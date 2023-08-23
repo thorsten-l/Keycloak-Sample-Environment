@@ -1,0 +1,21 @@
+version: '3.9'
+
+services:
+ 
+  app1:
+    image: bellsoft/liberica-openjdk-alpine:17
+    container_name: app1
+    hostname: app1.dev.sonia.de
+    restart: always
+    command: "java -jar /data/springboot-keycloak.jar -c /data/app1-dev-config.properties"
+    volumes:
+      - .:/data
+    environment:
+      - TZ=Europe/Berlin
+    ports:
+      - "8081:8081"
+
+networks:
+  default:
+    name: iddev
+    external: true

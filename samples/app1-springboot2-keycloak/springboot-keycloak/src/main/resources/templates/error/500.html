@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+  <div th:replace="fragments/header::lsgwHeader(title='Error 500')">Header</div>
+  <body>
+
+    <div class="container" style="margin-top: 4em">
+      <div class="error-page">
+        <h2 class="headline text-danger">500</h2>
+
+        <div class="error-content">
+          <h3><i class="fas fa-exclamation-triangle text-danger"></i> Oops! Something went wrong.</h3>
+
+          <p>
+            We will work on fixing that right away.
+          </p>
+
+          <table class='table table-striped error-table'>
+            <tbody>
+              <tr><th>Request URI</th><td th:text='${pageErrorRequestUri}'></td></tr>
+              <tr><th>Exception</th><td th:text='${pageErrorException}'></td></tr>
+            </tbody>
+          </table>    
+        </div>
+      </div>
+
+      <div th:replace="fragments/footer::lsgwBuildinfo"></div>
+    </div>
+
+    <div th:replace="fragments/footer::lsgwFooter"></div>
+  </body>
+</html>

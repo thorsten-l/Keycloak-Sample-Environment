@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>l9g.oidc.demo</groupId>
+  <artifactId>app9-payara-javaee10</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>war</packaging>
+
+  <name>app9-payara-javaee10</name>
+
+  <properties>
+    <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <version.jakartaee>10.0.0</version.jakartaee>
+    <version.payara.micro>6.2023.4</version.payara.micro>
+    <version.payara>6.2023.4</version.payara>
+  </properties>
+    
+  <dependencies>
+    <dependency>
+      <groupId>jakarta.platform</groupId>
+      <artifactId>jakarta.jakartaee-web-api</artifactId>
+      <version>${version.jakartaee}</version>
+      <scope>provided</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>fish.payara.extras</groupId>
+      <artifactId>payara-micro</artifactId>
+      <version>${version.payara.micro}</version>
+      <scope>provided</scope>
+    </dependency>    
+  </dependencies>
+
+  <build>
+    <finalName>app9-payara-javaee10</finalName>
+    
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.11.0</version>
+        <configuration>
+          <release>17</release>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>3.3.2</version>
+        <configuration>
+          <failOnMissingWebXml>false</failOnMissingWebXml>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>fish.payara.maven.plugins</groupId>
+        <artifactId>payara-micro-maven-plugin</artifactId>
+        <version>2.0</version>
+        <configuration>
+          <payaraVersion>${version.payara}</payaraVersion>
+          <artifactItem>
+            <groupId>fish.payara.extras</groupId>
+            <artifactId>payara-micro</artifactId>
+            <version>${version.payara.micro}</version>
+          </artifactItem>
+          <commandLineOptions>
+            <option><key>--nocluster</key></option>
+            <option><key>--nohazelcast</key></option>
+            <option><key>--nohostaware</key></option>
+            <option>
+              <key>--port</key>
+              <value>8089</value>
+            </option>
+            <option>
+              <key>--contextroot</key>
+              <value>/</value>
+            </option>
+            <option>
+              <key>--deploy</key>
+              <value>${project.build.directory}/${project.build.finalName}</value>
+            </option>
+          </commandLineOptions>
+          <deployWar>false</deployWar>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

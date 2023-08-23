@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<div th:replace="fragments/header::lsgwHeader(title='Keycloak Demo Home')"></div>
+</head>
+<body>
+  <div class="container">
+    <a id='loginButton' class='btn btn-primary' href='info'>Login <i class="fa-solid fa-right-to-bracket"></i></a>
+    <h1><i class="fa-solid fa-key"></i> <div th:text="${applicationName}" th:remove="tags"></div></h1>
+    <h4><div th:text="${applicationDescription}" th:remove="tags"></div></h4>
+    <div th:replace="fragments/footer::lsgwBuildinfo"></div>
+  </div>
+  <div th:replace="fragments/footer::lsgwFooter"></div>
+</body>
+</html>

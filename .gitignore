@@ -1,0 +1,7 @@
+keycloak/kcdb
+keycloak/kcfront
+keycloak/kcldap
+target
+*.jar
+**/html/vendor/**
+*.pyc

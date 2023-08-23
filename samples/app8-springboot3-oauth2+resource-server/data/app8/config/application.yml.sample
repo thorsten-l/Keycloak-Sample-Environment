@@ -1,0 +1,36 @@
+spring:
+  profiles:
+    active: default
+  security:
+    oauth2:
+      client:
+        registration:
+          iddev:
+            client-id: <client id>
+            scope: openid,profile,email
+        provider:
+          iddev:
+            issuer-uri: https://<keycloak server>/realms/<realm name>
+            user-name-attribute: preferred_username
+  thymeleaf:
+    cache: false
+    
+server: 
+  port: 8081
+  servlet: 
+    context-path: /
+  tomcat:
+    basedir: data/tomcat
+    accesslog:
+      enabled: true
+
+logging: 
+  level: 
+    org.springframework: INFO
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+        exclude: "loggers"

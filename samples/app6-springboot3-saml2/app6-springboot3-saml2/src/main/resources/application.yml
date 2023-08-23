@@ -1,0 +1,26 @@
+spring:
+  profiles:
+    active: default
+  security:
+    saml2:
+      relyingparty:
+        registration:
+          app6:
+            signing.credentials:
+              - private-key-location: classpath:credentials/saml2demo.key
+                certificate-location: classpath:credentials/saml2demo.crt
+            singlelogout:
+              binding: POST
+              url: http://app6.dev.sonia.de:8086/logout/saml2/slo
+            assertingparty.metadata-uri: https://id.dev.sonia.de/realms/dev/protocol/saml/descriptor
+
+server:
+  port: 8086
+  servlet:
+    context-path: /
+
+logging:
+  level:
+    l9g.app6: TRACE
+    org.springframework.security: TRACE
+    org.springframework: INFO

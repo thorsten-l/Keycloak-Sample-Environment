@@ -1,0 +1,21 @@
+spring:
+  profiles:
+    active: default
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://id.dev.sonia.de/realms/dev
+    
+server: 
+  port: 18088
+  servlet: 
+    context-path: /
+  tomcat:
+    basedir: data/rscs1/tomcat
+    accesslog:
+      enabled: true
+    
+logging: 
+  level: 
+    org.springframework: INFO

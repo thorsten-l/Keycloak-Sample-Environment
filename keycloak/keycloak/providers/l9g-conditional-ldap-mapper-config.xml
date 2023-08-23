@@ -1,0 +1,30 @@
+<config version="1.0">
+  <description>L9G conditional ldap mapper</description>
+  
+  <condition ldapAttribute="dn" endsWith="ou=people,o=ostfalia.de,dc=sonia,dc=de">
+    <condition ldapAttribute="soniaInstitute" equals="11">
+      <mapper userRole="USER-RECHENZENTRUM"/>
+    </condition>
+    <mapper userAttribute="ORGANIZATION" value="ostfalia.de"/>
+    <mapper userAttribute="LIBRARY_DATABASE" value="NCC-1701-A"/>
+    <mapper userRole="USER-OSTFALIA.DE"/>
+  </condition>
+
+  <condition ldapAttribute="dn" endsWith="ou=people,o=hbk-bs.de,dc=sonia,dc=de">
+    <mapper userAttribute="ORGANIZATION" value="hbk-bs.de"/>
+    <mapper userAttribute="LIBRARY_DATABASE" value="999"/>
+    <mapper userRole="USER-HBK-BS.DE"/>
+  </condition>
+
+  <condition ldapAttribute="dn" endsWith="ou=people,o=company1.de,dc=sample,dc=org">
+    <condition ldapAttribute="telephoneNumber" equals="0001">
+      <mapper userRole="USER-FIRSTPHONE"/>
+    </condition>
+    <mapper userAttribute="ORGANIZATION" value="company1.de"/>
+    <mapper userAttribute="LIBRARY_DATABASE" value="4711"/>
+    <mapper userRole="USER-COMPANY1.DE"/>
+  </condition>
+
+  <mapper userRole="USER"/>
+  <mapper userAttribute="TESTDELE" value="0815"/>
+</config>

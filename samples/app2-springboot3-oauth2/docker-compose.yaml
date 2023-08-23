@@ -1,0 +1,21 @@
+version: '3.9'
+
+services:
+ 
+  app1:
+    image: bellsoft/liberica-openjdk-alpine:17
+    container_name: app2
+    hostname: app2.dev.sonia.de
+    restart: always
+    command: "/workspace/entrypoint.sh"
+    volumes:
+      - .:/workspace
+    environment:
+      - TZ=Europe/Berlin
+    ports:
+      - "8082:8082"
+
+networks:
+  default:
+    name: iddev
+    external: true

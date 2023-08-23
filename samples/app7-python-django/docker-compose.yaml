@@ -1,0 +1,21 @@
+version: '3.9'
+
+services:
+
+  app7:
+    build: .
+    container_name: app7
+    hostname: app7.dev.sonia.de
+    restart: always
+    command: "/data/entrypoint.sh"
+    volumes:
+      - ./data:/data
+    environment:
+      - TZ=Europe/Berlin
+    ports:
+      - "8087:8000"
+
+networks:
+  default:
+    name: iddev
+    external: true

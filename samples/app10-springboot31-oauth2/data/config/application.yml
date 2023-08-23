@@ -1,0 +1,38 @@
+spring:
+  profiles:
+    active: default
+  security:
+    oauth2:
+      client:
+        registration:
+          iddev:
+            client-id: app10
+            client-secret: CkBIiskpgrhPVn712xT0ih2jxTYFZIlJ
+            scope: openid,phone,email
+        provider:
+          iddev:
+            issuer-uri: https://id.dev.sonia.de/realms/dev
+            jwks-uri: https://id.dev.sonia.de/realms/dev/protocol/openid-connect/certs
+            user-name-attribute: preferred_username
+  thymeleaf:
+    cache: false
+    
+server: 
+  port: 8090
+  servlet: 
+    context-path: /
+  tomcat:
+    basedir: data/tomcat
+    accesslog:
+      enabled: true
+    
+logging: 
+  level: 
+    org.springframework: INFO
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+        exclude: "loggers"

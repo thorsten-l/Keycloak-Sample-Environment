@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Spring OAuth2/OIDC Client Thymeleaf</title>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" ></link>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-light bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/app}">Spring OAuth2/OIDC Client Thymeleaf</a>
+        <div class="d-flex">
+          <span class="navbar-text">Hi, <span th:text="${fullname}">fullname</span>&nbsp;&nbsp;&nbsp;</span>
+          <span class="nav-item"><a th:href="@{/logout}" class="btn btn-outline-secondary">Logout</a></span>
+          <form style="margin-left: 1em" method="post" action="/logout">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"></input>
+            <input class="btn btn-outline-secondary" type="submit" value="Instant Logout"></input>
+          </form>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <h1 style="margin-top: 0.5em; margin-bottom: 1em;">App</h1>
+
+      <p>
+        plain password = '<span th:text="${PLAIN_PASSWORD}"></span>'
+      </p>
+      
+      <ul>
+        <li><a target="_blank" th:href="@{/principal}">principal</a></li>
+        <li><a target="_blank" th:href="@{/principal-attributes}">principal attributes</a></li>
+        <li><a target="_blank" th:href="@{/principal-userinfo}">principal userinfo</a></li>
+        <li><a target="_blank" th:href="@{/principal-idtoken}">principal idToken</a></li>
+        <li><a target="_blank" th:href="@{/rscs1/welcome}">resource server - welcome</a></li>
+        <li><a target="_blank" th:href="@{/rscs1/name}">resource server - path name</a></li>
+        <li><a target="_blank" th:href="@{/rscs1/parameter}">resource server - parameter</a></li>
+        <li><a target="_blank" th:href="@{/rscs1/buildinfo}">resource server - buildinfo</a></li>
+        <li><a target="_blank" th:href="@{/rscs1/principal}">resource server - principal</a></li>
+        <li><a target="_blank" th:href="@{/api/buildinfo}">buildinfo</a></li>
+      </ul>
+      
+      <p>
+        <a target="_blank" th:href="@{/build-properties}">build properties</a>
+      </p>
+    </div>
+
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+  </body>
+</html>

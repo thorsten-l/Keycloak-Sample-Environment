@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+  <div th:replace="fragments/header :: lsgwHeader(title='Error 403')" th:remove="tag">Header</div>
+  <body>
+
+    <!-- Main content -->
+    <div class="content" style="margin-top: 4em">
+      <div class="error-page">
+        <h2 class="headline text-danger"> 403</h2>
+        <div class="error-content">
+          <h3><i class="fas fa-ban text-danger"></i> Permission denied.</h3>
+          <p><a th:href="@{/}">Return to Homepage.</a></p>
+        </div>
+      </div>
+      <div th:replace="fragments/footer :: lsgwBuildinfo" th:remove="tag">Buildinfo</div>
+    </div>
+    <div th:replace="fragments/footer :: lsgwFooter" th:remove="tag">Footer</div>
+  </body>
+</html>

@@ -1,0 +1,13 @@
+{% extends 'app_app7/base.html' %}
+{% load static %}
+{% block content %}
+
+{% if user.is_authenticated %}
+<div>
+    <a class="btn btn-primary btn-lg text-decoration-none" href="{% url 'app_app7:protected' %}">See protected details</a>
+</div>
+
+{% endif %}
+
+
+{% endblock %}

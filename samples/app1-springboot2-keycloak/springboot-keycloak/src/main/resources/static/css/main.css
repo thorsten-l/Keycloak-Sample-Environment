@@ -1,0 +1,20 @@
+    
+body { margin-top: 2em }
+    
+#buildinfo { 
+  font-size: 70%; 
+  position: absolute;
+  bottom: 2em;
+}
+
+#loginButton { 
+  position: absolute;
+  top: 2em;
+  right: 2em;
+}
+
+#logoutButton { 
+  position: absolute;
+  top: 2em;
+  right: 2em;
+}

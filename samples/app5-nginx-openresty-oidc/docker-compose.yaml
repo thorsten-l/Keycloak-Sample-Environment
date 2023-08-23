@@ -1,0 +1,29 @@
+version: '3.9'
+
+services:
+
+  demo1:
+    image: demo1:0.0.1-SNAPSHOT
+    container_name: demo1
+    hostname: demo1
+    restart: always
+
+  app5:
+    image: ghcr.io/thorsten-l/nginx-openresty-oidc:1.21
+    container_name: nginx-openresty-oidc
+    hostname: app5.dev.sonia.de
+    restart: always
+    volumes:
+      - "./openresty/conf.d:/etc/nginx/conf.d"
+      - "./openresty/html:/usr/local/openresty/nginx/html"
+    environment:
+      - TZ=Europe/Berlin
+    ports:
+      - "8085:80"
+    depends_on:
+      - demo1
+
+networks:
+  default:
+    name: iddev
+    external: true

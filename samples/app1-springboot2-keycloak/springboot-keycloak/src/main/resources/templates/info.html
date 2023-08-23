@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <template 
+      th:replace="fragments/header::lsgwHeader(title='Keycloak Demo Home')">
+    </template>
+  </head>
+  <body>
+    <div class="container">
+      <a id='logoutButton' class='btn btn-primary' href='/sso/logout'><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+      <h1><i class="fa-solid fa-key"></i> <div th:text="${applicationName}" th:remove="tags"></div></h1>
+      <h2>Info Page - realm: <div th:text="${realm}" th:remove="tags"></div></h2>
+
+
+      <nav style="margin-top: 2em">
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+          <a class="nav-link active" id="nav-principal-tab" data-bs-toggle="tab" href="#nav-principal" role="tab" aria-controls="nav-principal" aria-selected="true">Principal</a>
+          <a class="nav-link" id="nav-idToken-tab" data-bs-toggle="tab" href="#nav-idToken" role="tab" aria-controls="nav-idToken" aria-selected="false">IdToken</a>
+          <a class="nav-link" id="nav-idTokenOc-tab" data-bs-toggle="tab" href="#nav-idTokenOc" role="tab" aria-controls="nav-idTokenOc" aria-selected="false">IdToken.OtherClaims</a>
+          <a class="nav-link" id="nav-accessToken-tab" data-bs-toggle="tab" href="#nav-accessToken" role="tab" aria-controls="nav-accessToken" aria-selected="false">AccessToken</a>
+          <a class="nav-link" id="nav-accessTokenRA-tab" data-bs-toggle="tab" href="#nav-accessTokenRA" role="tab" aria-controls="nav-accessTokenRA" aria-selected="false">AccessToken.ResourceAccess</a>
+          <a class="nav-link" id="nav-accessTokenOc-tab" data-bs-toggle="tab" href="#nav-accessTokenOc" role="tab" aria-controls="nav-accessTokenOc" aria-selected="false">AccessToken.OtherClaims</a>
+        </div>
+      </nav>
+
+      <div class="tab-content" id="nav-tabContent">
+
+        <div class="tab-pane fade show active" id="nav-principal" role="tabpanel" aria-labelledby="nav-principal-tab">
+
+          <table class='table table-striped'>
+            <tbody>
+              <tr><th width='25%'>name</th><td th:text='${principal.name}'></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="tab-pane fade" id="nav-idToken" role="tabpanel" aria-labelledby="nav-idToken-tab">
+          <table class='table table-striped'>
+            <tbody>
+              <tr><th width='25%'>AccessTokenHash</th><td th:text='${idToken.accessTokenHash}'></td></tr>
+              <tr><th width='25%'>ACR</th><td th:text='${idToken.acr}'></td></tr>
+
+            <div th:remove="tags" th:if="${idToken.address != null}">
+              <tr><th width='25%'>Address.Country</th><td th:text='${idToken.address.country}'></td></tr>
+              <tr><th width='25%'>Address.FormattedAddress</th><td th:text='${idToken.address.formattedAddress}'></td></tr>
+              <tr><th width='25%'>Address.Locality</th><td th:text='${idToken.address.locality}'></td></tr>
+              <tr><th width='25%'>Address.PostalCode</th><td th:text='${idToken.address.postalCode}'></td></tr>
+              <tr><th width='25%'>Address.Region</th><td th:text='${idToken.address.region}'></td></tr>
+              <tr><th width='25%'>Address.StreetAddress</th><td th:text='${idToken.address.streetAddress}'></td></tr>
+            </div>
+
+            <div th:remove="tags" th:if="${idToken.audience != null}">
+              <tr><th width='25%'>Audience</th>
+                <td>
+                  <ul th:each="entry : ${idToken.audience}">
+                    <li th:text="${entry}">value</li>
+                  </ul>
+                </td>
+              </tr>
+            </div>
+
+            <tr><th width='25%'>Auth_time</th><td th:text='${idToken.auth_time}'></td></tr>
+
+            <tr><th width='25%'>Birthdate</th><td th:text='${idToken.birthdate}'></td></tr>
+            <tr><th width='25%'>Category</th><td th:text='${idToken.category}'></td></tr>
+            <tr><th width='25%'>ClaimsLocales</th><td th:text='${idToken.claimsLocales}'></td></tr>
+            <tr><th width='25%'>CodeHash</th><td th:text='${idToken.codeHash}'></td></tr>
+
+            <tr><th width='25%'>Email</th><td th:text='${idToken.email}'></td></tr>
+            <tr><th width='25%'>EmailVerified</th><td th:text='${idToken.emailVerified}'></td></tr>
+            <tr><th width='25%'>Exp</th><td th:text='${idToken.exp}'></td></tr>
+
+            <tr><th width='25%'>FamilyName</th><td th:text='${idToken.familyName}'></td></tr>
+            <tr><th width='25%'>Gender</th><td th:text='${idToken.gender}'></td></tr>
+            <tr><th width='25%'>GivenName</th><td th:text='${idToken.givenName}'></td></tr>
+            <tr><th width='25%'>Iat</th><td th:text='${idToken.iat}'></td></tr>
+            <tr><th width='25%'>Id</th><td th:text='${idToken.id}'></td></tr>
+            <tr><th width='25%'>IssuedFor</th><td th:text='${idToken.issuedFor}'></td></tr>
+            <tr><th width='25%'>Issuer</th><td th:text='${idToken.issuer}'></td></tr>
+            <tr><th width='25%'>Locale</th><td th:text='${idToken.locale}'></td></tr>
+            <tr><th width='25%'>MiddleName</th><td th:text='${idToken.middleName}'></td></tr>
+            <tr><th width='25%'>Name</th><td th:text='${idToken.name}'></td></tr>
+            <tr><th width='25%'>Nbf</th><td th:text='${idToken.nbf}'></td></tr>
+            <tr><th width='25%'>NickName</th><td th:text='${idToken.nickName}'></td></tr>
+            <tr><th width='25%'>Nonce</th><td th:text='${idToken.nonce}'></td></tr>
+            <tr><th width='25%'>PhoneNumber</th><td th:text='${idToken.phoneNumber}'></td></tr>
+            <tr><th width='25%'>PhoneNumberVerified</th><td th:text='${idToken.phoneNumberVerified}'></td></tr>
+            <tr><th width='25%'>PreferredUsername</th><td th:text='${idToken.preferredUsername}'></td></tr>
+            <tr><th width='25%'>Profile</th><td th:text='${idToken.profile}'></td></tr>
+            <tr><th width='25%'>SessionId</th><td th:text='${idToken.sessionId}'></td></tr>
+            <tr><th width='25%'>SessionState</th><td th:text='${idToken.sessionState}'></td></tr>
+            <tr><th width='25%'>StateHash</th><td th:text='${idToken.stateHash}'></td></tr>
+            <tr><th width='25%'>Subject</th><td th:text='${idToken.subject}'></td></tr>
+            <tr><th width='25%'>Type</th><td th:text='${idToken.type}'></td></tr>
+            <tr><th width='25%'>UpdatedAt</th><td th:text='${idToken.updatedAt}'></td></tr>
+            <tr><th width='25%'>Website</th><td th:text='${idToken.website}'></td></tr>
+            <tr><th width='25%'>Zoneinfo</th><td th:text='${idToken.zoneinfo}'></td></tr>
+
+            </tbody>
+          </table>          
+        </div>
+
+
+        <div class="tab-pane fade" id="nav-idTokenOc" role="tabpanel" aria-labelledby="nav-idTokenOc-tab">
+
+          <table class='table table-striped'>
+            <tbody>
+              <tr th:each="entry : ${otherClaims}">
+                <td width='25%' th:text="${entry.key}">key</td>
+                <td th:text="${entry.value}">value</td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+
+        <div class="tab-pane fade" id="nav-accessToken" role="tabpanel" aria-labelledby="nav-accessToken-tab">
+          <table class='table table-striped'>
+            <tbody>
+              <tr><th width='25%'>IssuedFor</th><td th:text='${accessToken.issuedFor}'></td></tr>
+              <tr><th width='25%'>AccessTokenHash</th><td th:text='${accessToken.accessTokenHash}'></td></tr>
+              <tr><th width='25%'>Acr</th><td th:text='${accessToken.acr}'></td></tr>
+              <tr><th width='25%'>Active</th><td th:text='${accessToken.active}'></td></tr>
+
+            <div th:remove="tags" th:if="${accessToken.address != null}">
+              <tr><th width='25%'>Address.Country</th><td th:text='${accessToken.address.country}'></td></tr>
+              <tr><th width='25%'>Address.FormattedAddress</th><td th:text='${accessToken.address.formattedAddress}'></td></tr>
+              <tr><th width='25%'>Address.Locality</th><td th:text='${accessToken.address.locality}'></td></tr>
+              <tr><th width='25%'>Address.PostalCode</th><td th:text='${accessToken.address.postalCode}'></td></tr>
+              <tr><th width='25%'>Address.Region</th><td th:text='${accessToken.address.region}'></td></tr>
+              <tr><th width='25%'>Address.StreetAddress</th><td th:text='${accessToken.address.streetAddress}'></td></tr>
+            </div>
+
+            <tr><th width='25%'>AllowedOrigins</th>
+              <td>
+                <ul th:each="entry : ${accessToken.allowedOrigins}">
+                  <li th:text="${entry}"></li>
+                </ul>
+              </td>
+            </tr>
+
+            <tr><th width='25%'>Audience</th>
+              <td>
+                <ul th:each="entry : ${accessToken.audience}">
+                  <li th:text="${entry}"></li>
+                </ul>
+              </td>
+            </tr>
+
+            <tr><th width='25%'>Auth_time</th><td th:text='${accessToken.auth_time}'></td></tr>
+            <tr><th width='25%'>Authorization</th><td th:text='${accessToken.authorization}'></td></tr>
+
+            <tr><th width='25%'>Birthdate</th><td th:text='${accessToken.birthdate}'></td></tr>
+            <tr><th width='25%'>Category</th><td th:text='${accessToken.category}'></td></tr>
+            <tr><th width='25%'>ClaimsLocales</th><td th:text='${accessToken.claimsLocales}'></td></tr>
+            <tr><th width='25%'>CodeHash</th><td th:text='${accessToken.codeHash}'></td></tr>
+            <tr><th width='25%'>Email</th><td th:text='${accessToken.email}'></td></tr>
+            <tr><th width='25%'>EmailVerified</th><td th:text='${accessToken.emailVerified}'></td></tr>
+            <tr><th width='25%'>Exp</th><td th:text='${accessToken.exp}'></td></tr>
+            <tr><th width='25%'>Expired</th><td th:text='${accessToken.expired}'></td></tr>
+
+            <tr><th width='25%'>FamilyName</th><td th:text='${accessToken.familyName}'></td></tr>
+            <tr><th width='25%'>Gender</th><td th:text='${accessToken.gender}'></td></tr>
+            <tr><th width='25%'>GivenName</th><td th:text='${accessToken.givenName}'></td></tr>
+            <tr><th width='25%'>Iat</th><td th:text='${accessToken.iat}'></td></tr>
+            <tr><th width='25%'>Id</th><td th:text='${accessToken.id}'></td></tr>
+            <tr><th width='25%'>IssuedFor</th><td th:text='${accessToken.issuedFor}'></td></tr>
+            <tr><th width='25%'>Issuer</th><td th:text='${accessToken.issuer}'></td></tr>
+            <tr><th width='25%'>Locale</th><td th:text='${accessToken.locale}'></td></tr>
+            <tr><th width='25%'>MiddleName</th><td th:text='${accessToken.middleName}'></td></tr>
+            <tr><th width='25%'>Name</th><td th:text='${accessToken.name}'></td></tr>
+            <tr><th width='25%'>Nbf</th><td th:text='${accessToken.nbf}'></td></tr>
+            <tr><th width='25%'>NickName</th><td th:text='${accessToken.nickName}'></td></tr>
+            <tr><th width='25%'>Nonce</th><td th:text='${accessToken.nonce}'></td></tr>
+            <tr><th width='25%'>PhoneNumber</th><td th:text='${accessToken.phoneNumber}'></td></tr>
+            <tr><th width='25%'>PhoneNumberVerified</th><td th:text='${accessToken.phoneNumberVerified}'></td></tr>
+            <tr><th width='25%'>PreferredUsername</th><td th:text='${accessToken.preferredUsername}'></td></tr>
+            <tr><th width='25%'>Profile</th><td th:text='${accessToken.profile}'></td></tr>
+
+            <tr><th width='25%'>RealmAccess.Roles</th>
+              <td>
+                <ul th:each="entry : ${accessToken.realmAccess.roles}">
+                  <li th:text="${entry}"></li>
+                </ul>
+              </td>
+            </tr>
+
+            <tr><th width='25%'>RealmAccess.VerifyCaller</th><td th:text='${accessToken.realmAccess.verifyCaller}'></td></tr>
+
+            <tr><th width='25%'>Scope</th><td th:text='${accessToken.scope}'></td></tr>
+            <tr><th width='25%'>SessionId</th><td th:text='${accessToken.sessionId}'></td></tr>
+            <tr><th width='25%'>SessionState</th><td th:text='${accessToken.sessionState}'></td></tr>
+            <tr><th width='25%'>StateHash</th><td th:text='${accessToken.stateHash}'></td></tr>
+            <tr><th width='25%'>Subject</th><td th:text='${accessToken.subject}'></td></tr>
+            <tr><th width='25%'>Type</th><td th:text='${accessToken.type}'></td></tr>
+            <tr><th width='25%'>UpdatedAt</th><td th:text='${accessToken.updatedAt}'></td></tr>
+            <tr><th width='25%'>VerifyCaller</th><td th:text='${accessToken.verifyCaller}'></td></tr>
+            <tr><th width='25%'>Website</th><td th:text='${accessToken.website}'></td></tr>
+            <tr><th width='25%'>Zoneinfo</th><td th:text='${accessToken.zoneinfo}'></td></tr>
+
+            </tbody>
+          </table>
+        </div>
+
+
+        <div class="tab-pane fade" id="nav-accessTokenRA" role="tabpanel" aria-labelledby="nav-accessTokenRA-tab">
+          <table class='table table-striped'>
+            <tbody>
+              <tr th:each="entry : ${accessToken.resourceAccess}">
+                <td width='25%' th:text="${entry.key}"></td>
+                <td>
+                  <ul th:each="role : ${entry.value.roles}">
+                    <li th:text="${role}"></li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="tab-pane fade" id="nav-accessTokenOc" role="tabpanel" aria-labelledby="nav-accessTokenOc-tab">
+          <table class='table table-striped'>
+            <tbody>
+              <tr th:each="entry : ${accessToken.otherClaims}">
+                <td width='25%' th:text="${entry.key}">key</td>
+                <td th:text="${entry.value}">value</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+    <div th:replace="fragments/footer::lsgwFooter"></div>
+  </body>
+</html>

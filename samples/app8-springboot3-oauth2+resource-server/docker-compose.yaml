@@ -1,0 +1,34 @@
+version: '3.9'
+
+services:
+ 
+  app8:
+    image: bellsoft/liberica-openjdk-alpine:17
+    container_name: app8
+    hostname: app8.dev.sonia.de
+    restart: always
+    command: "/workspace/entrypoint-app8.sh"
+    volumes:
+      - .:/workspace
+    environment:
+      - TZ=Europe/Berlin
+    ports:
+      - "8088:8088"
+
+  rscs1:
+    image: bellsoft/liberica-openjdk-alpine:17
+    container_name: rscs1
+    hostname: rscs1.dev.sonia.de
+    restart: always
+    command: "/workspace/entrypoint-rscs1.sh"
+    volumes:
+      - .:/workspace
+    environment:
+      - TZ=Europe/Berlin
+    ports:
+      - "18088:18088"
+
+networks:
+  default:
+    name: iddev
+    external: true

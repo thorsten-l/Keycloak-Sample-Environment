@@ -1,0 +1,39 @@
+spring:
+  profiles:
+    active: default
+  security:
+    oauth2:
+      client:
+        registration:
+          iddev:
+            client-id: app8
+            client-secret: 018opzer6HsHeQaVPMGCQpSn8pNdFhmM
+            scope: openid,phone,email,roles
+        provider:
+          iddev:
+            issuer-uri: https://id.dev.sonia.de/realms/dev
+            user-name-attribute: preferred_username
+  webclient:
+    base-url: http://rscs1.dev.sonia.de:18088
+  thymeleaf:
+    cache: false
+    
+server: 
+  port: 8088
+  servlet: 
+    context-path: /
+  tomcat:
+    basedir: data/app8/tomcat
+    accesslog:
+      enabled: true
+    
+logging: 
+  level: 
+    org.springframework: INFO
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+        exclude: "loggers"

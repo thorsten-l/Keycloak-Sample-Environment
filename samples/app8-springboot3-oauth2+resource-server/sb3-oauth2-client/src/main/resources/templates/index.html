@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Spring OAuth Client Thymeleaf</title>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" ></link>
+  </head>
+  <body>
+    <nav class="navbar navbar-light bg-light">
+      <div class="container-fluid">
+        <div class="navbar-brand">Spring OAuth2/OIDC Client Thymeleaf</div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <h1 style="margin-top: 0.5em; margin-bottom: 1em;">Welcome!</h1>
+      <a th:href="@{/app}" class="btn btn-primary">Login</a>
+    </div>
+    
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+  </body>
+</html>

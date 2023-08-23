@@ -1,0 +1,21 @@
+version: '3.9'
+
+services:
+ 
+  app6:
+    image: bellsoft/liberica-openjdk-alpine:17
+    container_name: app6
+    hostname: app6.dev.sonia.de
+    restart: always
+    command: "java -jar /app6-springboot3-saml2.jar"
+    volumes:
+      - ./app6-springboot3-saml2/target/app6-springboot3-saml2.jar:/app6-springboot3-saml2.jar:ro
+    environment:
+      - TZ=Europe/Berlin
+    ports:
+      - "8086:8086"
+
+networks:
+  default:
+    name: iddev
+    external: true

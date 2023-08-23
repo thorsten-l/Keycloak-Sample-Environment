@@ -1,0 +1,23 @@
+version: '3.9'
+
+services:
+
+  httpd:
+    image: ghcr.io/thorsten-l/apache2-httpd-oidc:latest
+    container_name: httpd
+    hostname: app4.dev.sonia.de
+    restart: always
+    volumes:
+      - "./apache2/cgi-bin:/usr/local/apache2/cgi-bin"
+      - "./apache2/conf:/usr/local/apache2/conf"
+      - "./apache2/htdocs:/usr/local/apache2/htdocs"
+      - "./apache2/logs:/usr/local/apache2/logs"
+    environment:
+      - TZ=Europe/Berlin
+    ports:
+      - "8084:80"
+
+networks:
+  default:
+    name: iddev
+    external: true
