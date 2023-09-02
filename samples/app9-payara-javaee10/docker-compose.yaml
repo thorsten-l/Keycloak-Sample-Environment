@@ -7,9 +7,9 @@ services:
     container_name: app9
     hostname: app9.dev.sonia.de
     restart: always
-    command: "java -jar /payara-micro-6.2023.4.jar --nocluster --nohazelcast --nohostaware --port 8089 --contextroot / --deploy /app9-payara-javaee10.war"
+    command: "java -jar /payara-micro-6.2023.8.jar --nocluster --nohazelcast --nohostaware --port 8089 --contextroot / --deploy /app9-payara-javaee10.war"
     volumes:
-      - ./payara-micro-6.2023.4.jar:/payara-micro-6.2023.4.jar:ro
+      - ./payara-micro-6.2023.8.jar:/payara-micro-6.2023.8.jar:ro
       - ./app9-payara-javaee10/target/app9-payara-javaee10.war:/app9-payara-javaee10.war:ro
     environment:
       - TZ=Europe/Berlin
