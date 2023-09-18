@@ -36,6 +36,10 @@
     <appender-ref ref="FILE" />
   </root>
   
+  <logger name="org.apache.coyote.http11" level="TRACE"/>
+
+  
+  <!--
   <logger name="org.apache.catalina.startup.DigesterFactory" level="ERROR"/>
   <logger name="org.apache.catalina.util.LifecycleBase" level="ERROR"/>
   <logger name="org.apache.coyote.http11.Http11NioProtocol" level="WARN"/>
@@ -46,6 +50,7 @@
   <logger name="org.springframework.boot.actuate.endpoint.jmx" level="WARN"/>
   
   <logger name="l9g" level="TRACE"/>
-
+  -->
+  
  </configuration>
  
