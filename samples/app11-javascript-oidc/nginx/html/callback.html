@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>JavaScript OIDC Callback</title>
+    <script src="js/oidc-client.min.js"></script>
+    <script src="js/oidc-config.js"></script>
+</head>
+
+<body>
+    <h1>OIDC Callback</h1>
+    <script>
+        var userManager = new Oidc.UserManager(oidcConfig);
+
+        userManager.signinRedirectCallback().then(function (user) {
+            if (user) {
+                window.location.href = '/';
+            } else {
+                alert('Authentication failed');
+            }
+        }).catch(function (error) {
+            console.error('Error processing callback:', error);
+            alert('Error processing callback');
+        });
+    </script>
+</body>
+
+</html>

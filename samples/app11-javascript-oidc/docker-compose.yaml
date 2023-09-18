@@ -1,0 +1,21 @@
+version: '3.9'
+
+services:
+
+  app11:
+    image: nginx:1
+    container_name: javascript-oidc
+    hostname: app11.dev.sonia.de
+    restart: always
+    volumes:
+      - "./nginx/conf.d:/etc/nginx/conf.d"
+      - "./nginx/html:/usr/share/nginx/html"
+    environment:
+      - TZ=Europe/Berlin
+    ports:
+      - "8091:80"
+
+networks:
+  default:
+    name: iddev
+    external: true
