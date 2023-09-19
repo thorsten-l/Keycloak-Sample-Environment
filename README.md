@@ -90,6 +90,8 @@ app10 | JavaScrip + OIDC Client | OIDC | http://app11.dev.sonia.de:8091
 ### Spring Boot
 - [https://spring.io/projects/spring-boot](https://spring.io/projects/spring-boot)
 - [https://start.spring.io/](https://start.spring.io/)
+- [Servlet - https://docs.spring.io/spring-security/reference/servlet/oauth2/index.html](https://docs.spring.io/spring-security/reference/servlet/oauth2/index.html)
+- [WebFlux - https://docs.spring.io/spring-security/reference/reactive/oauth2/index.html](https://docs.spring.io/spring-security/reference/reactive/oauth2/index.html)
 
 ### Apache HTTPd
 - [https://httpd.apache.org/](https://httpd.apache.org/)
