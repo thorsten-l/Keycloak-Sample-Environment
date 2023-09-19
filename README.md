@@ -79,4 +79,39 @@ app7 | Python 3.9 + Django + mozilla-django-oidc  | OIDC | http://app7.dev.sonia
 app8 | Springboot 3 + OAuth2 Lib / Springboot 3 Resource Server | OIDC | http://app8.dev.sonia.de:8088
 app9 | Jakarta EE 10 + Payara ME 6.2023.4 | OIDC | http://app9.dev.sonia.de:8089
 app10 | Springboot 3.1 + OAuth2 Lib | OIDC | http://app10.dev.sonia.de:8090
+app10 | JavaScrip + OIDC Client | OIDC | http://app11.dev.sonia.de:8091
+
+## Referenzen
+
+### Java
+
+- [https://bell-sw.com/pages/downloads/](https://bell-sw.com/pages/downloads/)
+
+### Spring Boot
+- [https://spring.io/projects/spring-boot](https://spring.io/projects/spring-boot)
+- [https://start.spring.io/](https://start.spring.io/)
+
+### Apache HTTPd
+- [https://httpd.apache.org/](https://httpd.apache.org/)
+- [https://github.com/OpenIDC/mod_auth_openidc](https://github.com/OpenIDC/mod_auth_openidc)
+
+### NGINX
+- [https://www.nginx.com/](https://www.nginx.com/)
+- [https://openresty.org/en/](https://openresty.org/en/)
+- [https://github.com/zmartzone/lua-resty-openidc](https://github.com/zmartzone/lua-resty-openidc)
+
+### PHP
+- [https://www.php.net/](https://www.php.net/)
+- [https://github.com/jumbojett/OpenID-Connect-PHP](https://github.com/jumbojett/OpenID-Connect-PHP)
+
+### Python
+- [https://www.python.org/](https://www.python.org/)
+- [https://github.com/mozilla/mozilla-django-oidc](https://github.com/mozilla/mozilla-django-oidc)
+
+### Java EE
+- [https://www.payara.fish/](https://www.payara.fish/)
+
+### JavaScript / TypeScript
+- [https://www.npmjs.com/package/oidc-client](https://www.npmjs.com/package/oidc-client)
+- [https://github.com/authts/oidc-client-ts](https://github.com/authts/oidc-client-ts)
 
