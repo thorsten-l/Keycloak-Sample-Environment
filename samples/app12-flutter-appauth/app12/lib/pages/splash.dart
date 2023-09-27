@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app12/controller/Authentication.dart';
 import 'package:app12/main.dart';
 import 'package:flutter/material.dart';
 
@@ -10,11 +11,14 @@ class SplashPage extends StatelessWidget
   @override
   Widget build(BuildContext context) {
 
-    // refresh access token -> if refresh token exists
+    // update access token -> if refresh token exists
+    Authentication().updateAccessToken();
 
     // simulate refresh
-    Timer(const Duration(seconds: 5), () {
-      Navigator.pushReplacementNamed(context, "/login");
+    Timer(const Duration(seconds: 5), ()
+    {
+      Navigator.pushReplacementNamed(context,
+          Authentication().authenticated ? "/details" : "/login" );
     });
 
     return Scaffold(
