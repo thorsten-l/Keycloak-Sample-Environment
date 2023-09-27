@@ -27,6 +27,10 @@ class SplashPage extends StatelessWidget
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(128),
+              child: Image.asset('assets/images/logo.png'),
+            ),
             Text(
               'Initializing',
               style: Theme.of(context).textTheme.headlineMedium,
@@ -35,7 +39,7 @@ class SplashPage extends StatelessWidget
               'Please wait...',
             ),
             const Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: EdgeInsets.all(32),
               child: LinearProgressIndicator(),
             ),
           ],
