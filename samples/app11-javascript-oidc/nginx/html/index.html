@@ -18,6 +18,7 @@
         <div id="userInfo" style="display: none">
             <p><strong>preferred_username:</strong> <span id="username"></span></p>
             <p><strong>email:</strong> <span id="email"></span></p>
+            <p><strong>sub:</strong> <span id="sub"></span></p>
         </div>
     </div>
 
@@ -36,6 +37,7 @@
             if (user) {
                 document.getElementById('username').textContent = user.profile.preferred_username;
                 document.getElementById('email').textContent = user.profile.email;
+                document.getElementById('sub').textContent = user.profile.sub;
                 document.getElementById('loginButton').style = "display: none";
                 document.getElementById('logoutButton').style = "display: inline";
                 document.getElementById('userInfo').style = "display: inline";
