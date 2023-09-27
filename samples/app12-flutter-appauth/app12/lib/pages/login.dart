@@ -8,8 +8,6 @@ class LoginPage extends StatelessWidget
   @override
   Widget build(BuildContext context) {
 
-    // refresh access token -> if refresh token exists
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.lightBlue,
@@ -25,10 +23,17 @@ class LoginPage extends StatelessWidget
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             const Text(
-              'User: c1test1 / Password test123',
+              'User: c1test1 / Password: test123',
             ),
           ],
-        ),
+        )
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.pushReplacementNamed(context, "/details");
+        },
+        label: const Text('Login'),
+        icon: const Icon(Icons.login),
       ),
     );
   }

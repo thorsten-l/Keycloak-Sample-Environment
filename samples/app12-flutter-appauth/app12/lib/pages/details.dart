@@ -1,21 +1,12 @@
-import 'dart:async';
-
 import 'package:app12/main.dart';
 import 'package:flutter/material.dart';
 
-class SplashPage extends StatelessWidget
+class DetailsPage extends StatelessWidget
 {
-  const SplashPage({super.key});
+  const DetailsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-
-    // refresh access token -> if refresh token exists
-
-    // simulate refresh
-    Timer(const Duration(seconds: 5), () {
-      Navigator.pushReplacementNamed(context, "/login");
-    });
 
     return Scaffold(
       appBar: AppBar(
@@ -28,18 +19,21 @@ class SplashPage extends StatelessWidget
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'Initializing',
+              'Details',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             const Text(
-              'Please wait...',
-            ),
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: LinearProgressIndicator(),
+              '...',
             ),
           ],
-        ),
+        )
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.pushReplacementNamed(context, "/");
+        },
+        label: const Text('Logout'),
+        icon: const Icon(Icons.logout),
       ),
     );
   }
