@@ -23,7 +23,6 @@ class Authentication {
     String? refreshToken = await secureStorage.read(key: refreshTokenKey);
 
     if (refreshToken != null) {
-      log( "refreshToken != null" );
       // TODO: validate refresh token and get new access token
       _authenticated = true;
     }
