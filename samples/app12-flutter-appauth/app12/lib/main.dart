@@ -1,9 +1,10 @@
 import 'package:app12/router.dart';
 import 'package:flutter/material.dart';
 
-const appTitle = 'App12 - Flutter OIDC AppAuth';
+import 'constants.dart';
 
-void main() {
+
+void main() async {
   runApp(const MyApp());
 }
 

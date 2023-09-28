@@ -1,24 +1,25 @@
-import 'dart:async';
 import 'package:app12/services/authentication.dart';
-import 'package:app12/main.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class SplashScreen extends StatelessWidget
-{
+import '../constants.dart';
+
+class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-
     // update access token -> if refresh token exists
-    Authentication.instance.updateAccessToken();
+    Authentication.instance.updateAccessToken().then(
+        (authenticated) => context.go(authenticated ? "/details" : "/login"));
 
-    // simulate refresh
+    // simulate refresh#
+    /*
     Timer(const Duration(seconds: 2), ()
     {
       context.go( Authentication.instance.authenticated ? "/details" : "/login" );
     });
+   */
 
     return Scaffold(
       appBar: AppBar(

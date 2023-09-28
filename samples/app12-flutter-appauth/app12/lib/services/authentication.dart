@@ -1,27 +1,35 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter_appauth/flutter_appauth.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:uuid/uuid.dart';
+
+import '../constants.dart';
 
 class Authentication {
   static final Authentication instance = Authentication._internal();
 
-  static const String _oidcDiscoveryUrl =
-      "https://id.dev.sonia.de/realms/dev/.well-known/openid-configuration";
-  static const String _oidcClientId = "app12";
-  static const String _oidcClientSecret = "0Jv69f5uaX14Xuel0ScDvGVVwXgTL6LM";
-  static const String _oidcRedirectUrl = "com.example.app12://callback";
-
   final String _uuid = const Uuid().v4().toString();
   final FlutterAppAuth appAuth = const FlutterAppAuth();
+  final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
 
   Authentication._internal() {
     log("uuid = $_uuid", name: "Authentication._internal");
   }
 
-  bool updateAccessToken() {
+  Future<bool> updateAccessToken() async {
     log("uid = $_uuid", name: "Authentication.updateAccessToken");
-    return false;
+
+    String? refreshToken = await secureStorage.read(key: refreshTokenKey);
+
+    if (refreshToken != null) {
+      log( "refreshToken != null" );
+      // TODO: validate refresh token and get new access token
+      _authenticated = true;
+    }
+
+    // Show splash screen at least for a second
+    return Future.delayed(const Duration(seconds: 1), () => _authenticated );
   }
 
   Future<bool> authenticate() async {
@@ -30,10 +38,10 @@ class Authentication {
     if (!_authenticated) {
       _authorizationTokenResponse = await appAuth.authorizeAndExchangeCode(
         AuthorizationTokenRequest(
-          _oidcClientId,
-          _oidcRedirectUrl,
-          clientSecret: _oidcClientSecret,
-          discoveryUrl: _oidcDiscoveryUrl,
+          oidcClientId,
+          oidcRedirectUrl,
+          clientSecret: oidcClientSecret,
+          discoveryUrl: oidcDiscoveryUrl,
           // scopes: ['openid', 'profile', 'email', 'offline_access'],
           scopes: ['openid', 'profile', 'email'],
           promptValues: ['login'],
@@ -44,19 +52,31 @@ class Authentication {
         String? idToken = _authorizationTokenResponse!.idToken;
         log("idToken=${idToken!}");
         _authenticated = _validateIdToken(idToken);
+        if (_authenticated) {
+          secureStorage.write(
+              key: authorizedKey, value: _authenticated.toString());
+          secureStorage.write(
+              key: idTokenKey, value: _authorizationTokenResponse!.idToken);
+          secureStorage.write(
+              key: accessTokenKey,
+              value: _authorizationTokenResponse!.accessToken);
+          secureStorage.write(
+              key: refreshTokenKey,
+              value: _authorizationTokenResponse!.refreshToken);
+        }
       }
     }
 
     return _authenticated;
   }
 
-  void logout() {
+  void logout() async {
     log("uid = $_uuid", name: "Authentication.logout");
     _authenticated = false;
+    secureStorage.deleteAll();
   }
 
-  String _decodeTokenPart( String tokenPart )
-  {
+  String _decodeTokenPart(String tokenPart) {
     return utf8.decode(base64Url.decode((base64Url.normalize(tokenPart))));
   }
 
@@ -65,22 +85,23 @@ class Authentication {
 
     if (idToken != null) {
       var idTokenParts = idToken.split(r'.');
-      if ( idTokenParts.length == 3) {
-        log( "found all 3 parts in idToken");
+      if (idTokenParts.length == 3) {
+        log("found all 3 parts in idToken");
 
-        log( _decodeTokenPart(idTokenParts[0]), name: 'idToken Header' );
-        log( _decodeTokenPart(idTokenParts[1]), name: 'idToken Body' );
-        log( base64Url.normalize(idTokenParts[2]), name: 'idToken Signature' );
+        log(_decodeTokenPart(idTokenParts[0]), name: 'idToken Header');
+        log(_decodeTokenPart(idTokenParts[1]), name: 'idToken Body');
+        log(base64Url.normalize(idTokenParts[2]), name: 'idToken Signature');
 
         idTokenMap = jsonDecode(_decodeTokenPart(idTokenParts[1]));
-        log( idTokenMap!.toString(), name: "idTokenMap" );
+        log(idTokenMap!.toString(), name: "idTokenMap");
 
-        log( idTokenMap!['name'].toString(), name: "name");
-        log( idTokenMap!['preferred_username'].toString(), name: "preferred_username");
-        log( idTokenMap!['sub'].toString(), name: "sub");
-        log( idTokenMap!['nickname'].toString(), name: "nickname");
-        log( idTokenMap!['family_name'].toString(), name: "family_name");
-        log( idTokenMap!['email'].toString(), name: "email");
+        log(idTokenMap!['name'].toString(), name: "name");
+        log(idTokenMap!['preferred_username'].toString(),
+            name: "preferred_username");
+        log(idTokenMap!['sub'].toString(), name: "sub");
+        log(idTokenMap!['nickname'].toString(), name: "nickname");
+        log(idTokenMap!['family_name'].toString(), name: "family_name");
+        log(idTokenMap!['email'].toString(), name: "email");
 
         idTokenValid = true;
       }
