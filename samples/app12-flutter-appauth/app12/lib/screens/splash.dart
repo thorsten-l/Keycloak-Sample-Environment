@@ -3,7 +3,6 @@ import 'package:app12/services/authentication.dart';
 import 'package:app12/main.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'dart:developer';
 
 class SplashScreen extends StatelessWidget
 {
@@ -16,7 +15,7 @@ class SplashScreen extends StatelessWidget
     Authentication.instance.updateAccessToken();
 
     // simulate refresh
-    Timer(const Duration(seconds: 3), ()
+    Timer(const Duration(seconds: 2), ()
     {
       context.go( Authentication.instance.authenticated ? "/details" : "/login" );
     });

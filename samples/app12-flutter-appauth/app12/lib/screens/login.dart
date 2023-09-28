@@ -28,13 +28,12 @@ class LoginScreen extends StatelessWidget {
         ],
       )),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () async {
-
-          var a = await Authentication.instance.authenticate();
-
-          if (a) {
-            context.go("/details");
-          }
+        onPressed: () {
+          Authentication.instance.authenticate().then(
+                (success) => {
+                  if (success) {context.go("/details")}
+                },
+              );
         },
         label: const Text('Login'),
         icon: const Icon(Icons.login),

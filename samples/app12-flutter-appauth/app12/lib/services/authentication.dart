@@ -36,6 +36,7 @@ class Authentication {
           discoveryUrl: _oidcDiscoveryUrl,
           // scopes: ['openid', 'profile', 'email', 'offline_access'],
           scopes: ['openid', 'profile', 'email'],
+          promptValues: ['login'],
         ),
       );
 
