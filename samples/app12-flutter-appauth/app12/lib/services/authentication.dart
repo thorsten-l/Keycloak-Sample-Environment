@@ -20,6 +20,12 @@ class Authentication {
   Future<bool> updateAccessToken() async {
     log("uid = $_uuid", name: "Authentication.updateAccessToken");
 
+    String? idToken = await secureStorage.read(key: idTokenKey);
+
+    if (idToken != null) {
+      _validateIdToken(idToken);
+    }
+
     String? refreshToken = await secureStorage.read(key: refreshTokenKey);
 
     if (refreshToken != null) {
@@ -28,7 +34,7 @@ class Authentication {
     }
 
     // Show splash screen at least for a second
-    return Future.delayed(const Duration(seconds: 1), () => _authenticated );
+    return Future.delayed(const Duration(seconds: 1), () => _authenticated);
   }
 
   Future<bool> authenticate() async {

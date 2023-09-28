@@ -4,9 +4,14 @@ import 'package:go_router/go_router.dart';
 
 import '../constants.dart';
 
-class DetailsScreen extends StatelessWidget {
+class DetailsScreen extends StatefulWidget {
   const DetailsScreen({super.key});
 
+  @override
+  State<DetailsScreen> createState() => _DetailsScreen();
+}
+
+class _DetailsScreen extends State<DetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,19 +20,41 @@ class DetailsScreen extends StatelessWidget {
         foregroundColor: Colors.white,
         title: const Text(appTitle),
       ),
-      body: Center(
-          child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            'Details',
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
-          const Text(
-            '...',
-          ),
-        ],
-      )),
+      body: SingleChildScrollView(
+        child: DataTable(
+          columns: const <DataColumn>[
+            DataColumn(
+              label: Text(
+                'Key',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            DataColumn(
+              label: Text(
+                'Value',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+          rows: Authentication.instance.idTokenMap!.entries
+              .map(
+                (e) => DataRow(cells: [
+                  DataCell(
+                    Container(
+                      width: 96,
+                      child: Text(e.key.toString()),
+                    ),
+                  ),
+                  DataCell(Text(e.value.toString())),
+                ]),
+              )
+              .toList(),
+        ),
+      ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Authentication.instance.logout();
