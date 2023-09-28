@@ -1,6 +1,4 @@
-import 'package:app12/screens/details.dart';
-import 'package:app12/screens/login.dart';
-import 'package:app12/screens/splash.dart';
+import 'package:app12/router.dart';
 import 'package:flutter/material.dart';
 
 const appTitle = 'App12 - Flutter OIDC AppAuth';
@@ -15,18 +13,16 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: appTitle,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      initialRoute: "/",
-      routes: {
-        "/": (context) => const SplashScreen(),
-        "/login": (context) => const LoginScreen(),
-        "/details": (context) => const DetailsScreen(),
-      },
+      routeInformationProvider: router.routeInformationProvider,
+      routeInformationParser: router.routeInformationParser,
+      routerDelegate: router.routerDelegate,
+      debugShowCheckedModeBanner: false,
     );
   }
 }
