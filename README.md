@@ -80,6 +80,7 @@ app8 | Springboot 3 + OAuth2 Lib / Springboot 3 Resource Server | OIDC | http://
 app9 | Jakarta EE 10 + Payara ME 6.2023.4 | OIDC | http://app9.dev.sonia.de:8089
 app10 | Springboot 3.1 + OAuth2 Lib | OIDC | http://app10.dev.sonia.de:8090
 app11 | JavaScript + OIDC Client | OIDC | http://app11.dev.sonia.de:8091
+app12 | Dart, Flutter AppAuth | OIDC | Mobile App (Android,iOS,...)
 
 ## Referenzen
 
@@ -117,3 +118,8 @@ app11 | JavaScript + OIDC Client | OIDC | http://app11.dev.sonia.de:8091
 - [https://www.npmjs.com/package/oidc-client](https://www.npmjs.com/package/oidc-client)
 - [https://github.com/authts/oidc-client-ts](https://github.com/authts/oidc-client-ts)
 
+### Dart / Flutter
+- [https://dart.dev/](https://dart.dev/)
+- [https://flutter.dev/](https://flutter.dev/)
+- [https://pub.dev/packages/flutter_appauth](https://pub.dev/packages/flutter_appauth)
+- [Free Flutter Authentication & Authorization Course, YouTube](https://www.youtube.com/playlist?list=PLCOnzDflrUceRLfHEkl-u2ipjsre6ZwjV)

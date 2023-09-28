@@ -5,3 +5,5 @@ target
 *.jar
 **/html/vendor/**
 *.pyc
+*.log
+.DS_Store
