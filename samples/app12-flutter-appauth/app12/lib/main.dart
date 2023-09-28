@@ -1,6 +1,6 @@
-import 'package:app12/pages/details.dart';
-import 'package:app12/pages/login.dart';
-import 'package:app12/pages/splash.dart';
+import 'package:app12/screens/details.dart';
+import 'package:app12/screens/login.dart';
+import 'package:app12/screens/splash.dart';
 import 'package:flutter/material.dart';
 
 const appTitle = 'App12 - Flutter OIDC AppAuth';
@@ -23,9 +23,9 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: "/",
       routes: {
-        "/": (context) => const SplashPage(),
-        "/login": (context) => const LoginPage(),
-        "/details": (context) => const DetailsPage(),
+        "/": (context) => const SplashScreen(),
+        "/login": (context) => const LoginScreen(),
+        "/details": (context) => const DetailsScreen(),
       },
     );
   }
