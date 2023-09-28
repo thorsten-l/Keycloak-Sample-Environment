@@ -27,6 +27,7 @@ class _DetailsScreen extends State<DetailsScreen> {
               label: Text(
                 'Key',
                 style: TextStyle(
+                  color: Colors.blue,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -35,6 +36,7 @@ class _DetailsScreen extends State<DetailsScreen> {
               label: Text(
                 'Value',
                 style: TextStyle(
+                  color: Colors.blue,
                   fontWeight: FontWeight.bold,
                 ),
               ),
