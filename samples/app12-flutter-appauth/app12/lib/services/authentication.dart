@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:uuid/uuid.dart';
+import 'package:http/http.dart' as http;
 
 import '../constants.dart';
 
@@ -20,17 +21,29 @@ class Authentication {
   Future<bool> updateAccessToken() async {
     log("uuid = $_uuid", name: "Authentication.updateAccessToken");
 
-    String? idToken = await secureStorage.read(key: idTokenKey);
+    _authenticated = false;
+    _userInfo = null;
 
-    if (idToken != null) {
-      _validateIdToken(idToken);
-    }
+    _idToken = await secureStorage.read(key: idTokenKey);
+    _accessToken = await secureStorage.read(key: accessTokenKey);
+    _refreshToken = await secureStorage.read(key: refreshTokenKey);
 
-    String? refreshToken = await secureStorage.read(key: refreshTokenKey);
+    if (_refreshToken != null) {
+      final response = await appAuth.token(
+        TokenRequest(
+          oidcClientId,
+          oidcRedirectUrl,
+          clientSecret: oidcClientSecret,
+          discoveryUrl: oidcDiscoveryUrl,
+          refreshToken: _refreshToken,
+        ),
+      );
 
-    if (refreshToken != null) {
-      // TODO: validate refresh token and get new access token
-      _authenticated = true;
+      if (response != null) {
+        _authenticated = true;
+        _accessToken = response.accessToken;
+        await _getUserInfo(accessToken!);
+      }
     }
 
     // Show splash screen at least for a second
@@ -41,7 +54,8 @@ class Authentication {
     log("uuid = $_uuid", name: "Authentication.authenticate");
 
     if (!_authenticated) {
-      _authorizationTokenResponse = await appAuth.authorizeAndExchangeCode(
+      AuthorizationTokenResponse? authorizationTokenResponse =
+          await appAuth.authorizeAndExchangeCode(
         AuthorizationTokenRequest(
           oidcClientId,
           oidcRedirectUrl,
@@ -53,21 +67,22 @@ class Authentication {
         ),
       );
 
-      if (_authorizationTokenResponse != null) {
-        String? idToken = _authorizationTokenResponse!.idToken;
-        log("idToken=${idToken!}");
-        _authenticated = _validateIdToken(idToken);
+      if (authorizationTokenResponse != null) {
+        _idToken = authorizationTokenResponse.idToken;
+        _accessToken = authorizationTokenResponse.accessToken;
+        _refreshToken = authorizationTokenResponse.refreshToken;
+
+        log(_idToken!, name: "idToken");
+
+        _authenticated = _validateIdToken(_idToken);
+
         if (_authenticated) {
-          secureStorage.write(
-              key: authorizedKey, value: _authenticated.toString());
-          secureStorage.write(
-              key: idTokenKey, value: _authorizationTokenResponse!.idToken);
-          secureStorage.write(
-              key: accessTokenKey,
-              value: _authorizationTokenResponse!.accessToken);
-          secureStorage.write(
-              key: refreshTokenKey,
-              value: _authorizationTokenResponse!.refreshToken);
+          secureStorage.write(key: idTokenKey, value: _idToken);
+          secureStorage.write(key: accessTokenKey, value: _accessToken);
+          secureStorage.write(key: refreshTokenKey, value: _refreshToken);
+          log("_getUserInfo...");
+
+          await _getUserInfo(accessToken!);
         }
       }
     }
@@ -75,10 +90,47 @@ class Authentication {
     return _authenticated;
   }
 
+  Future<String?> _getUserInfo(String accessToken) async {
+    // get userinfoEndpoint URL String from Discovery URL
+    final discoveryResponse = await http.get(Uri.parse(oidcDiscoveryUrl));
+    final userinfoEndpointUrl =
+        jsonDecode(discoveryResponse.body)['userinfo_endpoint'];
+
+    // log(userinfoEndpointUrl, name: "userinfoEndpoint");
+
+    final userinfoResponse = await http.get(
+      Uri.parse(userinfoEndpointUrl),
+      headers: {
+        'Authorization': 'Bearer $accessToken',
+      },
+    );
+
+    if (userinfoResponse.statusCode == 200) {
+      _userInfo = userinfoResponse.body;
+    } else {
+      _userInfo = null;
+    }
+
+    return _userInfo;
+  }
+
   void logout() async {
     log("uuid = $_uuid", name: "Authentication.logout");
     _authenticated = false;
     secureStorage.deleteAll();
+  }
+
+  Map<String, dynamic>? parseJwt(String? jwt) {
+    Map<String, dynamic>? tokenMap;
+
+    if (jwt != null) {
+      var jwtParts = jwt.split(r'.');
+      if (jwtParts.length == 3) {
+        tokenMap = jsonDecode(_decodeTokenPart(jwtParts[1]));
+      }
+    }
+
+    return tokenMap;
   }
 
   String _decodeTokenPart(String tokenPart) {
@@ -88,37 +140,46 @@ class Authentication {
   bool _validateIdToken(String? idToken) {
     bool idTokenValid = false;
 
-    if (idToken != null) {
-      var idTokenParts = idToken.split(r'.');
-      if (idTokenParts.length == 3) {
-        log("found all 3 parts in idToken");
+    Map<String, dynamic>? idTokenMap = parseJwt(idToken);
 
-        log(_decodeTokenPart(idTokenParts[0]), name: 'idToken Header');
-        log(_decodeTokenPart(idTokenParts[1]), name: 'idToken Body');
-        log(base64Url.normalize(idTokenParts[2]), name: 'idToken Signature');
+    if (idTokenMap != null) {
+      log(idTokenMap.toString(), name: "idTokenMap");
 
-        idTokenMap = jsonDecode(_decodeTokenPart(idTokenParts[1]));
-        log(idTokenMap!.toString(), name: "idTokenMap");
+      log(idTokenMap['name'], name: "name");
+      log(idTokenMap['preferred_username'], name: "preferred_username");
+      log(idTokenMap['sub'], name: "sub");
+      log(idTokenMap['given_name'], name: "given_name");
+      log(idTokenMap['family_name'], name: "family_name");
+      log(idTokenMap['email'], name: "email");
 
-        log(idTokenMap!['name'].toString(), name: "name");
-        log(idTokenMap!['preferred_username'].toString(),
-            name: "preferred_username");
-        log(idTokenMap!['sub'].toString(), name: "sub");
-        log(idTokenMap!['nickname'].toString(), name: "nickname");
-        log(idTokenMap!['family_name'].toString(), name: "family_name");
-        log(idTokenMap!['email'].toString(), name: "email");
-
-        idTokenValid = true;
-      }
+      idTokenValid = true;
     }
 
     return idTokenValid;
   }
 
-  AuthorizationTokenResponse? _authorizationTokenResponse;
-  Map<String, dynamic>? idTokenMap;
+  Map<String, dynamic>? idTokenMap() {
+    return parseJwt(_idToken!);
+  }
+
+  Map<String, dynamic>? accessTokenMap() {
+    return parseJwt(_accessToken!);
+  }
+
+  Map<String, dynamic>? userInfoMap() {
+    var userinfoMap = <String, dynamic>{};
+    if (_userInfo != null) {
+      userinfoMap = jsonDecode(_userInfo!);
+    }
+    return userinfoMap;
+  }
 
   bool get authenticated => _authenticated;
+  String? get accessToken => _accessToken;
 
+  String? _idToken;
+  String? _accessToken;
+  String? _refreshToken;
+  String? _userInfo;
   bool _authenticated = false;
 }
