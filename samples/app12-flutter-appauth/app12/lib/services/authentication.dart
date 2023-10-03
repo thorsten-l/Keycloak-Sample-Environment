@@ -18,7 +18,7 @@ class Authentication {
   }
 
   Future<bool> updateAccessToken() async {
-    log("uid = $_uuid", name: "Authentication.updateAccessToken");
+    log("uuid = $_uuid", name: "Authentication.updateAccessToken");
 
     String? idToken = await secureStorage.read(key: idTokenKey);
 
@@ -38,7 +38,7 @@ class Authentication {
   }
 
   Future<bool> authenticate() async {
-    log("uid = $_uuid", name: "Authentication.authenticate");
+    log("uuid = $_uuid", name: "Authentication.authenticate");
 
     if (!_authenticated) {
       _authorizationTokenResponse = await appAuth.authorizeAndExchangeCode(
@@ -76,7 +76,7 @@ class Authentication {
   }
 
   void logout() async {
-    log("uid = $_uuid", name: "Authentication.logout");
+    log("uuid = $_uuid", name: "Authentication.logout");
     _authenticated = false;
     secureStorage.deleteAll();
   }

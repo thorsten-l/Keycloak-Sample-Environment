@@ -1,10 +1,23 @@
+import 'dart:developer';
+
 import 'package:app12/router.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import 'constants.dart';
 
 
 void main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+
+  PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+  log( packageInfo.appName, name: "appName" );
+  log( packageInfo.packageName, name: "packageName" );
+  log( packageInfo.version, name: "version" );
+  log( packageInfo.buildNumber, name: "buildNumber" );
+
   runApp(const MyApp());
 }
 

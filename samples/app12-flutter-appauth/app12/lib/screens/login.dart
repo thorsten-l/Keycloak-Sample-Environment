@@ -20,11 +20,11 @@ class LoginScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(
-            'Login via id.dev.sonia.de',
+            loginHost,
             style: Theme.of(context).textTheme.headlineMedium,
           ),
           const Text(
-            'User: c1test1 / Password: test123',
+            loginText,
           ),
         ],
       )),
