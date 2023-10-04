@@ -30,7 +30,7 @@ class LoginScreen extends StatelessWidget {
       )),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Authentication.instance.authenticate().then(
+          Authentication.instance.authenticate(context).then(
                 (success) => {
                   if (success) {context.go("/details")}
                 },

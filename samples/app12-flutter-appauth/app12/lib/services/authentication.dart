@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:uuid/uuid.dart';
@@ -18,7 +20,7 @@ class Authentication {
     log("uuid = $_uuid", name: "Authentication._internal");
   }
 
-  Future<bool> updateAccessToken() async {
+  Future<bool> updateAccessToken(BuildContext context) async {
     log("uuid = $_uuid", name: "Authentication.updateAccessToken");
 
     _authenticated = false;
@@ -29,20 +31,30 @@ class Authentication {
     _refreshToken = await secureStorage.read(key: refreshTokenKey);
 
     if (_refreshToken != null) {
-      final response = await appAuth.token(
-        TokenRequest(
-          oidcClientId,
-          oidcRedirectUrl,
-          clientSecret: oidcClientSecret,
-          discoveryUrl: oidcDiscoveryUrl,
-          refreshToken: _refreshToken,
-        ),
-      );
+      try {
+        final response = await appAuth.token(
+          TokenRequest(
+            oidcClientId,
+            oidcRedirectUrl,
+            clientSecret: oidcClientSecret,
+            discoveryUrl: oidcDiscoveryUrl,
+            refreshToken: _refreshToken,
+          ),
+        );
 
-      if (response != null) {
-        _authenticated = true;
-        _accessToken = response.accessToken;
-        await _getUserInfo(accessToken!);
+        if (response != null) {
+          _authenticated = true;
+          _accessToken = response.accessToken;
+          DateTime? exp = response.accessTokenExpirationDateTime;
+          log("$exp", name: "access token expiration");
+          await _getUserInfo(accessToken!);
+        }
+      } on Exception catch (error, stackTrace) {
+        const snackBar = SnackBar(content: Text("Refresh token invalid!"));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        log("refresh token invalid", name: "updateAccessToken");
+        log(error.toString(), name: "updateAccessToken");
+        log(stackTrace.toString(), name: "updateAccessToken");
       }
     }
 
@@ -50,40 +62,48 @@ class Authentication {
     return Future.delayed(const Duration(seconds: 1), () => _authenticated);
   }
 
-  Future<bool> authenticate() async {
+  Future<bool> authenticate(BuildContext context) async {
     log("uuid = $_uuid", name: "Authentication.authenticate");
 
     if (!_authenticated) {
-      AuthorizationTokenResponse? authorizationTokenResponse =
-          await appAuth.authorizeAndExchangeCode(
-        AuthorizationTokenRequest(
-          oidcClientId,
-          oidcRedirectUrl,
-          clientSecret: oidcClientSecret,
-          discoveryUrl: oidcDiscoveryUrl,
-          // scopes: ['openid', 'profile', 'email', 'offline_access'],
-          scopes: ['openid', 'profile', 'email'],
-          promptValues: ['login'],
-        ),
-      );
+      try {
+        AuthorizationTokenResponse? authorizationTokenResponse =
+            await appAuth.authorizeAndExchangeCode(
+          AuthorizationTokenRequest(
+            oidcClientId,
+            oidcRedirectUrl,
+            clientSecret: oidcClientSecret,
+            discoveryUrl: oidcDiscoveryUrl,
+            // scopes: ['openid', 'profile', 'email', 'offline_access'],
+            scopes: ['openid', 'profile', 'email'],
+            promptValues: ['login'],
+          ),
+        );
 
-      if (authorizationTokenResponse != null) {
-        _idToken = authorizationTokenResponse.idToken;
-        _accessToken = authorizationTokenResponse.accessToken;
-        _refreshToken = authorizationTokenResponse.refreshToken;
+        if (authorizationTokenResponse != null) {
+          _idToken = authorizationTokenResponse.idToken;
+          _accessToken = authorizationTokenResponse.accessToken;
+          _refreshToken = authorizationTokenResponse.refreshToken;
 
-        log(_idToken!, name: "idToken");
+          log(_idToken!, name: "idToken");
 
-        _authenticated = _validateIdToken(_idToken);
+          _authenticated = _validateIdToken(_idToken);
 
-        if (_authenticated) {
-          secureStorage.write(key: idTokenKey, value: _idToken);
-          secureStorage.write(key: accessTokenKey, value: _accessToken);
-          secureStorage.write(key: refreshTokenKey, value: _refreshToken);
-          log("_getUserInfo...");
+          if (_authenticated) {
+            secureStorage.write(key: idTokenKey, value: _idToken);
+            secureStorage.write(key: accessTokenKey, value: _accessToken);
+            secureStorage.write(key: refreshTokenKey, value: _refreshToken);
+            log("_getUserInfo...");
 
-          await _getUserInfo(accessToken!);
+            await _getUserInfo(accessToken!);
+          }
         }
+      } on Exception catch (error, stackTrace) {
+        const snackBar = SnackBar(content: Text("Login failed!"));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        log("login failed", name: "authenticate");
+        log(error.toString(), name: "authenticate");
+        log(stackTrace.toString(), name: "authenticate");
       }
     }
 

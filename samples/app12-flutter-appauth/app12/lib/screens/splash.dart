@@ -1,16 +1,27 @@
+import 'dart:developer';
+
 import 'package:app12/services/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:uuid/uuid.dart';
 
 import '../constants.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
+  State<SplashScreen> createState() => _SplashScreen();
+}
+
+class _SplashScreen extends State<SplashScreen> {
+  final String _uuid = const Uuid().v4().toString();
+
+  @override
   Widget build(BuildContext context) {
+    log( _uuid, name: "SplashScreen: uuid" );
     // update access token -> if refresh token exists
-    Authentication.instance.updateAccessToken().then(
+    Authentication.instance.updateAccessToken(context).then(
         (authenticated) => context.go(authenticated ? "/details" : "/login"));
 
     // simulate refresh#
