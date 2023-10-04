@@ -49,12 +49,11 @@ class Authentication {
           log("$exp", name: "access token expiration");
           await _getUserInfo(accessToken!);
         }
-      } on Exception catch (error, stackTrace) {
+      } catch (error) {
         const snackBar = SnackBar(content: Text("Refresh token invalid!"));
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
         log("refresh token invalid", name: "updateAccessToken");
         log(error.toString(), name: "updateAccessToken");
-        log(stackTrace.toString(), name: "updateAccessToken");
       }
     }
 
@@ -98,7 +97,7 @@ class Authentication {
             await _getUserInfo(accessToken!);
           }
         }
-      } on Exception catch (error, stackTrace) {
+      } catch (error, stackTrace) {
         const snackBar = SnackBar(content: Text("Login failed!"));
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
         log("login failed", name: "authenticate");

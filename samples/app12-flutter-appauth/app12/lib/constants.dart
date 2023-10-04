@@ -19,3 +19,6 @@ const authorizedKey = "authorized";
 const idTokenKey = "idToken";
 const accessTokenKey = "accessToken";
 const refreshTokenKey = "refreshToken";
+
+const githubUrl =
+    "https://github.com/thorsten-l/Keycloak-Sample-Environment/tree/main/samples/app12-flutter-appauth";

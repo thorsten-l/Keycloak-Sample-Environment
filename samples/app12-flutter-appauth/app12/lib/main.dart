@@ -6,17 +6,18 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 import 'constants.dart';
 
+late PackageInfo appPackageInfo;
 
 void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
 
-  PackageInfo packageInfo = await PackageInfo.fromPlatform();
+  appPackageInfo = await PackageInfo.fromPlatform();
 
-  log( packageInfo.appName, name: "appName" );
-  log( packageInfo.packageName, name: "packageName" );
-  log( packageInfo.version, name: "version" );
-  log( packageInfo.buildNumber, name: "buildNumber" );
+  log( appPackageInfo.appName, name: "appName" );
+  log( appPackageInfo.packageName, name: "packageName" );
+  log( appPackageInfo.version, name: "version" );
+  log( appPackageInfo.buildNumber, name: "buildNumber" );
 
   runApp(const MyApp());
 }

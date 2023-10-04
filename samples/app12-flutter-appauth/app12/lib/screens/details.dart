@@ -1,6 +1,12 @@
+import 'dart:developer';
+
+import 'package:app12/main.dart';
 import 'package:app12/services/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../constants.dart';
 
 class DetailsScreen extends StatefulWidget {
   const DetailsScreen({super.key});
@@ -9,8 +15,20 @@ class DetailsScreen extends StatefulWidget {
   State<DetailsScreen> createState() => _DetailsScreen();
 }
 
+enum SelectedItem { about, github, logout }
+
 class _DetailsScreen extends State<DetailsScreen> {
   int currentPageIndex = 0;
+  SelectedItem? selectedMenu;
+
+  Future<void> _launchInBrowser(String url) async {
+    if (!await launchUrl(
+      Uri.parse(url),
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw Exception('Could not launch $url');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,37 +37,77 @@ class _DetailsScreen extends State<DetailsScreen> {
         backgroundColor: Colors.lightBlue,
         foregroundColor: Colors.white,
         title: const Text("Information"),
-        actions: [
-          IconButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text("Logout"),
-                    content: const Text("Do you really want to logout?"),
-                    actions: [
-                      TextButton(
-                        child: const Text("No"),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                      TextButton(
-                        child: const Text("Yes"),
-                        onPressed: () {
-                          Authentication.instance.logout();
-                          context.go("/");
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-            icon: const Icon(Icons.logout),
-          )
-        ],
+        leading: PopupMenuButton<SelectedItem>(
+          icon: const Icon(Icons.menu),
+
+          initialValue: selectedMenu,
+          // Callback that sets the selected popup menu item.
+          onSelected: (SelectedItem item) {
+            setState(
+              () {
+                selectedMenu = item;
+
+                switch (selectedMenu!) {
+                  case SelectedItem.about:
+                    showAboutDialog(
+                        context: context,
+                        applicationVersion: appPackageInfo.version,
+                        applicationName: appPackageInfo.appName,
+                        applicationLegalese:
+                            "Copyleft 2023 by\nDr. Thorsten Ludewig\nt.ludewig@gmail.com");
+                    break;
+
+                  case SelectedItem.github:
+                    log("launch browser");
+                    _launchInBrowser(githubUrl);
+                    break;
+
+                  case SelectedItem.logout:
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text("Logout"),
+                          content: const Text("Do you really want to logout?"),
+                          actions: [
+                            TextButton(
+                              child: const Text("No"),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            TextButton(
+                              child: const Text("Yes"),
+                              onPressed: () {
+                                Authentication.instance.logout();
+                                context.go("/");
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                    break;
+                }
+              },
+            );
+          },
+          itemBuilder: (BuildContext context) => <PopupMenuEntry<SelectedItem>>[
+            const PopupMenuItem<SelectedItem>(
+              value: SelectedItem.about,
+              child: Text('About'),
+            ),
+            const PopupMenuItem<SelectedItem>(
+              value: SelectedItem.github,
+              child: Text('Source Code...'),
+            ),
+            const PopupMenuDivider(),
+            const PopupMenuItem<SelectedItem>(
+              value: SelectedItem.logout,
+              child: Text('Logout'),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
