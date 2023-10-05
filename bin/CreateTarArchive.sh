@@ -11,6 +11,8 @@ find . \( -name 'target' \) -print -exec rm -fr {} \;
 find . \( -name '.DS_Store' -o -name '._?*' -o -name 'access_log*' -o -name 'application.log'  \) -print -exec rm -fr {} \;
 rm -f keycloak/kcldap/data/run/slapd-localhost.socket keycloak/kcfront/log/* keycloak/kcldap/data/logs/*
 
+( cd ./samples/app12-flutter-appauth/app12; flutter clean )
+
 sudo xattr -rc .
 
 cd ..

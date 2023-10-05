@@ -51,7 +51,10 @@ class _DetailsScreen extends State<DetailsScreen> {
                   case SelectedItem.about:
                     showAboutDialog(
                         context: context,
-                        applicationVersion: appPackageInfo.version,
+                        applicationVersion: appPackageInfo.buildNumber +
+                            " (" +
+                            appPackageInfo.version +
+                            ")",
                         applicationName: appPackageInfo.appName,
                         applicationLegalese:
                             "Copyleft 2023 by\nDr. Thorsten Ludewig\nt.ludewig@gmail.com");
