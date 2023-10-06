@@ -1,9 +1,6 @@
-import 'dart:developer';
-
 import 'package:app12/services/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:uuid/uuid.dart';
 
 import '../constants.dart';
 
