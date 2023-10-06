@@ -1,10 +1,13 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:app12/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/cupertino.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 import '../constants.dart';
 
@@ -49,15 +52,23 @@ class Authentication {
           await _getUserInfo(accessToken!);
         }
       } catch (error) {
-        const snackBar = SnackBar(content: Text("Refresh token invalid!"));
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        if (UniversalPlatform.isIOS) {
+          showCupertinoModalPopup<void>(
+            context: context,
+            builder: (BuildContext context) => CupertinoAlertDialog(
+                title: const Text('Refresh token invalid!')),
+          );
+        } else {
+          const snackBar = SnackBar(content: Text("Refresh token invalid!"));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
         log("refresh token invalid", name: "updateAccessToken");
         log(error.toString(), name: "updateAccessToken");
       }
     }
 
     // Show splash screen at least for a second
-    return Future.delayed(const Duration(seconds: 1), () => _authenticated);
+    return Future.delayed(const Duration(seconds: 2), () => _authenticated);
   }
 
   Future<bool> authenticate(BuildContext context) async {
@@ -97,8 +108,17 @@ class Authentication {
           }
         }
       } catch (error, stackTrace) {
-        const snackBar = SnackBar(content: Text("Login failed!"));
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        if (UniversalPlatform.isIOS) {
+          showCupertinoModalPopup<void>(
+            context: context,
+            builder: (BuildContext context) => CupertinoAlertDialog(
+              title: Text('Login failed!\n\n' + error!.toString()),
+            ),
+          );
+        } else {
+          const snackBar = SnackBar(content: Text("Login failed!"));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
         log("login failed", name: "authenticate");
         log(error.toString(), name: "authenticate");
         log(stackTrace.toString(), name: "authenticate");
@@ -177,11 +197,19 @@ class Authentication {
   }
 
   Map<String, dynamic>? idTokenMap() {
-    return parseJwt(_idToken!);
+    Map<String, dynamic>? idTokenMap = <String, dynamic>{};
+    if( _idToken != null ) {
+      idTokenMap = parseJwt(_idToken);
+    }
+    return idTokenMap;
   }
 
   Map<String, dynamic>? accessTokenMap() {
-    return parseJwt(_accessToken!);
+    Map<String, dynamic>? accessTokenMap = <String, dynamic>{};
+    if( _accessToken != null ) {
+      accessTokenMap = parseJwt(_accessToken);
+    }
+    return accessTokenMap;
   }
 
   Map<String, dynamic>? userInfoMap() {
