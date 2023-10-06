@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'package:app12/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -112,7 +111,7 @@ class Authentication {
           showCupertinoModalPopup<void>(
             context: context,
             builder: (BuildContext context) => CupertinoAlertDialog(
-              title: Text('Login failed!\n\n' + error!.toString()),
+              title: Text('Login failed!\n\n' + error.toString()),
             ),
           );
         } else {
