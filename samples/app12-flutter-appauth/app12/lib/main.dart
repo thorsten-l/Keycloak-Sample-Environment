@@ -20,7 +20,6 @@ void main() async {
   log(appPackageInfo.packageName, name: "packageName");
   log(appPackageInfo.version, name: "version");
   log(appPackageInfo.buildNumber, name: "buildNumber");
-  log(appPackageInfo.buildNumber, name: "buildNumber");
 
   runApp(const MyApp());
 }
@@ -33,6 +32,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return (UniversalPlatform.isIOS)
         ? CupertinoApp.router(
+            theme: CupertinoThemeData(brightness: Brightness.light),
             title: appTitle,
             routeInformationProvider: router.routeInformationProvider,
             routeInformationParser: router.routeInformationParser,

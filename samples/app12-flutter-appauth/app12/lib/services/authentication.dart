@@ -8,7 +8,8 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:universal_platform/universal_platform.dart';
 
-import '../constants.dart';
+import 'package:app12/constants.dart';
+import 'package:app12/screens/alert.dart';
 
 class Authentication {
   static final Authentication instance = Authentication._internal();
@@ -51,6 +52,10 @@ class Authentication {
           await _getUserInfo(accessToken!);
         }
       } catch (error) {
+
+        showErrorAlert(context, "Refresh token invalid!");
+
+        /*
         if (UniversalPlatform.isIOS) {
           showCupertinoModalPopup<void>(
             context: context,
@@ -61,6 +66,8 @@ class Authentication {
           const snackBar = SnackBar(content: Text("Refresh token invalid!"));
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         }
+        */
+
         log("refresh token invalid", name: "updateAccessToken");
         log(error.toString(), name: "updateAccessToken");
       }
@@ -107,17 +114,7 @@ class Authentication {
           }
         }
       } catch (error, stackTrace) {
-        if (UniversalPlatform.isIOS) {
-          showCupertinoModalPopup<void>(
-            context: context,
-            builder: (BuildContext context) => CupertinoAlertDialog(
-              title: Text('Login failed!\n\n' + error.toString()),
-            ),
-          );
-        } else {
-          const snackBar = SnackBar(content: Text("Login failed!"));
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        }
+        showErrorAlert(context, "Login failed!");
         log("login failed", name: "authenticate");
         log(error.toString(), name: "authenticate");
         log(stackTrace.toString(), name: "authenticate");
