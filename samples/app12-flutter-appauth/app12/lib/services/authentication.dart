@@ -6,8 +6,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
-import 'package:universal_platform/universal_platform.dart';
-
 import 'package:app12/constants.dart';
 import 'package:app12/screens/alert.dart';
 
