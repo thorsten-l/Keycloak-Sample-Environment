@@ -50,28 +50,13 @@ class Authentication {
           await _getUserInfo(accessToken!);
         }
       } catch (error) {
-
         showErrorAlert(context, "Refresh token invalid!");
-
-        /*
-        if (UniversalPlatform.isIOS) {
-          showCupertinoModalPopup<void>(
-            context: context,
-            builder: (BuildContext context) => CupertinoAlertDialog(
-                title: const Text('Refresh token invalid!')),
-          );
-        } else {
-          const snackBar = SnackBar(content: Text("Refresh token invalid!"));
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        }
-        */
-
         log("refresh token invalid", name: "updateAccessToken");
         log(error.toString(), name: "updateAccessToken");
       }
     }
 
-    // Show splash screen at least for a second
+    // Show splash screen at least for two seconds
     return Future.delayed(const Duration(seconds: 2), () => _authenticated);
   }
 
@@ -127,8 +112,6 @@ class Authentication {
     final discoveryResponse = await http.get(Uri.parse(oidcDiscoveryUrl));
     final userinfoEndpointUrl =
         jsonDecode(discoveryResponse.body)['userinfo_endpoint'];
-
-    // log(userinfoEndpointUrl, name: "userinfoEndpoint");
 
     final userinfoResponse = await http.get(
       Uri.parse(userinfoEndpointUrl),

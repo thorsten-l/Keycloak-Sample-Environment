@@ -12,7 +12,9 @@ class CDetailsScreen extends State<DetailsScreen> {
   int currentPageIndex = 0;
   SelectedItem? selectedMenu;
 
-  Widget _cupertinoScreen(BuildContext context) {
+  @override
+  Widget build(BuildContext context) {
+
     double height = (MediaQuery.of(context).size.height);
 
     log(height.toString(), name: "context.height");
@@ -103,12 +105,6 @@ class CDetailsScreen extends State<DetailsScreen> {
         ),
       ),
     );
-  }
-
-
-  @override
-  Widget build(BuildContext context) {
-    return _cupertinoScreen(context);
   }
 
   void _showCupertinoMenu(BuildContext context) {
