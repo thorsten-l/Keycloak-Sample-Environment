@@ -6,7 +6,7 @@ import 'package:app12/services/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class MDetailsScreen extends State<DetailsScreen> {
+class MDetailsScreen extends State<DetailsScreen> implements DataHelper {
   int currentPageIndex = 0;
   SelectedItem? selectedMenu;
 
@@ -22,7 +22,7 @@ class MDetailsScreen extends State<DetailsScreen> {
           initialValue: selectedMenu,
           onSelected: (SelectedItem item) {
             setState(
-                  () {
+              () {
                 selectedMenu = item;
 
                 switch (selectedMenu!) {
@@ -35,7 +35,7 @@ class MDetailsScreen extends State<DetailsScreen> {
                             ")",
                         applicationName: appPackageInfo.appName,
                         applicationLegalese:
-                        "Copyleft 2023 by\nDr. Thorsten Ludewig\nt.ludewig@gmail.com");
+                            "Copyleft 2023 by\nDr. Thorsten Ludewig\nt.ludewig@gmail.com");
                     break;
 
                   case SelectedItem.github:
@@ -73,8 +73,7 @@ class MDetailsScreen extends State<DetailsScreen> {
               },
             );
           },
-          itemBuilder: (BuildContext context) =>
-          <PopupMenuEntry<SelectedItem>>[
+          itemBuilder: (BuildContext context) => <PopupMenuEntry<SelectedItem>>[
             const PopupMenuItem<SelectedItem>(
               value: SelectedItem.about,
               child: Text('About'),
@@ -125,4 +124,11 @@ class MDetailsScreen extends State<DetailsScreen> {
     );
   }
 
+  Widget createDataKey(String value) {
+    return Text(value);
+  }
+
+  Widget createDataValue(String value) {
+    return Text(value);
+  }
 }

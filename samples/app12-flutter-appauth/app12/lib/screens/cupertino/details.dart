@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 
-class CDetailsScreen extends State<DetailsScreen> {
+class CDetailsScreen extends State<DetailsScreen> implements DataHelper {
   int currentPageIndex = 0;
   SelectedItem? selectedMenu;
 
@@ -201,5 +201,20 @@ class CDetailsScreen extends State<DetailsScreen> {
         );
       },
     );
+  }
+
+  Widget createDataKey( String value )
+  {
+    return Text(
+      value,
+      style: TextStyle(
+        fontWeight: FontWeight.bold,
+      ),
+    );
+  }
+
+  Widget createDataValue( String value )
+  {
+    return Text( value );
   }
 }
