@@ -19,6 +19,7 @@ cat <<EOT
     <h1>OPAC Userinfo</h1>
     <table class="table table-striped">
       <tbody>
+        <tr><th>UID</th><td>$OIDC_CLAIM_preferred_username</td></tr>
         <tr><th>Name</th><td>$OIDC_CLAIM_name</td></tr>
         <tr><th>E-Mail</th><td>$OIDC_CLAIM_email</td></tr>
         <tr><th>Nachname</th><td>$OIDC_CLAIM_family_name</td></tr>
