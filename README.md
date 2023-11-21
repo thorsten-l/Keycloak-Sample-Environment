@@ -22,6 +22,7 @@ Alle in dieser Umgebung verwendeten Beispiele beötigen *Docker* als Laufzeitumg
 Das gesamte System ist nur für den `localhost` konfiguriert, Docker und dein Lieblings-Browser müssen auf dem gleichen Rechner laufen. (z.B. deinem Notebook oder Arbeitsplatz-PC)
 
 Bitte füge folgende Zeilen in deine `/etc/hosts` Datei ein.
+(Unter Microsoft Windows `C:\Windows\System32\drivers\etc\hosts`)
 
 ```text
 127.0.0.1       id.dev.sonia.de
@@ -45,7 +46,7 @@ Bitte füge folgende Zeilen in deine `/etc/hosts` Datei ein.
 ## Starte Keycloak Umgebung
 
 1. `cd keycloak`
-2. `./bin/STARTUP.sh`
+2. `./bin/STARTUP.sh` (Windows: `.\bin\STARTUP.ps1`)
 
 ## Starte Beispiel Applikation
 
@@ -123,3 +124,10 @@ app12 | Dart, Flutter AppAuth | OIDC | Mobile App (Android,iOS,...)
 - [https://flutter.dev/](https://flutter.dev/)
 - [https://pub.dev/packages/flutter_appauth](https://pub.dev/packages/flutter_appauth)
 - [Free Flutter Authentication & Authorization Course, YouTube](https://www.youtube.com/playlist?list=PLCOnzDflrUceRLfHEkl-u2ipjsre6ZwjV)
+
+## Tools
+- [Apache NetBeans](https://netbeans.apache.org)
+- [Apache Directory Studio](https://directory.apache.org/studio/)
+- [DbVisualizer](https://www.dbvis.com/)
+- [DBeaver Community](https://dbeaver.io/)
+- [Visual Studio Code](https://code.visualstudio.com/)
