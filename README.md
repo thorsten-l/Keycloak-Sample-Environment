@@ -1,17 +1,17 @@
-# Keycloak Sample Environment
+# [Keycloak](https://keycloak.org) Sample Environment
 
 ## Kontakt
 Dr.-Ing. Thorsten Ludewig (t.ludewig@gmail.com)
 
 ## Einführung
 
-Keycloak ist eine Open-Source-Software zur Verwaltung der Authentifizierung und Autorisierung für Webanwendungen und RESTful Webdienste. Es ist ein Single-Sign-On (SSO)-System, das es Benutzern ermöglicht, sich einmal zu authentifizieren und dann auf mehrere Anwendungen zuzugreifen, ohne sich erneut anmelden zu müssen.
+[Keycloak](https://keycloak.org) ist eine Open-Source-Software zur Verwaltung der Authentifizierung und Autorisierung für Webanwendungen und RESTful Webdienste. Es ist ein Single-Sign-On (SSO)-System, das es Benutzern ermöglicht, sich einmal zu authentifizieren und dann auf mehrere Anwendungen zuzugreifen, ohne sich erneut anmelden zu müssen.
 
-Keycloak bietet eine zentrale Anlaufstelle für die Verwaltung von Benutzerkonten, Berechtigungen und Rollen. Es unterstützt eine Vielzahl von Authentifizierungstechnologien, darunter OpenID Connect, OAuth 2.0, SAML 2.0 und Kerberos. Außerdem bietet es Funktionen wie Multi-Faktor-Authentifizierung, Social Login, Benutzerverwaltung, Gruppenmanagement und Single-Sign-Out.
+[Keycloak](https://keycloak.org) bietet eine zentrale Anlaufstelle für die Verwaltung von Benutzerkonten, Berechtigungen und Rollen. Es unterstützt eine Vielzahl von Authentifizierungstechnologien, darunter OpenID Connect, OAuth 2.0, SAML 2.0 und Kerberos. Außerdem bietet es Funktionen wie Multi-Faktor-Authentifizierung, Social Login, Benutzerverwaltung, Gruppenmanagement und Single-Sign-Out.
 
-Keycloak kann als eigenständiger Server bereitgestellt werden oder in eine vorhandene Anwendung integriert werden. Es ist in Java geschrieben und läuft auf verschiedenen Betriebssystemen, einschließlich Windows, Linux und macOS. Keycloak bietet auch eine REST-API zur Integration mit anderen Anwendungen und Diensten.
+[Keycloak](https://keycloak.org) kann als eigenständiger Server bereitgestellt werden oder in eine vorhandene Anwendung integriert werden. Es ist in Java geschrieben und läuft auf verschiedenen Betriebssystemen, einschließlich Windows, Linux und macOS. [Keycloak](https://keycloak.org) bietet auch eine REST-API zur Integration mit anderen Anwendungen und Diensten.
 
-Keycloak wird von Red Hat entwickelt und unterstützt. Es ist eine beliebte Authentifizierungslösung für Unternehmen, die eine zentrale Plattform für die Verwaltung von Benutzern und Anwendungen benötigen. (ChatGPT)
+[Keycloak](https://keycloak.org) wird von Red Hat entwickelt und unterstützt. Es ist eine beliebte Authentifizierungslösung für Unternehmen, die eine zentrale Plattform für die Verwaltung von Benutzern und Anwendungen benötigen. (ChatGPT)
 
 ## Installation
 
@@ -84,6 +84,9 @@ app11 | JavaScript + OIDC Client | OIDC | http://app11.dev.sonia.de:8091
 app12 | Dart, Flutter AppAuth | OIDC | Mobile App (Android,iOS,...)
 
 ## Referenzen
+
+### Keycloak
+- [https://keycloak.org](https://keycloak.org)
 
 ### Java
 
