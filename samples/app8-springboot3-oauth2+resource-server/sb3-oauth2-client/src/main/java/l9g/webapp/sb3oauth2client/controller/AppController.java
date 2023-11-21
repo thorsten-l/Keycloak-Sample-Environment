@@ -7,6 +7,7 @@ import java.security.PrivateKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Base64;
 import javax.crypto.Cipher;
+import org.bouncycastle.jce.spec.IESParameterSpec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -81,7 +82,7 @@ public class AppController
     try
     {
       Cipher cipher = Cipher.getInstance("ECIES", "BC");
-      cipher.init(Cipher.DECRYPT_MODE, privateKey);
+      cipher.init(Cipher.DECRYPT_MODE, privateKey, new IESParameterSpec( null, null, 256, 256, null, false ));
       plainPassword 
         = new String(cipher.doFinal(Base64.getDecoder()
           .decode(encryptedPassword)));

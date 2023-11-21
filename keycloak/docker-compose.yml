@@ -41,7 +41,7 @@ services:
           size: 268435456
 
   keycloak:
-    image: quay.io/keycloak/keycloak:22.0.1
+    image: quay.io/keycloak/keycloak:22.0.5
     restart: always
     container_name: keycloak
     command: "start --debug --spi-login-protocol-openid-connect-suppress-logout-confirmation-screen=true --log-level=INFO,l9g:TRACE,org.hibernate:INFO,org.keycloak.transaction:INFO,org.keycloak.saml:TRACE,org.keycloak.protocol.oidc:TRACE --spi-login-protocol-openid-connect-legacy-logout-redirect-uri=true --proxy edge --hostname-strict=false --auto-build --db=postgres"
