@@ -41,6 +41,9 @@ Bitte füge folgende Zeilen in deine `/etc/hosts` Datei ein.
 127.0.0.1       app12.dev.sonia.de
 
 127.0.0.1       rscs1.dev.sonia.de
+
+127.0.0.1       typo3.dev.sonia.de
+127.0.0.1       portainer.dev.sonia.de
 ```
 
 ## Starte Keycloak Umgebung
@@ -58,12 +61,15 @@ Bitte füge folgende Zeilen in deine `/etc/hosts` Datei ein.
 Beschreibung | Username | Password 
 -------------|----------|---------
 Keycloak Admin | admin | admin123
+Keycloak Test Admin | c1admin | admin123 
 Keycloak Test User 1 | c1test1 | test123 
 Keycloak Test User 2 | c1test2 | test123 
 Keycloak Test User 3 | c1test3 | test123 
 Keycloak Test User 4 | c1test4 | test123 
 Keycloak Test User 5 | c1test5 | test123 
 LDAP Directory Manager | cn=Directory Manager | ad1n36KCEF28wPogqvlX8FDImxfkAJBtj0XIgdvyitrmd83AITAS0JA8Uf.q3Yw6T
+Portainer - Local Admin | localadmin | localadmin123 
+Typo3 - Admin | typo3admin | Typo3Admin123! 
 
 ## URLs
 

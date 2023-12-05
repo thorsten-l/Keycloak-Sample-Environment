@@ -1,6 +1,11 @@
 keycloak/kcdb
 keycloak/kcfront
 keycloak/kcldap
+
+appliance/typo3
+appliance/mysql
+appliance/portainer_data
+
 target
 *.jar
 **/html/vendor/**
