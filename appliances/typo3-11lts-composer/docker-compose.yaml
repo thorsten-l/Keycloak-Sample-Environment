@@ -9,14 +9,13 @@ services:
     ports:
       - "9080:80"
     volumes:
-      - ./typo3/fileadmin:/var/www/html/fileadmin
-      - ./typo3/typo3conf:/var/www/html/typo3conf
-      - ./typo3/typo3temp:/var/www/html/typo3temp
-      - ./typo3/uploads:/var/www/html/uploads
+     - ./typo3:/var/www/html
  
   typo3db:
     image: mysql:8.0
     container_name: typo3db
+    ports:
+      - "3306:3306"
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
@@ -27,19 +26,6 @@ services:
       - "MYSQL_ROOT_PASSWORD=typo3db-rootpw"
     volumes:
       - ./mysql:/var/lib/mysql
-
-  portainer:
-    image: portainer/portainer-ce:latest
-    container_name: portainer
-    hostname: portainer.dev.sonia.de
-    restart: always
-    ports:
-      - 9000:9000
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./portainer_data:/data
-    environment:
-      - TZ=Europe/Berlin
 
 networks:
   default:

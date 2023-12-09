@@ -1,0 +1,21 @@
+version: '3.9'
+
+services:
+
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    hostname: portainer.dev.sonia.de
+    restart: always
+    ports:
+      - 9000:9000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./portainer_data:/data
+    environment:
+      - TZ=Europe/Berlin
+
+networks:
+  default:
+    name: iddev
+    external: true

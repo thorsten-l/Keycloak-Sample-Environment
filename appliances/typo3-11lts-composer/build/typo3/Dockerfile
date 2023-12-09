@@ -19,14 +19,15 @@
 # do not make any changes to this file directly, and consult the
 # CONTRIBUTING document, first.
 
-FROM php:8.2-apache-bookworm
+FROM php:8.1-apache-bullseye
 LABEL maintainer="Martin Helmich <typo3@martin-helmich.de>"
 
 # Install TYPO3
+RUN rm /etc/apt/preferences.d/no-debian-php
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install -y --no-install-recommends \
-        wget \
+    apt-get install -y \
+    wget unzip curl php-xmlrpc php-intl php-bcmath php-zip php-apcu php-mbstring php-fileinfo php-soap php-json php-curl php-xml php-dom vim  \
 # Configure PHP
         libxml2-dev libfreetype6-dev \
         libjpeg62-turbo-dev \
@@ -53,25 +54,22 @@ RUN apt-get update && \
         zlib1g-dev && \
     rm -rf /var/lib/apt/lists/* /usr/src/*
 
-RUN cd /var/www/html && \
-    wget -O download.tar.gz https://get.typo3.org/12.4.8 && \
-    echo "8293b3441ec133fc8f9174fab5b88f450044ded0e188a0f12de37ad60a8bf8b3 download.tar.gz" > download.tar.gz.sum && \
-    sha256sum -c download.tar.gz.sum && \
-    tar -xzf download.tar.gz && \
-    rm download.* && \
-    ln -s typo3_src-* typo3_src && \
-    ln -s typo3_src/index.php && \
-    ln -s typo3_src/typo3 && \
-    cp typo3/sysext/install/Resources/Private/FolderStructureTemplateFiles/root-htaccess .htaccess && \
-    mkdir typo3temp && \
-    mkdir typo3conf && \
-    mkdir fileadmin && \
-    mkdir uploads && \
-    touch FIRST_INSTALL && \
-    chown -R www-data. .
+RUN mkdir /work && \
+    cd /work && \
+    wget -O composer-setup.php https://getcomposer.org/installer && \
+    php composer-setup.php --install-dir=/usr/local/bin --filename=composer && \
+    cd /var/www/html && \
+    rm -fr /work && \
+    chown -R www-data. . && \
+    cd /etc/apache2/sites-available && \
+    sed -e 's/DocumentRoot.*/DocumentRoot \/var\/www\/html\/public/g' 000-default.conf > 000-default.conf.tmp && \
+    mv 000-default.conf.tmp 000-default.conf
 
-# Configure volumes
-VOLUME /var/www/html/fileadmin
-VOLUME /var/www/html/typo3conf
-VOLUME /var/www/html/typo3temp
-VOLUME /var/www/html/uploads
+USER www-data
+WORKDIR /var/www/html
+
+RUN composer create-project typo3/cms-base-distribution:^11.5 . && \
+    composer require waldhacker/typo3-oauth2-client && \
+    composer require nng/nnrestapi && \
+    composer dumpautoload -o && \
+    touch public/FIRST_INSTALL 

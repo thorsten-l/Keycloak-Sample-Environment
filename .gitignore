@@ -2,9 +2,18 @@ keycloak/kcdb
 keycloak/kcfront
 keycloak/kcldap
 
-appliance/typo3
-appliance/mysql
-appliance/portainer_data
+appliances/portainer/portainer_data
+appliances/typo3-11lts-composer/mysql
+appliances/typo3-11lts-composer/typo3/config
+appliances/typo3-11lts-composer/typo3/var
+appliances/typo3-11lts-composer/typo3/.gitignore
+appliances/typo3-11lts-composer/typo3/composer*
+appliances/typo3-11lts-composer/typo3/public/fileadmin
+appliances/typo3-11lts-composer/typo3/public/typo3
+appliances/typo3-11lts-composer/typo3/public/typo3conf/ext
+appliances/typo3-11lts-composer/typo3/public/typo3temp
+
+private
 
 target
 *.jar

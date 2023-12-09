@@ -69,13 +69,16 @@ Keycloak Test User 4 | c1test4 | test123
 Keycloak Test User 5 | c1test5 | test123 
 LDAP Directory Manager | cn=Directory Manager | ad1n36KCEF28wPogqvlX8FDImxfkAJBtj0XIgdvyitrmd83AITAS0JA8Uf.q3Yw6T
 Portainer - Local Admin | localadmin | localadmin123 
+Portainer - OIDC Admin | c1admin | admin123 
 Typo3 - Admin | typo3admin | Typo3Admin123! 
 
 ## URLs
 
 ID | Beschreibung | Auth | URL
 ----|-------|--|----
-id | Keycloak Identity Provider (IDP) | OAuth2, OIDC, SAML2 | https://id.dev.sonia.de
+--- | KEYCLOAK FOLDER | --- | ---
+id | Keycloak Identity Provider (IDP) | OAuth2, OIDC, SAML2 | https://id.dev.sonia.de/admin/
+--- | SAMPLES FOLDER | --- | ---
 app1 | Springboot 2 + Keycloak Lib | OIDC | http://app1.dev.sonia.de:8081
 app2 | Springboot 3 + OAuth2 Lib | OIDC | http://app2.dev.sonia.de:8082
 app3 | PHP 8 + Apache 2 | OIDC | http://app3.dev.sonia.de:8083
@@ -88,6 +91,10 @@ app9 | Jakarta EE 10 + Payara ME 6.2023.4 | OIDC | http://app9.dev.sonia.de:8089
 app10 | Springboot 3.1 + OAuth2 Lib | OIDC | http://app10.dev.sonia.de:8090
 app11 | JavaScript + OIDC Client | OIDC | http://app11.dev.sonia.de:8091
 app12 | Dart, Flutter AppAuth | OIDC | Mobile App (Android,iOS,...)
+--- | APPLIANCE FOLDER | --- | ---
+portainer | Portainer CE | OIDC | http://portainer.dev.sonia.de:9000
+typo3 | Typo3 | OIDC | http://typo3.dev.sonia.de:9080/typo3/
+
 
 ## Referenzen
 
