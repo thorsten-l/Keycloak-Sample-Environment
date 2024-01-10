@@ -91,6 +91,7 @@ app9 | Jakarta EE 10 + Payara ME 6.2023.4 | OIDC | http://app9.dev.sonia.de:8089
 app10 | Springboot 3.1 + OAuth2 Lib | OIDC | http://app10.dev.sonia.de:8090
 app11 | JavaScript + OIDC Client | OIDC | http://app11.dev.sonia.de:8091
 app12 | Dart, Flutter AppAuth | OIDC | Mobile App (Android,iOS,...)
+app13 | Go Lang | OIDC | http://app13.dev.sonia.de:8093
 --- | APPLIANCE FOLDER | --- | ---
 portainer | Portainer CE | OIDC | http://portainer.dev.sonia.de:9000
 typo3 | Typo3 | OIDC | http://typo3.dev.sonia.de:9080/typo3/
