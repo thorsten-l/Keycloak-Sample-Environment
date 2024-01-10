@@ -18,10 +18,9 @@ package l9g.webapp.sb31oauth2client.controller;
 import java.util.Map;
 import l9g.webapp.sb31oauth2client.OAuth2AuthorizedClientProvider;
 import l9g.webapp.sb31oauth2client.config.BuildProperties;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
@@ -41,17 +40,17 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Thorsten Ludewig (t.ludewig@gmail.com)
  */
 @RestController
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class UserController
 {
   private final static Logger LOGGER = LoggerFactory.getLogger(
     UserController.class.getName());
 
-  @Autowired
+  // @Autowired
   private final OAuth2AuthorizedClientProvider oauth2AuthorizedClientProvider;
 
-  @Autowired
-  private JwtDecoder jwtDecoder;
+  // @Autowired
+  private final JwtDecoder jwtDecoder;
 
   @GetMapping("/principal")
   public OAuth2User principalGET(

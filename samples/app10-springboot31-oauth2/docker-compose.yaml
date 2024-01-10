@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
  
-  app1:
+  app10:
     image: bellsoft/liberica-openjdk-alpine:17
     container_name: app10
     hostname: app10.dev.sonia.de
