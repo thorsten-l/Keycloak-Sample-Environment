@@ -15,6 +15,20 @@ services:
     ports:
       - "8090:8090"
 
+  app10sfront:
+    image: nginx:1
+    container_name: app10sfront
+    hostname: app10s.dev.sonia.de
+    restart: always
+    ports:
+      - "8490:443"
+    volumes:
+      - ./nginx/etc:/etc/nginx
+      - ./nginx/cache:/share/container/nginx/cache
+      - ./nginx/log:/var/log/nginx
+    environment:
+      - TZ=Europe/Berlin
+
 networks:
   default:
     name: iddev

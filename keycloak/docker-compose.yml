@@ -41,7 +41,7 @@ services:
           size: 268435456
 
   keycloak:
-    image: quay.io/keycloak/keycloak:23.0.4
+    image: quay.io/keycloak/keycloak:23.0.7
     restart: always
     container_name: keycloak
     command: "start --debug --spi-login-protocol-openid-connect-suppress-logout-confirmation-screen=true --log-level=INFO,l9g:TRACE,org.hibernate:INFO,org.keycloak.transaction:INFO,org.keycloak.saml:TRACE,org.keycloak.protocol.oidc:TRACE --spi-login-protocol-openid-connect-legacy-logout-redirect-uri=true --proxy edge --hostname-strict=false --db=postgres"
@@ -84,6 +84,16 @@ services:
       - kcdb
       - kcldap
       - keycloak
+
+  kcmailhog:
+    build: build/mailhog
+    container_name: kcmailhog
+    restart: always
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    environment:
+      - TZ=Europe/Berlin
 
 networks:
   default:

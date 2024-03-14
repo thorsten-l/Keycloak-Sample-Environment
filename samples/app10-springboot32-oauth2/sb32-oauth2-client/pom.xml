@@ -6,15 +6,15 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.1.6</version>
+    <version>3.2.3</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
   
   <groupId>l9g.webapp</groupId>
-  <artifactId>sb31-oauth2-client</artifactId>
+  <artifactId>sb32-oauth2-client</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>APP10 sb31-oauth2-client</name>
-  <description>OAuth2/OIDC demo project for Spring Boot 3.1</description>
+  <name>APP10 sb32-oauth2-client</name>
+  <description>OAuth2/OIDC demo project for Spring Boot 3.2</description>
   
   <properties>
     <java.version>17</java.version>
@@ -75,7 +75,7 @@
 
   <build>
     
-    <finalName>sb31-oauth2-client</finalName>
+    <finalName>${project.artifactId}</finalName>
 
     <resources>
       <resource>
@@ -126,8 +126,8 @@
               <goal>copy</goal>
             </goals>
             <configuration>
-              <sourceFile>target/sb31-oauth2-client.jar</sourceFile>
-              <destinationFile>../sb31-oauth2-client.jar</destinationFile>
+              <sourceFile>target/${project.artifactId}.jar</sourceFile>
+              <destinationFile>../${project.artifactId}.jar</destinationFile>
             </configuration>
           </execution>
         </executions>

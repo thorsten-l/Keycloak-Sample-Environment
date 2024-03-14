@@ -24,9 +24,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.oauth2.client.oidc.web.logout.OidcClientInitiatedLogoutSuccessHandler;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizationRequestResolver;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestCustomizers;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 
 @Configuration
 @EnableWebSecurity
@@ -36,22 +38,26 @@ public class ClientSecurityConfig
     = LoggerFactory.getLogger(ClientSecurityConfig.class.getName());
 
   @Bean
-  WebSecurityCustomizer webSecurityCustomizer()
-  {
-    LOGGER.debug("webSecurityCustomizer");
-    return web
-      -> web.ignoring().requestMatchers("/webjars/**", "/actuator/**" );
-  }
-
-  @Bean
   public SecurityFilterChain filterChain(HttpSecurity http,
     ClientRegistrationRepository clientRegistrationRepository) throws Exception
   {
     LOGGER.debug("filterChain");
+
+    DefaultOAuth2AuthorizationRequestResolver resolver
+      = new DefaultOAuth2AuthorizationRequestResolver(
+        clientRegistrationRepository,
+        OAuth2AuthorizationRequestRedirectFilter.DEFAULT_AUTHORIZATION_REQUEST_BASE_URI);
+
+    resolver.setAuthorizationRequestCustomizer(
+      OAuth2AuthorizationRequestCustomizers.withPkce());
+
     http.authorizeHttpRequests(
-      authorize -> authorize.requestMatchers("/logout", "/login")
+      authorize -> authorize.requestMatchers(
+        "/webjars/**", "/actuator/**", "/logout")
         .permitAll().anyRequest().authenticated())
-      .oauth2Login(withDefaults())
+      .oauth2Login(login -> login.authorizationEndpoint(
+        authorizationEndpointCustomizer -> authorizationEndpointCustomizer
+          .authorizationRequestResolver(resolver)))
       .oauth2Client(withDefaults())
       .logout(
         logout -> logout.logoutSuccessHandler(

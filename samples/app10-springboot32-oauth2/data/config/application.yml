@@ -17,11 +17,14 @@ spring:
   thymeleaf:
     cache: false
     
-server: 
+server:
   port: 8090
   servlet: 
     context-path: /
   tomcat:
+    remoteip:
+      protocol-header: X-Forwarded-Proto
+      port-header: X-Forwarded-Port
     basedir: data/tomcat
     accesslog:
       enabled: true
