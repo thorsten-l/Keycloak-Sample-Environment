@@ -43,7 +43,7 @@ OIDC_VERIFY_SSL = False
 
 LOGIN_URL = '/oidc/authenticate/'
 LOGIN_REDIRECT_URL = 'http://app7.dev.sonia.de:8087/protected'
-LOGOUT_REDIRECT_URL = 'https://id.dev.sonia.de/realms/dev/protocol/openid-connect/logout?redirect_uri=http://app7.dev.sonia.de:8087'
+LOGOUT_REDIRECT_URL = 'https://id.dev.sonia.de/realms/dev/protocol/openid-connect/logout?post_logout_redirect_uri=http://app7.dev.sonia.de:8087&client_id=app7'
 
 
 # Application definition
