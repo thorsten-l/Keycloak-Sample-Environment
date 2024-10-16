@@ -67,7 +67,7 @@ Keycloak Test User 2 | c1test2 | test123
 Keycloak Test User 3 | c1test3 | test123 
 Keycloak Test User 4 | c1test4 | test123 
 Keycloak Test User 5 | c1test5 | test123 
-LDAP Directory Manager | cn=Directory Manager | ad1n36KCEF28wPogqvlX8FDImxfkAJBtj0XIgdvyitrmd83AITAS0JA8Uf.q3Yw6T
+LDAP Directory Manager | cn=Directory Manager | 10peb8uW43kWQL519ibpsJoPpcrzPLY4tMAGBEf5e4.f8IipWmVE0A.3Gcpe0g2sw
 Portainer - Local Admin | localadmin | localadmin123 
 Portainer - OIDC Admin | c1admin | admin123 
 Typo3 - Admin | typo3admin | Typo3Admin123! 

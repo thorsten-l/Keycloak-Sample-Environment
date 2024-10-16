@@ -1,0 +1,47 @@
+spring:
+
+  profiles:
+    active: default
+
+  security:
+    saml2:
+      relyingparty:
+        registration:
+          app6:
+            signing:
+              credentials:
+                - private-key-location: classpath:credentials/saml2demo.key
+                  certificate-location: classpath:credentials/saml2demo.crt
+            singlelogout:
+              url: "https://app6.dev.sonia.de:8086/logout/saml2/slo"
+              response-url: "https://id.qa.sonia.de/realms/sonia/protocol/saml"
+              binding: POST
+            assertingparty:
+              metadata-uri: "https://id.qa.sonia.de/realms/sonia/protocol/saml/descriptor"
+
+  ssl:
+    bundle:
+      jks:
+        web-server:
+          key:
+            alias: "server"
+            password: "keypass"
+          keystore:
+            location: "classpath:server.p12"
+            password: "storepass"
+            type: "PKCS12"
+
+
+server:
+  port: 8086
+  servlet:
+    context-path: /
+  ssl:
+    bundle: "web-server"
+
+
+logging:
+  level:
+    l9g: TRACE
+    org.springframework.security: INFO
+    org.springframework: INFO

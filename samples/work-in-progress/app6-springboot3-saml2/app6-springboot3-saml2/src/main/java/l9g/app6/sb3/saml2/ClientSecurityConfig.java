@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Thorsten Ludewig (t.ludewig@gmail.com).
+ * Copyright 2024 Thorsten Ludewig (t.ludewig@gmail.com).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,35 +15,38 @@
  */
 package l9g.app6.sb3.saml2;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import static org.springframework.security.config.Customizer.withDefaults;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.saml2.provider.service.metadata.OpenSamlMetadataResolver;
-import org.springframework.security.saml2.provider.service.web.RelyingPartyRegistrationResolver;
-import org.springframework.security.saml2.provider.service.web.Saml2MetadataFilter;
-import org.springframework.security.saml2.provider.service.web.authentication.Saml2WebSsoAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-@Slf4j
 public class ClientSecurityConfig
 {
-  @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http)
-    throws Exception
-  {
-    log.debug("filterChain");
+  private final static Logger LOGGER
+    = LoggerFactory.getLogger(ClientSecurityConfig.class.getName());
 
+  @Bean
+  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception
+  {
+    LOGGER.debug("filterChain");
     http.authorizeHttpRequests(
-      authorize -> authorize.anyRequest()
-        .authenticated()).saml2Login(withDefaults());
-    
+      authorize -> authorize
+        .requestMatchers(
+          "/favicon.ico",
+          "/webjars/**",
+          "/actuator/**",
+          "/images/**"
+        ).permitAll()
+        .anyRequest().authenticated())
+      .saml2Login(withDefaults())
+      .saml2Logout(withDefaults());
+
     return http.build();
   }
-
 }

@@ -1,5 +1,3 @@
-version: '3.9'
-
 # *.dev.sonia.de
 # /etc/hosts
 # 127.0.0.1       id.dev.sonia.de
@@ -14,7 +12,7 @@ services:
 # password to "10peb8uW43kWQL519ibpsJoPpcrzPLY4tMAGBEf5e4.f8IipWmVE0A.3Gcpe0g2sw"
  
   kcldap:
-    image: ghcr.io/thorsten-l/389ds-fedora:2.3.3
+    image: ghcr.io/thorsten-l/389ds-fedora:3.0.2
     container_name: kcldap
     restart: always
     volumes:
@@ -33,6 +31,8 @@ services:
       - POSTGRES_PASSWORD=keycloak
       - POSTGRES_USER=keycloak
       - POSTGRES_DB=keycloak
+    ports:
+      - "5432:5432"
     volumes:
       - ./kcdb:/var/lib/postgresql/data
       - type: tmpfs
@@ -41,11 +41,10 @@ services:
           size: 268435456
 
   keycloak:
-    image: quay.io/keycloak/keycloak:23.0.7
+    image: quay.io/keycloak/keycloak:25.0
     restart: always
     container_name: keycloak
-    command: "start --debug --spi-login-protocol-openid-connect-suppress-logout-confirmation-screen=true --log-level=INFO,l9g:TRACE,org.hibernate:INFO,org.keycloak.transaction:INFO,org.keycloak.saml:TRACE,org.keycloak.protocol.oidc:TRACE --spi-login-protocol-openid-connect-legacy-logout-redirect-uri=true --proxy edge --hostname-strict=false --db=postgres"
-  # --optimized --spi-login-protocol-openid-connect-suppress-logout-confirmation-screen=true --log-level=INFO,l9g:TRACE,org.hibernate:INFO,org.keycloak.transaction:INFO,org.keycloak.saml:TRACE,org.keycloak.protocol.oidc:TRACE --spi-login-protocol-openid-connect-legacy-logout-redirect-uri=true --proxy=edge --hostname-strict=false
+    command: "start --debug --log-level=INFO,l9g:TRACE,org.hibernate:INFO,org.keycloak.transaction:INFO,org.keycloak.saml:TRACE,org.keycloak.protocol.oidc:TRACE --proxy edge --hostname-strict=false --db=postgres"
     environment:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin123
