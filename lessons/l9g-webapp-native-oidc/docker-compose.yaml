@@ -1,0 +1,14 @@
+services:
+  app1-sb335:
+    image: bellsoft/liberica-openjdk-alpine:21
+    hostname: app1.dev.sonia.de
+    ports:
+      - "8081:8081"
+    volumes:
+      - .:/work
+    command: "java -jar /work/target/l9g-webapp-native-oidc-0.0.1-SNAPSHOT.jar"
+      
+networks:
+  default:
+    name: iddev
+    external: true

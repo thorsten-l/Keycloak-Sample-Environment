@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>3.3.5</version>
+    <relativePath/> <!-- lookup parent from repository -->
+  </parent>
+  <groupId>l9g.webapp</groupId>
+  <artifactId>l9g-webapp-native-oidc</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>l9g-webapp-native-oidc</name>
+  <description>A native OIDC Implementation for education.</description>
+  <url/>
+  <licenses>
+    <license/>
+  </licenses>
+  <developers>
+    <developer/>
+  </developers>
+  <scm>
+    <connection/>
+    <developerConnection/>
+    <tag/>
+    <url/>
+  </scm>
+  
+  <properties>
+    <java.version>21</java.version>
+    <build.profile>default</build.profile>
+    <exec.inheritIo>true</exec.inheritIo>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-jersey</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-thymeleaf</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+    </dependency>
+    
+    <!-- webjars -->
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>webjars-locator</artifactId>
+      <version>0.52</version>
+    </dependency>
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>bootstrap</artifactId>
+      <version>5.3.3</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <optional>true</optional>
+    </dependency>
+  </dependencies>
+
+  <build>
+    
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.13.0</version>
+        <configuration>
+          <encoding>${project.build.sourceEncoding}</encoding>
+          <release>${java.version}</release>
+          <compilerArgs>
+            <arg>-proc:full</arg>
+          </compilerArgs>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <executable>true</executable>
+          <excludes>
+            <exclude>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+            </exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

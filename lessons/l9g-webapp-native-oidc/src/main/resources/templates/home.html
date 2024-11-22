@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Home</title>
+    <meta charset="UTF-8"></meta>
+    <meta name="viewport" content="width=device-width, initial-scale=1" ></meta>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" ></link>
+    <link th:rel="stylesheet" th:href="@{/css/main.css}" ></link>
+  </head>
+  <body>
+    <div class="container mt-2"> 
+      <h1>Home</h1>
+      <a class="btn btn-primary" th:href="@{{uri}(uri=${oauth2AuthorizationEndpoint},client_id=${oauth2ClientId},response_type=${oauth2ResponseType},redirect_uri=${oauth2RedirectUri},scope=${oauth2ClientScope},state=${oauth2State},code_challenge=${oauth2CodeChallenge},code_challenge_method=${oauth2CodeChallengeMethod})}">LOGIN</a>
+      <p style="word-break: break-all;" class="m-4" th:text="@{{uri}(uri=${oauth2AuthorizationEndpoint},client_id=${oauth2ClientId},response_type=${oauth2ResponseType},redirect_uri=${oauth2RedirectUri},scope=${oauth2ClientScope},state=${oauth2State},code_challenge=${oauth2CodeChallenge},code_challenge_method=${oauth2CodeChallengeMethod})}"></p>
+    
+      <p class="red-background p-1">*** Optional: PKCE code challenge ***<p>
+    
+      <h2 class="appheader">Login URL</h2>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th style="width: 20%">Key</th>
+            <th style="width: 80%">Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>uri</td><td th:text="${oauth2AuthorizationEndpoint}"></td></tr>
+          <tr><td>client_id</td><td th:text="${oauth2ClientId}"></td></tr>
+          <tr><td>response_type</td><td th:text="${oauth2ResponseType}"></td></tr>
+          <tr><td>redirect_uri</td><td th:text="${oauth2RedirectUri}"></td></tr>
+          <tr><td>scope</td><td th:text="${oauth2ClientScope}"></td></tr>
+          <tr><td>state</td><td th:text="${oauth2State}"></td></tr>
+          <tr><td class="red-background">code_challenge</td><td class="red-background" th:text="${oauth2CodeChallenge}"></td></tr>
+          <tr><td class="red-background">code_challenge_method</td><td class="red-background" th:text="${oauth2CodeChallengeMethod}"></td></tr>
+        </tbody>
+      </table>    
+    
+      <h2 class="appheader">Session Attributes</h2>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th style="width: 20%">Key</th>
+            <th style="width: 80%">Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>session id</td><td th:text="${sessionId}"></td></tr>
+          <tr><td>oauth2State</td><td th:text="${oauth2State}"></td></tr>
+          <tr><td class="red-background">oauth2CodeVerifier</td><td class="red-background" th:text="${oauth2CodeVerifier}"></td></tr>
+        </tbody>
+      </table>
+
+    </div>
+  </body>
+</html>

@@ -1,0 +1,13 @@
+
+services:
+  app1-php:
+    build: .
+    ports:
+      - "8081:80"
+    volumes:
+      - .:/var/www/html
+      
+networks:
+  default:
+    name: iddev
+    external: true
