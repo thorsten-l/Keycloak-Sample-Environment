@@ -75,7 +75,7 @@ public class OidcService
 
   private RestClient restClient;
 
-  @Value("${oidc.discovery-uri:}")
+  @Value("${oidc.discovery-uri}")
   private String oidcDiscoveryUri;
 
   @Value("${oauth2.authorization.endpoint:}")
@@ -86,6 +86,9 @@ public class OidcService
 
   @Value("${oauth2.end-session.endpoint:}")
   private String oauth2EndSessionEndpoint;
+
+  @Value("${oauth2.client.id}")
+  private String oauth2ClientId;
 
   @Value("${oauth2.client.secret}")
   private String oauth2ClientSecret;
@@ -117,25 +120,25 @@ public class OidcService
       log.debug("*** is2xxSuccessful {}", responseEntity.getBody());
       oidcDiscovery = responseEntity.getBody();
 
-      if(oauth2AuthorizationEndpoint != null && oauth2AuthorizationEndpoint.isBlank())
+      if(oauth2AuthorizationEndpoint == null || oauth2AuthorizationEndpoint.isBlank())
       {
         oauth2AuthorizationEndpoint = oidcDiscovery.authorizationEndpoint();
       }
       log.debug("oauth2AuthorizationEndpoint={}", oauth2AuthorizationEndpoint);
 
-      if(oauth2tokenEndpoint != null && oauth2tokenEndpoint.isBlank())
+      if(oauth2tokenEndpoint == null || oauth2tokenEndpoint.isBlank())
       {
         oauth2tokenEndpoint = oidcDiscovery.tokenEndpoint();
       }
       log.debug("oauth2AuthorizationEndpoint={}", oauth2tokenEndpoint);
 
-      if(oauth2EndSessionEndpoint != null && oauth2EndSessionEndpoint.isBlank())
+      if(oauth2EndSessionEndpoint == null || oauth2EndSessionEndpoint.isBlank())
       {
         oauth2EndSessionEndpoint = oidcDiscovery.endSessionEndpoint();
       }
       log.debug("oauth2EndSessionEndpoint={}", oauth2EndSessionEndpoint);
 
-      if(oauth2JwksUri != null && oauth2JwksUri.isBlank())
+      if(oauth2JwksUri == null || oauth2JwksUri.isBlank())
       {
         oauth2JwksUri = oidcDiscovery.jwksUri();
       }
@@ -165,7 +168,7 @@ public class OidcService
     bodyData.add("grant_type", "authorization_code");
     bodyData.add("code", code);
     bodyData.add("redirect_uri", oauth2RedirectUri);
-    bodyData.add("client_id", "app1");
+    bodyData.add("client_id", oauth2ClientId);
     bodyData.add("client_secret", oauth2ClientSecret);
 
     if(codeVerifier != null &&  ! codeVerifier.isBlank())
