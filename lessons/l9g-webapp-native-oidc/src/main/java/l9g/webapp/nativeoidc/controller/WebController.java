@@ -156,18 +156,18 @@ public class WebController
     log.debug("oidcLogin: state={}", state);
     log.debug("oidcLogin: error={}", error);
     log.debug("oidcLogin: error_description={}", errorDescription);
+    
+    if(error != null &&  ! error.isBlank())
+    {
+      log.error("Error: {} / {}", error, errorDescription);
+      return "redirect:/";
+    }
 
     String oauth2State = (String)session.getAttribute(SESSION_OAUTH2_STATE);
 
     if(oauth2State == null ||  ! oauth2State.equals(state))
     {
       log.error("Illegal 'state'");
-      return "redirect:/";
-    }
-
-    if(error != null &&  ! error.isBlank())
-    {
-      log.error("Error: {} / {}", error, errorDescription);
       return "redirect:/";
     }
 
