@@ -32,8 +32,28 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 /**
+ * Service class for handling JWT (JSON Web Token) operations such as decoding and validating signatures.
+ * This class provides methods to split, decode, and validate JWT tokens using various algorithms.
  *
- * @author Thorsten Ludewig (t.ludewig@gmail.com)
+ * <p>
+ * It supports RS256 and HS512 algorithms for signature validation.</p>
+ *
+ * <p>
+ * Methods:</p>
+ * <ul>
+ * <li>{@link #splitJwt(String)} - Splits a JWT token into its constituent parts.</li>
+ * <li>{@link #decodeJwtPayload(String)} - Decodes the payload of a JWT token and returns it as a Map.</li>
+ * <li>{@link #validateJwtSignature(String)} - Validates the signature of a JWT token.</li>
+ * <li>{@link #getPublicKeyFromJwks(JwksCerts, String)} - Retrieves the public key from JWKS (JSON Web Key Set) using the key ID.</li>
+ * <li>{@link #validateRs256Signature(String, String)} - Validates the RS256 signature of a JWT token.</li>
+ * <li>{@link #validateHs512Signature(String)} - Validates the HS512 signature of a JWT token (currently returns true).</li>
+ * </ul>
+ *
+ * <p>
+ * Note: The HS512 signature validation method is currently a stub and always returns true.</p>
+ *
+ * <p>
+ * Author: Thorsten Ludewig (t.ludewig@gmail.com)</p>
  */
 @Service
 @Slf4j

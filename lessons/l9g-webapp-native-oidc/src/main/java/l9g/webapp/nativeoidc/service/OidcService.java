@@ -19,11 +19,6 @@ import l9g.webapp.nativeoidc.dto.JwksCerts;
 import l9g.webapp.nativeoidc.dto.OAuth2Tokens;
 import l9g.webapp.nativeoidc.dto.OidcDiscovery;
 import jakarta.annotation.PostConstruct;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.util.Base64;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,8 +31,37 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
 
 /**
+ * OidcService is a Spring service that handles OpenID Connect (OIDC) and OAuth2 operations.
+ * It initializes OIDC discovery endpoints and fetches OAuth2 tokens.
  *
- * @author Thorsten Ludewig (t.ludewig@gmail.com)
+ * <p>
+ * It uses the following properties for configuration:
+ * <ul>
+ * <li>oidc.discovery-uri: URI for OIDC discovery</li>
+ * <li>oauth2.authorization.endpoint: OAuth2 authorization endpoint</li>
+ * <li>oauth2.token.endpoint: OAuth2 token endpoint</li>
+ * <li>oauth2.end-session.endpoint: OAuth2 end session endpoint</li>
+ * <li>oauth2.client.secret: OAuth2 client secret</li>
+ * <li>oauth2.redirect-uri: OAuth2 redirect URI</li>
+ * <li>oauth2.jwks_uri: OAuth2 JWKS URI</li>
+ * </ul>
+ *
+ * <p>
+ * Methods:
+ * <ul>
+ * <li>{@link #initialize()}: Initializes the OIDC discovery and sets up endpoints.</li>
+ * <li>{@link #fetchOAuth2Tokens(String, String)}: Fetches OAuth2 tokens using authorization code and code verifier.</li>
+ * </ul>
+ *
+ * <p>
+ * Dependencies:
+ * <ul>
+ * <li>{@link RestClient.Builder}: Builder for creating RestClient instances.</li>
+ * <li>{@link JwtService}: Service for handling JWT operations.</li>
+ * </ul>
+ *
+ * <p>
+ * Author: Thorsten Ludewig (t.ludewig@gmail.com)
  */
 @Service
 @Slf4j

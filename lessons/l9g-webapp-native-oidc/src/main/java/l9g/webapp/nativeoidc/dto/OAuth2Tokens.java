@@ -19,14 +19,36 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
+ * A record representing OAuth2 tokens.
+ * <p>
+ * This record is used to encapsulate the various tokens received from an OAuth2
+ * authorization server, including the access token, ID token, refresh token,
+ * token type, and the expiration time of the access token.
+ * </p>
+ * <p>
+ * The fields are annotated with {@link JsonProperty} to map the JSON properties
+ * to the corresponding fields in this record.
+ * </p>
+ *
+ * @param accessToken The access token issued by the authorization server.
+ * @param idToken The ID token issued by the authorization server.
+ * @param refreshToken The refresh token issued by the authorization server.
+ * @param tokenType The type of the token issued by the authorization server.
+ * @param expiresIn The lifetime in seconds of the access token.
  *
  * @author Thorsten Ludewig (t.ludewig@gmail.com)
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record OAuth2Tokens(
-    @JsonProperty("access_token") String accessToken,
-    @JsonProperty("id_token") String idToken,
-    @JsonProperty("refresh_token") String refreshToken,
-    @JsonProperty("token_type") String tokenType,
-    @JsonProperty("expires_in") int expiresIn
-) {}
+  @JsonProperty("access_token")
+  String accessToken,
+  @JsonProperty("id_token")
+  String idToken,
+  @JsonProperty("refresh_token")
+  String refreshToken,
+  @JsonProperty("token_type")
+  String tokenType,
+  @JsonProperty("expires_in")
+  int expiresIn)
+  {
+}

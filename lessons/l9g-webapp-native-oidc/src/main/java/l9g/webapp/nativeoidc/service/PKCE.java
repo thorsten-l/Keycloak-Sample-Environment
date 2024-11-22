@@ -22,8 +22,33 @@ import java.security.SecureRandom;
 import java.util.Base64;
 
 /**
+ * The PKCE (Proof Key for Code Exchange) class provides methods to generate
+ * a code verifier and a code challenge as part of the OAuth 2.0 PKCE extension.
  *
- * @author Thorsten Ludewig (t.ludewig@gmail.com)
+ * <p>
+ * This class contains two main methods:
+ * <ul>
+ * <li>{@link #generateCodeVerifier()} - Generates a secure random code verifier.</li>
+ * <li>{@link #generateCodeChallenge(String)} - Generates a code challenge based on the provided code verifier.</li>
+ * </ul>
+ * </p>
+ *
+ * <p>
+ * Usage example:
+ * <pre>
+ * {@code
+ * String codeVerifier = PKCE.generateCodeVerifier();
+ * String codeChallenge = PKCE.generateCodeChallenge(codeVerifier);
+ * }
+ * </pre>
+ * </p>
+ *
+ * <p>
+ * Note: The {@link #generateCodeChallenge(String)} method throws a {@link NoSuchAlgorithmException}
+ * if the SHA-256 algorithm is not available.</p>
+ *
+ * <p>
+ * Author: Thorsten Ludewig (t.ludewig@gmail.com)</p>
  */
 public class PKCE
 {

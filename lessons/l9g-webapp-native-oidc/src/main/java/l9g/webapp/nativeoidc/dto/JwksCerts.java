@@ -19,21 +19,49 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /**
+ * Represents a collection of JSON Web Key Set (JWKS) certificates.
+ * This class is used to deserialize the JWKS response from an OpenID Connect provider.
+ *
+ * @param keys A list of JSON Web Keys (JWKs).
  *
  * @author Thorsten Ludewig (t.ludewig@gmail.com)
  */
 public record JwksCerts(
-  List<JwksKey> keys
-) {
+  List<JwksKey> keys)
+  {
+  /**
+   * Represents a JSON Web Key (JWK) used in the JWKS response.
+   *
+   * @param keyId The unique identifier for the key.
+   * @param keyType The cryptographic algorithm family used with the key.
+   * @param algorithm The specific algorithm used with the key.
+   * @param keyUsage The intended use of the key (e.g., signature, encryption).
+   * @param modulus The modulus value for RSA keys.
+   * @param exponent The exponent value for RSA keys.
+   * @param x509CertificateChain The X.509 certificate chain corresponding to the key.
+   * @param x509CertificateThumbprint The thumbprint of the X.509 certificate.
+   * @param x509CertificateSha256Thumbprint The SHA-256 thumbprint of the X.509 certificate.
+   */
   public record JwksKey(
-    @JsonProperty("kid") String keyId,
-    @JsonProperty("kty") String keyType,
-    @JsonProperty("alg") String algorithm,
-    @JsonProperty("use") String keyUsage,
-    @JsonProperty("n") String modulus,
-    @JsonProperty("e") String exponent,
-    @JsonProperty("x5c") List<String> x509CertificateChain,
-    @JsonProperty("x5t") String x509CertificateThumbprint,
-    @JsonProperty("x5t#S256") String x509CertificateSha256Thumbprint
-  ) {}
+    @JsonProperty("kid")
+    String keyId,
+    @JsonProperty("kty")
+    String keyType,
+    @JsonProperty("alg")
+    String algorithm,
+    @JsonProperty("use")
+    String keyUsage,
+    @JsonProperty("n")
+    String modulus,
+    @JsonProperty("e")
+    String exponent,
+    @JsonProperty("x5c")
+    List<String> x509CertificateChain,
+    @JsonProperty("x5t")
+    String x509CertificateThumbprint,
+    @JsonProperty("x5t#S256")
+    String x509CertificateSha256Thumbprint)
+    {
+  }
+
 }

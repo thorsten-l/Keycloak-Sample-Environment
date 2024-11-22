@@ -35,8 +35,45 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
+ * WebController is a Spring MVC controller that handles OAuth2/OIDC login and logout flows.
+ * It provides endpoints for home, login, logout, and backchannel logout.
  *
- * @author Thorsten Ludewig (t.ludewig@gmail.com)
+ * <p>
+ * Endpoints:</p>
+ * <ul>
+ * <li>GET / - Displays the home page and initializes OAuth2 login parameters.</li>
+ * <li>GET /oidc-login - Handles the OIDC login callback, exchanges the authorization code for tokens, and stores them in the session.</li>
+ * <li>GET /oidc-logout - Logs out the user by invalidating the session and redirects to the home page.</li>
+ * <li>POST /oidc-backchannel-logout - Handles backchannel logout requests by invalidating the session associated with the provided logout token.</li>
+ * <li>GET /app - Displays the application page if the user is authenticated, otherwise redirects to the home page.</li>
+ * </ul>
+ *
+ * <p>
+ * Session Attributes:</p>
+ * <ul>
+ * <li>SESSION_OAUTH2_STATE - Stores the OAuth2 state parameter to prevent CSRF attacks.</li>
+ * <li>SESSION_OAUTH2_TOKENS - Stores the OAuth2 tokens (ID token, access token, refresh token) after successful login.</li>
+ * <li>SESSION_OAUTH2_CODE_VERIFIER - Stores the PKCE code verifier used during the OAuth2 authorization code flow.</li>
+ * </ul>
+ *
+ * <p>
+ * Configuration Properties:</p>
+ * <ul>
+ * <li>oauth2.redirect-uri - The redirect URI for OAuth2 login.</li>
+ * <li>oauth2.client.id - The client ID for OAuth2 login.</li>
+ * <li>oauth2.client.scope - The scope for OAuth2 login.</li>
+ * <li>oauth2.post-logout-redirect-uri - The redirect URI after logout.</li>
+ * </ul>
+ *
+ * <p>
+ * Dependencies:</p>
+ * <ul>
+ * <li>OidcService - Service for handling OIDC operations such as fetching tokens and getting endpoints.</li>
+ * <li>JwtService - Service for decoding JWT tokens.</li>
+ * </ul>
+ *
+ * <p>
+ * Author: Thorsten Ludewig (t.ludewig@gmail.com)</p>
  */
 @Controller
 @Slf4j
