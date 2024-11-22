@@ -1,0 +1,14 @@
+
+services:
+
+  typo3app:
+    build: build/typo3
+    container_name: typo3app
+    hostname: typo3.dev.sonia.de
+    ports:
+      - "9080:80"
+
+networks:
+  default:
+    name: iddev
+    external: true
