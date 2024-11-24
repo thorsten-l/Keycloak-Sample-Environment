@@ -191,6 +191,7 @@ public class OidcService
     {
       tokens = responseEntity.getBody();
 
+      log.trace("client secret='{}'", oauth2ClientSecret);    
       log.debug("accessToken={}", tokens.accessToken());
       log.debug("valid access token = {}", jwtService.validateJwtSignature(tokens.accessToken()));
       log.debug("idToken={}", tokens.idToken());
