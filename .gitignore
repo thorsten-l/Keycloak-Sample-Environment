@@ -12,6 +12,8 @@ appliances/typo3-11lts-composer/typo3/public/fileadmin
 appliances/typo3-11lts-composer/typo3/public/typo3
 appliances/typo3-11lts-composer/typo3/public/typo3conf/ext
 appliances/typo3-11lts-composer/typo3/public/typo3temp
+lessons/l9g-php-native-oidc/vendor
+appliances/typo3-12lts-composer
 
 private
 

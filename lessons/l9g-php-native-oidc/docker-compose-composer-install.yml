@@ -1,0 +1,12 @@
+services:
+  app1-php:
+    build: .
+    hostname: app1.dev.sonia.de
+    volumes:
+      - .:/var/www/html
+    command: composer install
+
+networks:
+  default:
+    name: iddev
+    external: true

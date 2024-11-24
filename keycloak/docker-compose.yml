@@ -44,7 +44,7 @@ services:
     image: quay.io/keycloak/keycloak:25.0
     restart: always
     container_name: keycloak
-    command: "start --debug --log-level=INFO,l9g:TRACE,org.hibernate:INFO,org.keycloak.transaction:INFO,org.keycloak.saml:TRACE,org.keycloak.protocol.oidc:TRACE --proxy edge --hostname-strict=false --db=postgres"
+    command: "start --debug --log-level=INFO,org.apache.http:DEBUG,org.keycloak.services.managers:DEBUG,l9g:TRACE,org.hibernate:INFO,org.keycloak.transaction:INFO,org.keycloak.saml:TRACE,org.keycloak.protocol.oidc:TRACE --proxy edge --hostname-strict=false --db=postgres"
     environment:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin123

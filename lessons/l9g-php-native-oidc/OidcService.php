@@ -23,35 +23,42 @@
 
 namespace App;
 
-class OidcService {
+class OidcService
+{
     private $config;
 
-    public function __construct($config) {
+    public function __construct($config)
+    {
         $this->config = $config;
     }
 
-    public function getAuthorizationUrl($state) {
+    public function buildAuthorizationUrl($state, $code_challenge): string
+    {
         return $this->config['oidc_discovery']['authorization_endpoint'] . '?' . http_build_query([
             'response_type' => 'code',
             'client_id' => $this->config['client_id'],
             'redirect_uri' => $this->config['redirect_uri'],
-            'scope' => $this->config['scopes'],
+            'scope' => $this->config['scope'],
             'state' => $state,
+            'code_challenge' => $code_challenge,
+            'code_challenge_method' => 'S256',
         ]);
     }
 
-    public function decodeJwt($token) {
+    public function decodeJwt($token)
+    {
         $parts = explode('.', $token);
         return json_decode(base64_decode($parts[1]), true);
     }
 
-    public function exchangeCodeForTokens(string $code): array
+    public function fetchOAuth2Tokens(string $code, string $code_verifier): array
     {
         $tokenEndpoint = $this->config['oidc_discovery']['token_endpoint'];
 
         $postData = [
             'grant_type' => 'authorization_code',
             'code' => $code,
+            'code_verifier' => $code_verifier,
             'redirect_uri' => $this->config['redirect_uri'],
             'client_id' => $this->config['client_id'],
             'client_secret' => $this->config['client_secret'],
@@ -60,13 +67,13 @@ class OidcService {
         $response = $this->makePostRequest($tokenEndpoint, $postData);
 
         if (!$response) {
-            throw new Exception('Failed to exchange authorization code for tokens.');
+            throw new \Exception('Failed to exchange authorization code for tokens.');
         }
 
         $responseData = json_decode($response, true);
 
         if (!isset($responseData['access_token'])) {
-            throw new Exception('Invalid token response: ' . $response);
+            throw new \Exception('Invalid token response: ' . $response);
         }
 
         return $responseData;
@@ -87,7 +94,7 @@ class OidcService {
         $response = curl_exec($ch);
 
         if (curl_errno($ch)) {
-            throw new Exception('cURL error: ' . curl_error($ch));
+            throw new \Exception('cURL error: ' . curl_error($ch));
         }
 
         curl_close($ch);
@@ -95,19 +102,31 @@ class OidcService {
         return $response;
     }
 
-  public function getLogoutUrl(string $idToken, string $postLogoutRedirectUri): string
-  {
-    if (empty($this->config['oidc_discovery']['end_session_endpoint'])) {
-        throw new Exception('End Session Endpoint is not defined in OIDC Discovery.');
+    public function buildLogoutUrl(string $idToken, string $postLogoutRedirectUri): string
+    {
+        if (empty($this->config['oidc_discovery']['end_session_endpoint'])) {
+            throw new \Exception('End Session Endpoint is not defined in OIDC Discovery.');
+        }
+
+        $logoutEndpoint = $this->config['oidc_discovery']['end_session_endpoint'];
+
+        $queryParams = http_build_query([
+            'id_token_hint' => $idToken,
+            'post_logout_redirect_uri' => $postLogoutRedirectUri,
+        ]);
+
+        return $logoutEndpoint . '?' . $queryParams;
     }
 
-    $logoutEndpoint = $this->config['oidc_discovery']['end_session_endpoint'];
+    public function generateCodeVerifier(): string
+    {
+        $randomBytes = random_bytes(32);
+        return rtrim(strtr(base64_encode($randomBytes), '+/', '-_'), '=');
+    }
 
-    $queryParams = http_build_query([
-        'id_token_hint' => $idToken,
-        'post_logout_redirect_uri' => $postLogoutRedirectUri,
-    ]);
-
-    return $logoutEndpoint . '?' . $queryParams;
-  }
+    public function generateCodeChallenge(string $codeVerifier): string
+    {
+        $hash = hash('sha256', $codeVerifier, true);
+        return rtrim(strtr(base64_encode($hash), '+/', '-_'), '=');
+    }
 }

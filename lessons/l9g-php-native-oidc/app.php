@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
- /*
+/*
  * This file handles the main application logic after the user has logged in.
  * It decodes the JWT tokens and displays the token data. It also provides a logout URL.
  */
@@ -24,6 +24,8 @@ require_once 'config.php';
 require_once 'OidcService.php';
 
 use App\OidcService;
+
+error_log("/app.php called");
 
 session_start();
 if (!isset($_SESSION['tokens'])) {
@@ -38,27 +40,113 @@ $accessTokenData = $oidc->decodeJwt($tokens['access_token']);
 $refreshTokenData = $oidc->decodeJwt($tokens['refresh_token']);
 
 $idToken = $tokens['id_token'];
-$postLogoutRedirectUri = 'http://app1.dev.sonia.de:8081/';
+$postLogoutRedirectUri = $config['post_logout_redirect_uri'];
 
-$logoutUrl = $oidc->getLogoutUrl($idToken, $postLogoutRedirectUri);
+$logoutUrl = $oidc->buildLogoutUrl($idToken, $postLogoutRedirectUri);
 
+function convertToString($value)
+{
+    if (is_array($value)) {
+        return json_encode($value);
+    }
+    return $value;
+}
 ?>
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>App</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body>
     <div class="container mt-4">
         <h1>App</h1>
         <a class="btn btn-primary mt-4" href="<?php echo htmlspecialchars($logoutUrl); ?>">LOGOUT</a>
-        <h2 class="mt-4">ID Token</h2>
-        <pre><?php print_r($idTokenData); ?></pre>
-        <h2 class="mt-4">Access Token</h2>
-        <pre><?php print_r($accessTokenData); ?></pre>
-        <h2 class="mt-4">Refresh Token</h2>
-        <pre><?php print_r($refreshTokenData); ?></pre>
+
+        <p style="word-break: break-all;"><?php echo htmlspecialchars($logoutUrl); ?></p>
+
+        <h2 class="appheader">Logout URL</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th style="width: 20%">Key</th>
+                    <th style="width: 80%">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>uri</td>
+                    <td><?php echo htmlspecialchars($config['oidc_discovery']['end_session_endpoint']); ?></td>
+                </tr>
+                <tr>
+                    <td>id_token_hint</td>
+                    <td style="word-break: break-all;"><?php echo htmlspecialchars($idToken); ?></td>
+                </tr>
+                <tr>
+                    <td class="red-background">post_logout_redirect_uri</td>
+                    <td class="red-background"><?php echo htmlspecialchars($postLogoutRedirectUri); ?></td>
+                </tr>
+            </tbody>
+        </table>
+
+
+        <h2 class="appheader">ID Token</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th style="width: 20%">Key</th>
+                    <th style="width: 80%">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($idTokenData as $key => $value): ?>
+                    <tr class="align-middle">
+                        <td><?php echo $key ?></td>
+                        <td><?php echo htmlspecialchars(convertToString($value)) ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+
+        <h2 class="appheader">Access Token</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th style="width: 20%">Key</th>
+                    <th style="width: 80%">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($accessTokenData as $key => $value): ?>
+                    <tr class="align-middle">
+                        <td><?php echo $key ?></td>
+                        <td><?php echo htmlspecialchars(convertToString($value)) ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+
+        <h2 class="appheader">Refresh Token</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th style="width: 20%">Key</th>
+                    <th style="width: 80%">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($refreshTokenData as $key => $value): ?>
+                    <tr class="align-middle">
+                        <td><?php echo $key ?></td>
+                        <td><?php echo htmlspecialchars(convertToString($value)) ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+
     </div>
 </body>
+
 </html>

@@ -22,10 +22,15 @@
  */
 
 $config = [
+    'redis' => [
+        'host' => 'app1-redis',
+        'port' => 6379,
+    ],
     'client_id' => 'app1',
     'client_secret' => 'x45mpvfzvPU5utH7MvNclj2vtilaXW0i',
-    'redirect_uri' => 'http://app1.dev.sonia.de:8081/oidc-login.php',
-    'scopes' => 'openid profile email roles',
+    'redirect_uri' => 'http://app1.dev.sonia.de:8081/oidc-login',
+    'post_logout_redirect_uri' => 'http://app1.dev.sonia.de:8081/oidc-logout',
+    'scope' => 'openid profile email roles',
     'oidc_discovery_url' => 'https://id.dev.sonia.de/realms/dev/.well-known/openid-configuration',
 ];
 
