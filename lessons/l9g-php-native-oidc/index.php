@@ -46,82 +46,103 @@ $authUrl = $oidc->buildAuthorizationUrl($state, $code_challenge);
 <head>
   <title>Home</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="main.css" rel="stylesheet">
 </head>
 
 <body>
   <div class="container mt-4">
     <h1>Home</h1>
-    <a class="btn btn-primary mt-4" href="<?php echo $authUrl; ?>">LOGIN</a>
-    <p style="word-break: break-all;"><?php echo htmlspecialchars($authUrl); ?></p>
+    <div class="card">
+      <div class="card-header d-flex justify-content-end">
+        <a class="btn btn-primary" href="<?php echo $authUrl; ?>">LOGIN</a>
+      </div>
+      <div class="card-body">
+        <p style="word-break: break-all;"><?php echo htmlspecialchars($authUrl); ?></p>
+      </div>
+    </div>
 
-    <h2 class="appheader">Login URL</h2>
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th style="width: 20%">Key</th>
-          <th style="width: 80%">Value</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>uri</td>
-          <td><?php echo htmlspecialchars($config['oidc_discovery']['authorization_endpoint']); ?></td>
-        </tr>
-        <tr>
-          <td>client_id</td>
-          <td><?php echo htmlspecialchars($config['client_id']); ?></td>
-        </tr>
-        <tr>
-          <td>response_type</td>
-          <td>code</td>
-        </tr>
-        <tr>
-          <td>redirect_uri</td>
-          <td><?php echo htmlspecialchars($config['redirect_uri']); ?></td>
-        </tr>
-        <tr>
-          <td>scope</td>
-          <td><?php echo htmlspecialchars($config['scope']); ?></td>
-        </tr>
-        <tr>
-          <td>state</td>
-          <td><?php echo htmlspecialchars($state); ?></td>
-        </tr>
-        <tr>
-          <td>code_challenge</td>
-          <td><?php echo htmlspecialchars($code_challenge); ?></td>
-        </tr>
-        <tr>
-          <td>code_challenge_method</td>
-          <td>S256</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="appheader card">
+      <div class="card-header">
+        <h4>Login URL</h4>
+      </div>
+      <div class="card-body">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th style="width: 20%">Key</th>
+              <th style="width: 80%">Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>uri</td>
+              <td><?php echo htmlspecialchars($config['oidc_discovery']['authorization_endpoint']); ?></td>
+            </tr>
+            <tr>
+              <td>client_id</td>
+              <td><?php echo htmlspecialchars($config['client_id']); ?></td>
+            </tr>
+            <tr>
+              <td>response_type</td>
+              <td>code</td>
+            </tr>
+            <tr>
+              <td>redirect_uri</td>
+              <td><?php echo htmlspecialchars($config['redirect_uri']); ?></td>
+            </tr>
+            <tr>
+              <td>scope</td>
+              <td><?php echo htmlspecialchars($config['scope']); ?></td>
+            </tr>
+            <tr>
+              <td>state</td>
+              <td><?php echo htmlspecialchars($state); ?></td>
+            </tr>
+            <tr>
+              <td class="red-background">code_challenge</td>
+              <td class="red-background"><?php echo htmlspecialchars($code_challenge); ?></td>
+            </tr>
+            <tr>
+              <td class="red-background">code_challenge_method</td>
+              <td class="red-background">S256</td>
+            </tr>
+          </tbody>
+        </table>
 
-    <h2 class="appheader">Session Attributes</h2>
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th style="width: 20%">Key</th>
-          <th style="width: 80%">Value</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>session id</td>
-          <td><?php echo session_id(); ?></td>
-        </tr>
-        <tr>
-          <td>oauth2State</td>
-          <td><?php echo htmlspecialchars($_SESSION['oauth2_state']); ?></td>
-        </tr>
-        <tr>
-          <td>code_verifier</td>
-          <td><?php echo htmlspecialchars($_SESSION['code_verifier']); ?></td>
-        </tr>
-      </tbody>
-    </table>
+        <p class="red-background p-1">*** Optional: PKCE code challenge ***</p>
 
+      </div>
+    </div>
+
+    <div class="appheader card">
+      <div class="card-header">
+        <h4>Session Attributes</h4>
+      </div>
+      <div class="card-body">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th style="width: 20%">Key</th>
+              <th style="width: 80%">Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>session id</td>
+              <td><?php echo session_id(); ?></td>
+            </tr>
+            <tr>
+              <td>oauth2State</td>
+              <td><?php echo htmlspecialchars($_SESSION['oauth2_state']); ?></td>
+            </tr>
+            <tr>
+              <td>code_verifier</td>
+              <td><?php echo htmlspecialchars($_SESSION['code_verifier']); ?></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </body>
 

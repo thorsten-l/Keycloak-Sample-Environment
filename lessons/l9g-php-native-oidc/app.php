@@ -58,94 +58,123 @@ function convertToString($value)
 <head>
     <title>App</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="main.css" rel="stylesheet">
 </head>
 
 <body>
     <div class="container mt-4">
         <h1>App</h1>
-        <a class="btn btn-primary mt-4" href="<?php echo htmlspecialchars($logoutUrl); ?>">LOGOUT</a>
 
-        <p style="word-break: break-all;"><?php echo htmlspecialchars($logoutUrl); ?></p>
+        <div class="card">
+            <div class="card-header d-flex justify-content-end">
+                <a class="btn btn-primary" href="<?php echo htmlspecialchars($logoutUrl); ?>">LOGOUT</a>
+            </div>
+            <div class="card-body">
+                <p style="word-break: break-all;"><?php echo htmlspecialchars($logoutUrl); ?></p>
+            </div>
+        </div>
 
-        <h2 class="appheader">Logout URL</h2>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th style="width: 20%">Key</th>
-                    <th style="width: 80%">Value</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>uri</td>
-                    <td><?php echo htmlspecialchars($config['oidc_discovery']['end_session_endpoint']); ?></td>
-                </tr>
-                <tr>
-                    <td>id_token_hint</td>
-                    <td style="word-break: break-all;"><?php echo htmlspecialchars($idToken); ?></td>
-                </tr>
-                <tr>
-                    <td class="red-background">post_logout_redirect_uri</td>
-                    <td class="red-background"><?php echo htmlspecialchars($postLogoutRedirectUri); ?></td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="card appheader">
+            <div class="card-header">
+                <h4>Logout URL</h4>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width: 20%">Key</th>
+                            <th style="width: 80%">Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>uri</td>
+                            <td><?php echo htmlspecialchars($config['oidc_discovery']['end_session_endpoint']); ?></td>
+                        </tr>
+                        <tr>
+                            <td>id_token_hint</td>
+                            <td style="word-break: break-all;"><?php echo htmlspecialchars($idToken); ?></td>
+                        </tr>
+                        <tr>
+                            <td class="red-background">post_logout_redirect_uri</td>
+                            <td class="red-background"><?php echo htmlspecialchars($postLogoutRedirectUri); ?></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
+        <div class="card appheader">
+            <div class="card-header">
+                <h4>ID Token</h4>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width: 20%">Key</th>
+                            <th style="width: 80%">Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($idTokenData as $key => $value): ?>
+                            <tr class="align-middle">
+                                <td><?php echo $key ?></td>
+                                <td><?php echo htmlspecialchars(convertToString($value)) ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-        <h2 class="appheader">ID Token</h2>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th style="width: 20%">Key</th>
-                    <th style="width: 80%">Value</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($idTokenData as $key => $value): ?>
-                    <tr class="align-middle">
-                        <td><?php echo $key ?></td>
-                        <td><?php echo htmlspecialchars(convertToString($value)) ?></td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+        <div class="card appheader">
+            <div class="card-header">
+                <h4>Access Token</h4>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width: 20%">Key</th>
+                            <th style="width: 80%">Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($accessTokenData as $key => $value): ?>
+                            <tr class="align-middle">
+                                <td><?php echo $key ?></td>
+                                <td><?php echo htmlspecialchars(convertToString($value)) ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-        <h2 class="appheader">Access Token</h2>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th style="width: 20%">Key</th>
-                    <th style="width: 80%">Value</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($accessTokenData as $key => $value): ?>
-                    <tr class="align-middle">
-                        <td><?php echo $key ?></td>
-                        <td><?php echo htmlspecialchars(convertToString($value)) ?></td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-
-        <h2 class="appheader">Refresh Token</h2>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th style="width: 20%">Key</th>
-                    <th style="width: 80%">Value</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($refreshTokenData as $key => $value): ?>
-                    <tr class="align-middle">
-                        <td><?php echo $key ?></td>
-                        <td><?php echo htmlspecialchars(convertToString($value)) ?></td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-
+        <div class="card appheader">
+            <div class="card-header">
+                <h4>Refresh Token</h4>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width: 20%">Key</th>
+                            <th style="width: 80%">Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($refreshTokenData as $key => $value): ?>
+                            <tr class="align-middle">
+                                <td><?php echo $key ?></td>
+                                <td><?php echo htmlspecialchars(convertToString($value)) ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </body>
 
