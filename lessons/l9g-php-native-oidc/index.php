@@ -74,42 +74,51 @@ $authUrl = $oidc->buildAuthorizationUrl($state, $code_challenge);
             <table class="table table-striped">
               <thead>
                 <tr>
-                  <th style="width: 20%">Key</th>
-                  <th style="width: 80%">Value</th>
+                  <th style="width: 10%">Key</th>
+                  <th style="width: 40%">Value</th>
+                  <th style="width: 50%">Description</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td class="discovery-background">uri</td>
                   <td class="discovery-background"><?php echo htmlspecialchars($config['oidc_discovery']['authorization_endpoint']); ?></td>
+                  <td class="discovery-background"><?php echo $descriptions['authorization_endpoint'] ?></td>
                 </tr>
                 <tr>
                   <td class="config-background">client_id</td>
                   <td class="config-background"><?php echo htmlspecialchars($config['client_id']); ?></td>
+                  <td class="config-background"><?php echo $descriptions['client_id'] ?></td>
                 </tr>
                 <tr>
                   <td class="config-background">response_type</td>
                   <td class="config-background">code</td>
+                  <td class="config-background"><?php echo $descriptions['response_type'] ?></td>
                 </tr>
                 <tr>
                   <td class="config-background">redirect_uri</td>
                   <td class="config-background"><?php echo htmlspecialchars($config['redirect_uri']); ?></td>
+                  <td class="config-background"><?php echo $descriptions['redirect_uri'] ?></td>
                 </tr>
                 <tr>
                   <td class="config-background">scope</td>
                   <td class="config-background"><?php echo htmlspecialchars($config['scope']); ?></td>
+                  <td class="config-background"><?php echo $descriptions['scope'] ?></td>
                 </tr>
                 <tr>
                   <td class="random-background">state</td>
                   <td class="random-background"><?php echo htmlspecialchars($state); ?></td>
+                  <td class="random-background"><?php echo $descriptions['state'] ?></td>
                 </tr>
                 <tr>
                   <td class="optional-background">code_challenge</td>
                   <td class="random-background"><?php echo htmlspecialchars($code_challenge); ?></td>
+                  <td class="random-background"><?php echo $descriptions['code_challenge'] ?></td>
                 </tr>
                 <tr>
                   <td class="optional-background">code_challenge_method</td>
                   <td class="config-background">S256</td>
+                  <td class="config-background"><?php echo $descriptions['code_challenge_method'] ?></td>
                 </tr>
               </tbody>
             </table>
@@ -126,22 +135,26 @@ $authUrl = $oidc->buildAuthorizationUrl($state, $code_challenge);
             <table class="table table-striped">
               <thead>
                 <tr>
-                  <th style="width: 20%">Key</th>
-                  <th style="width: 80%">Value</th>
+                  <th style="width: 10%">Key</th>
+                  <th style="width: 40%">Value</th>
+                  <th style="width: 50%">Description</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td class="random-background">session id</td>
                   <td class="random-background"><?php echo session_id(); ?></td>
+                  <td class="random-background"><?php echo $descriptions['session_id'] ?></td>
                 </tr>
                 <tr>
-                  <td class="random-background">oauth2State</td>
+                  <td class="random-background">oauth2_state</td>
                   <td class="random-background"><?php echo htmlspecialchars($_SESSION['oauth2_state']); ?></td>
+                  <td class="random-background"><?php echo $descriptions['state'] ?></td>
                 </tr>
                 <tr>
                   <td class="random-background">code_verifier</td>
                   <td class="random-background"><?php echo htmlspecialchars($_SESSION['code_verifier']); ?></td>
+                  <td class="random-background"><?php echo $descriptions['code_verifier'] ?></td>
                 </tr>
               </tbody>
             </table>
@@ -157,34 +170,41 @@ $authUrl = $oidc->buildAuthorizationUrl($state, $code_challenge);
             <table class="table table-striped">
               <thead>
                 <tr>
-                  <th style="width: 20%">Key</th>
-                  <th style="width: 80%">Value</th>
+                  <th style="width: 10%">Key</th>
+                  <th style="width: 40%">Value</th>
+                  <th style="width: 50%">Description</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td class="config-background">OIDC Discovery URL</td>
+                  <td class="config-background">oidc_discovery_url</td>
                   <td class="config-background"><?php echo htmlspecialchars($config['oidc_discovery_url']); ?></td>
+                  <td class="config-background"><?php echo $descriptions['oidc_discovery_url'] ?></td>
                 </tr>
                 <tr>
-                  <td class="discovery-background">Issuer</td>
+                  <td class="discovery-background">issuer</td>
                   <td class="discovery-background"><?php echo htmlspecialchars($config['oidc_discovery']['issuer']); ?></td>
+                  <td class="discovery-background"><?php echo $descriptions['issuer'] ?></td>
                 </tr>
                 <tr>
-                  <td class="discovery-background">Authorization Endpoint</td>
+                  <td class="discovery-background">authorization_endpoint</td>
                   <td class="discovery-background"><?php echo htmlspecialchars($config['oidc_discovery']['authorization_endpoint']); ?></td>
+                  <td class="discovery-background"><?php echo $descriptions['authorization_endpoint'] ?></td>
                 </tr>
                 <tr>
-                  <td class="discovery-background">Token Endpoint</td>
+                  <td class="discovery-background">token_endpoint</td>
                   <td class="discovery-background"><?php echo htmlspecialchars($config['oidc_discovery']['token_endpoint']); ?></td>
+                  <td class="discovery-background"><?php echo $descriptions['token_endpoint'] ?></td>
                 </tr>
                 <tr>
-                  <td class="discovery-background">End Session Endpoint</td>
+                  <td class="discovery-background">end_session_endpoint</td>
                   <td class="discovery-background"><?php echo htmlspecialchars($config['oidc_discovery']['end_session_endpoint']); ?></td>
+                  <td class="discovery-background"><?php echo $descriptions['end_session_endpoint'] ?></td>
                 </tr>
                 <tr>
-                  <td class="discovery-background">Userinfo Endpoint</td>
+                  <td class="discovery-background">userinfo_endpoint</td>
                   <td class="discovery-background"><?php echo htmlspecialchars($config['oidc_discovery']['userinfo_endpoint']); ?></td>
+                  <td class="discovery-background"><?php echo $descriptions['userinfo_endpoint'] ?></td>
                 </tr>
               </tbody>
             </table>

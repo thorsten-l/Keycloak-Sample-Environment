@@ -34,7 +34,7 @@ $config = [
   'oidc_discovery_url' => 'https://id.dev.sonia.de/realms/dev/.well-known/openid-configuration',
 ];
 
-$tokenDescriptions = [
+$descriptions = [
   "exp" => "Das Ablaufdatum des Tokens als UNIX-Timestamp. Nach diesem Zeitpunkt ist das Token ungültig.",
   "iat" => "Der Zeitpunkt der Erstellung des Tokens als UNIX-Timestamp.",
   "auth_time" => "Der Zeitpunkt, an dem der Benutzer authentifiziert wurde, als UNIX-Timestamp.",
@@ -60,7 +60,25 @@ $tokenDescriptions = [
   "family_name" => "Der Nachname des Benutzers.",
   "allowed-origins" => "Eine Liste von erlaubten Ursprüngen (Origins), die CORS-Anfragen für diesen Benutzer oder Client autorisieren.",
   "email" => "Die E-Mail-Adresse des Benutzers.",
-  "scope" => "Die genehmigten Berechtigungen und Zugriffsebenen für die Ressourcen, auf die das Token Zugriff gewährt."
+  "scope" => "Die genehmigten Berechtigungen und Zugriffsebenen für die Ressourcen, auf die das Token Zugriff gewährt.",
+
+  // OIDC Discovery-related keys
+  "oidc_discovery_url" => "URL zum OIDC-Discovery-Dokument mit Konfigurationsmetadaten.",
+  "issuer" => "Ausstellerkennung für den OIDC-Provider.",
+  "authorization_endpoint" => "Endpoint für die Benutzerautorisierung.",
+  "token_endpoint" => "Endpoint für den Austausch von Autorisierungscodes gegen Tokens.",
+  "end_session_endpoint" => "Endpoint zum Abmelden des Benutzers und Beenden der Sitzung.",
+  "userinfo_endpoint" => "Endpoint zum Abrufen von Benutzerprofildaten.",
+
+  "session_id" => "Sitzungs-ID, die für die Benutzersitzung generiert wurde.",
+  "code_verifier" => "PKCE-Code-Überprüfer, der während des Token-Austauschs verwendet wird.",
+  "uri" => "Autorisierungsanforderungs-URI für den OIDC-Provider.",
+  "client_id" => "Client-ID der Anwendung, die beim OIDC-Provider registriert ist.",
+  "response_type" => "Erwarteter Antworttyp der Autorisierungsanfrage.",
+  "redirect_uri" => "URL, zu der der OIDC-Provider nach der Benutzerautorisierung umleitet.",
+  "state" => "Statusparameter, der in der Autorisierungsanfrage enthalten ist, um CSRF zu vermeiden.",
+  "code_challenge" => "PKCE-Code-Challenge, die aus dem Code-Überprüfer abgeleitet wurde.",
+  "code_challenge_method" => "Verwendete Methode zur Erstellung der PKCE-Code-Challenge."
 ];
 
 $redis = new Redis();

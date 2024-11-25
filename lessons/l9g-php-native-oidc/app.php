@@ -133,7 +133,7 @@ function convertToString($value)
                   <tr class="align-middle">
                     <td><?php echo $key ?></td>
                     <td><?php echo htmlspecialchars(convertToString($value)) ?></td>
-                    <td><?php echo $tokenDescriptions[$key] ?></td>
+                    <td><?php echo $descriptions[$key] ?></td>
                   </tr>
                 <?php endforeach; ?>
               </tbody>
@@ -161,7 +161,7 @@ function convertToString($value)
                   <tr class="align-middle">
                     <td><?php echo $key ?></td>
                     <td><?php echo htmlspecialchars(convertToString($value)) ?></td>
-                    <td><?php echo $tokenDescriptions[$key] ?></td>
+                    <td><?php echo $descriptions[$key] ?></td>
                   </tr>
                 <?php endforeach; ?>
               </tbody>
@@ -189,7 +189,7 @@ function convertToString($value)
                   <tr class="align-middle">
                     <td><?php echo $key ?></td>
                     <td><?php echo htmlspecialchars(convertToString($value)) ?></td>
-                    <td><?php echo $tokenDescriptions[$key] ?></td>
+                    <td><?php echo $descriptions[$key] ?></td>
                   </tr>
                 <?php endforeach; ?>
               </tbody>
