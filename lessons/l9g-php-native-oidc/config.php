@@ -74,3 +74,5 @@ $tokenDescriptions = [
     "email" => "Die E-Mail-Adresse des Benutzers.",
     "scope" => "Die genehmigten Berechtigungen und Zugriffsebenen für die Ressourcen, auf die das Token Zugriff gewährt."
 ];
+
+date_default_timezone_set('Europe/Berlin');
