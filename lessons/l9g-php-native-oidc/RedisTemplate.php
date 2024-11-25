@@ -16,21 +16,31 @@
  */
 
 if (!class_exists('Redis')) {
-    class Redis {     
-        public function connect($host, $port) {
-            return true;
-        }
-
-        public function set($key, $value) {
-            return true;
-        }
-
-        public function get($key) {
-            return true;
-        }
-
-        public function del($key) {
-            return true;
-        }
+  class Redis
+  {
+    public function connect($host, $port)
+    {
+      return true;
     }
+
+    public function set($key, $value)
+    {
+      return true;
+    }
+
+    public function get($key)
+    {
+      return true;
+    }
+
+    public function del($key)
+    {
+      return true;
+    }
+
+    public function close()
+    {
+      return true;
+    }
+  }
 }

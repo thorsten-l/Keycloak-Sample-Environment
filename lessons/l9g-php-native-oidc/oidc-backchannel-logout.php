@@ -38,6 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $redis->connect($config['redis']['host'], $config['redis']['port']);
     $r_session_id = $redis->get($sid);
 		$redis->del($sid);
+    $redis->close();
 
 		error_log("handleBackchannelLogout r_session_id=" . $r_session_id);
 	

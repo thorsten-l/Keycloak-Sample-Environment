@@ -29,7 +29,7 @@ error_log("/app.php called");
 
 session_start();
 if (!isset($_SESSION['tokens'])) {
-  header('Location: index.php');
+  header('Location: /');
   exit();
 }
 

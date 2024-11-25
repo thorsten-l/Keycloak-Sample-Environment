@@ -31,28 +31,29 @@ session_start();
 error_log("/oidc-login.php called");
 
 if (isset($_GET['code']) && isset($_GET['state'])) {
-    $code = $_GET['code'];
-    $state = $_GET['state'];
+  $code = $_GET['code'];
+  $state = $_GET['state'];
 
-    if ($state !== $_SESSION['oauth2_state']) {
-        die('Invalid state');
-    }
-    $code_verifier = $_SESSION['code_verifier'];
-    $oidc = new OidcService($config);
-    $tokens = $oidc->fetchOAuth2Tokens($code, $code_verifier);
-    $_SESSION['tokens'] = $tokens;
+  if ($state !== $_SESSION['oauth2_state']) {
+    die('Invalid state');
+  }
+  $code_verifier = $_SESSION['code_verifier'];
+  $oidc = new OidcService($config);
+  $tokens = $oidc->fetchOAuth2Tokens($code, $code_verifier);
+  $_SESSION['tokens'] = $tokens;
 
-    $idTokenData = $oidc->decodeJwt($tokens['id_token']);
-    $sid = $idTokenData['sid'];
+  $idTokenData = $oidc->decodeJwt($tokens['id_token']);
+  $sid = $idTokenData['sid'];
 
-    error_log("oidc-login.php: sid=" . $sid);
+  error_log("oidc-login.php: sid=" . $sid);
 
-    $redis = new Redis();
-    $redis->connect($config['redis']['host'], $config['redis']['port']);
-    $redis->set($sid, session_id());
+  $redis = new Redis();
+  $redis->connect($config['redis']['host'], $config['redis']['port']);
+  $redis->set($sid, session_id());
+  $redis->close();
 
-    header('Location: /app');
-    exit();
+  header('Location: /app');
+  exit();
 } else {
-    die('Missing code or state');
+  die('Missing code or state');
 }
