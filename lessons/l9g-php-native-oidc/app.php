@@ -71,6 +71,7 @@ function convertToString($value)
     <nav class="appheader">
       <div class="nav nav-tabs" id="nav-tab" role="tablist">
         <a class="nav-link active" id="nav-logout-url-tab" data-bs-toggle="tab" href="#nav-logout-url" role="tab" aria-controls="nav-logout-url" aria-selected="true">Logout-URL</a>
+        <a class="nav-link" id="nav-userinfo-tab" data-bs-toggle="tab" href="#nav-userinfo" role="tab" aria-controls="nav-userinfo" aria-selected="false">Userinfo</a>
         <a class="nav-link" id="nav-idtoken-tab" data-bs-toggle="tab" href="#nav-idtoken" role="tab" aria-controls="nav-idtoken" aria-selected="false">ID Token</a>
         <a class="nav-link" id="nav-accesstoken-tab" data-bs-toggle="tab" href="#nav-accesstoken" role="tab" aria-controls="nav-accesstoken" aria-selected="false">Access Token</a>
         <a class="nav-link" id="nav-refreshtoken-tab" data-bs-toggle="tab" href="#nav-refreshtoken" role="tab" aria-controls="nav-refreshtoken" aria-selected="false">Refresh Token</a>
@@ -110,6 +111,56 @@ function convertToString($value)
               </tbody>
             </table>
 
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane fade show" id="nav-userinfo" role="tabpanel" aria-labelledby="nav-userinfo-tab">
+        <div class="card appheader">
+          <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center">
+              <h4>Userinfo</h4>
+            </div>
+          </div>
+          <div class="card-body">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th style="width: 20%">Key</th>
+                  <th style="width: 80%">Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>username</td>
+                  <td><?php echo htmlspecialchars($idTokenData[$config['attributesMap']['username']]); ?></td>
+                </tr>
+                <tr>
+                  <td>email</td>
+                  <td><?php echo htmlspecialchars($idTokenData[$config['attributesMap']['email']]); ?></td>
+                </tr>
+                <tr>
+                  <td>family_name</td>
+                  <td><?php echo htmlspecialchars($idTokenData[$config['attributesMap']['family_name']]); ?></td>
+                </tr>
+                <tr>
+                  <td>given_name</td>
+                  <td><?php echo htmlspecialchars($idTokenData[$config['attributesMap']['given_name']]); ?></td>
+                </tr>
+                <tr>
+                  <td>gender</td>
+                  <td><?php echo htmlspecialchars($idTokenData['gender']); ?></td>
+                </tr>
+                <tr>
+                  <td>realm roles</td>
+                  <td><?php echo convertToString($accessTokenData['realm_access']['roles']); ?></td>
+                </tr>
+                <tr>
+                  <td>resource roles</td>
+                  <td><?php echo convertToString($accessTokenData['resource_access'][$config['client_id']]['roles']); ?></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

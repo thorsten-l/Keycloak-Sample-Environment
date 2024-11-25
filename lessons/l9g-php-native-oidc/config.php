@@ -32,6 +32,12 @@ $config = [
   'post_logout_redirect_uri' => 'http://app1.dev.sonia.de:8081/oidc-logout',
   'scope' => 'openid profile email roles',
   'oidc_discovery_url' => 'https://id.dev.sonia.de/realms/dev/.well-known/openid-configuration',
+  'attributesMap' => [
+    'given_name' => 'given_name',
+    'family_name' => 'family_name',
+    'email' => 'email',
+    'username' => 'preferred_username'
+  ],
 ];
 
 $descriptions = [
