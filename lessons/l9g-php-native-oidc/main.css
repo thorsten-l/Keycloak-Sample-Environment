@@ -25,3 +25,19 @@ limitations under the License.
 .red-background {
   background-color: rgba(255, 99, 71, 0.2) !important;
 }
+
+.optional-background {
+  background-color: rgba(255, 99, 71, 0.2) !important;
+}
+
+.config-background {
+  background-color: rgba(99, 255, 71, 0.2) !important;
+}
+
+.random-background {
+  background-color: rgba(99, 99, 255, 0.2) !important;
+}
+
+.discovery-background {
+  background-color: rgba(255, 255, 71, 0.2) !important;
+}

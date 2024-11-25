@@ -28,16 +28,16 @@ class OidcDiscovery
     private string $issuer;
     private string $authorizationEndpoint;
     private string $tokenEndpoint;
-    private ?string $endSessionEndpoint;
-    private ?string $userinfoEndpoint;
+    private string $endSessionEndpoint;
+    private string $userinfoEndpoint;
 
     public function __construct(array $data)
     {
         $this->issuer = $data['issuer'];
         $this->authorizationEndpoint = $data['authorization_endpoint'];
         $this->tokenEndpoint = $data['token_endpoint'];
-        $this->endSessionEndpoint = $data['end_session_endpoint'] ?? null;
-        $this->userinfoEndpoint = $data['userinfo_endpoint'] ?? null;
+        $this->endSessionEndpoint = $data['end_session_endpoint'];
+        $this->userinfoEndpoint = $data['userinfo_endpoint'];
     }
 
     public function getIssuer(): string

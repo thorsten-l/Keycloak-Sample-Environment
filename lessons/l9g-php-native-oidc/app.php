@@ -96,21 +96,19 @@ function convertToString($value)
               </thead>
               <tbody>
                 <tr>
-                  <td>uri</td>
-                  <td><?php echo htmlspecialchars($config['oidc_discovery']['end_session_endpoint']); ?></td>
+                  <td class="discovery-background">uri</td>
+                  <td class="discovery-background"><?php echo htmlspecialchars($config['oidc_discovery']['end_session_endpoint']); ?></td>
                 </tr>
                 <tr>
                   <td>id_token_hint</td>
                   <td style="word-break: break-all;"><?php echo htmlspecialchars($idToken); ?></td>
                 </tr>
                 <tr>
-                  <td class="red-background">post_logout_redirect_uri</td>
-                  <td class="red-background"><?php echo htmlspecialchars($postLogoutRedirectUri); ?></td>
+                  <td class="optional-background">post_logout_redirect_uri</td>
+                  <td class="config-background"><?php echo htmlspecialchars($postLogoutRedirectUri); ?></td>
                 </tr>
               </tbody>
             </table>
-
-            <p class="red-background p-1">*** Optional ***</p>
 
           </div>
         </div>
@@ -200,6 +198,22 @@ function convertToString($value)
         </div>
       </div>
     </div>
+
+    <div class="row mt-4">
+      <div class="col text-center">
+        <p class="config-background p-1">Config</p>
+      </div>
+      <div class="col text-center">
+        <p class="discovery-background p-1">Discovery</p>
+      </div>
+      <div class="col text-center">
+        <p class="random-background p-1">Random</p>
+      </div>
+      <div class="col text-center">
+        <p class="optional-background p-1">Optional</p>
+      </div>
+    </div>
+
   </div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
