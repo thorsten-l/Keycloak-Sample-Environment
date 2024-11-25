@@ -45,3 +45,32 @@ $config['oidc_discovery'] = [
     'end_session_endpoint' => $oidcDiscovery['end_session_endpoint'] ?? null,
     'userinfo_endpoint' => $oidcDiscovery['userinfo_endpoint'] ?? null,
 ];
+
+$tokenDescriptions = [
+    "exp" => "Das Ablaufdatum des Tokens als UNIX-Timestamp. Nach diesem Zeitpunkt ist das Token ungültig.",
+    "iat" => "Der Zeitpunkt der Erstellung des Tokens als UNIX-Timestamp.",
+    "auth_time" => "Der Zeitpunkt, an dem der Benutzer authentifiziert wurde, als UNIX-Timestamp.",
+    "jti" => "Die eindeutige ID des Tokens, die zur Verfolgung oder Entwertung verwendet werden kann.",
+    "iss" => "Der Aussteller des Tokens, typischerweise die URL des Identity Providers.",
+    "aud" => "Der beabsichtigte Empfänger des Tokens, typischerweise die Client-ID der Anwendung.",
+    "sub" => "Der eindeutige Identifier des Benutzers, der das Token betrifft.",
+    "typ" => "Der Typ des Tokens, z. B. 'ID' für ID-Tokens.",
+    "azp" => "Der autorisierte Client, der das Token anfordert.",
+    "sid" => "Die Sitzungs-ID, die die aktuelle Anmeldesitzung des Benutzers identifiziert.",
+    "at_hash" => "Ein Hash des Access Tokens, um es mit dem ID Token zu verifizieren.",
+    "acr" => "Die Authentifizierungsstärke oder Methode, die während der Authentifizierung verwendet wurde.",
+    "resource_access" => "Eine Liste der Rollen und Berechtigungen, die der Benutzer für verschiedene Ressourcen besitzt.",
+    "realm_access" => "Die Rollen und Berechtigungen, die der Benutzer innerhalb des aktuellen Realms hat.",
+    "email_verified" => "Ein Indikator (0 oder 1), ob die E-Mail-Adresse des Benutzers verifiziert wurde.",
+    "gender" => "Das Geschlecht des Benutzers, falls angegeben.",
+    "name" => "Der vollständige Name des Benutzers.",
+    "nickname" => "Der Spitzname des Benutzers.",
+    "phone_number" => "Die Telefonnummer des Benutzers.",
+    "preferred_username" => "Der bevorzugte Benutzername des Benutzers.",
+    "locale" => "Die bevorzugte Sprache und Region des Benutzers, z. B. 'de' für Deutsch.",
+    "given_name" => "Der Vorname des Benutzers.",
+    "family_name" => "Der Nachname des Benutzers.",
+    "allowed-origins" => "Eine Liste von erlaubten Ursprüngen (Origins), die CORS-Anfragen für diesen Benutzer oder Client autorisieren.",
+    "email" => "Die E-Mail-Adresse des Benutzers.",
+    "scope" => "Die genehmigten Berechtigungen und Zugriffsebenen für die Ressourcen, auf die das Token Zugriff gewährt."
+];

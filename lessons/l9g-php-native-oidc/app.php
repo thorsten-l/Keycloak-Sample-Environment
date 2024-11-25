@@ -29,8 +29,8 @@ error_log("/app.php called");
 
 session_start();
 if (!isset($_SESSION['tokens'])) {
-    header('Location: index.php');
-    exit();
+  header('Location: index.php');
+  exit();
 }
 
 $tokens = $_SESSION['tokens'];
@@ -46,136 +46,162 @@ $logoutUrl = $oidc->buildLogoutUrl($idToken, $postLogoutRedirectUri);
 
 function convertToString($value)
 {
-    if (is_array($value)) {
-        return json_encode($value);
-    }
-    return $value;
+  if (is_array($value)) {
+    return json_encode($value);
+  }
+  if (is_numeric($value) && $value > 1700000000) {
+    return date('Y-m-d H:i:s', $value);
+  }
+  return $value;
 }
 ?>
 <!DOCTYPE html>
 <html>
 
 <head>
-    <title>App</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="main.css" rel="stylesheet">
+  <title>App</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="main.css" rel="stylesheet" />
 </head>
 
 <body>
-    <div class="container mt-4">
-        <h1>App</h1>
+  <div class="container mt-4">
+    <h1>App</h1>
 
-        <div class="card">
-            <div class="card-header d-flex justify-content-end">
-                <a class="btn btn-primary" href="<?php echo htmlspecialchars($logoutUrl); ?>">LOGOUT</a>
-            </div>
-            <div class="card-body">
-                <p style="word-break: break-all;"><?php echo htmlspecialchars($logoutUrl); ?></p>
-            </div>
-        </div>
+    <nav class="appheader">
+      <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <a class="nav-link active" id="nav-logout-url-tab" data-bs-toggle="tab" href="#nav-logout-url" role="tab" aria-controls="nav-logout-url" aria-selected="true">Logout-URL</a>
+        <a class="nav-link" id="nav-idtoken-tab" data-bs-toggle="tab" href="#nav-idtoken" role="tab" aria-controls="nav-idtoken" aria-selected="false">ID Token</a>
+        <a class="nav-link" id="nav-accesstoken-tab" data-bs-toggle="tab" href="#nav-accesstoken" role="tab" aria-controls="nav-accesstoken" aria-selected="false">Access Token</a>
+        <a class="nav-link" id="nav-refreshtoken-tab" data-bs-toggle="tab" href="#nav-refreshtoken" role="tab" aria-controls="nav-refreshtoken" aria-selected="false">Refresh Token</a>
+      </div>
+    </nav>
 
+    <div class="tab-content" id="nav-tabContent">
+      <div class="tab-pane fade show active" id="nav-logout-url" role="tabpanel" aria-labelledby="nav-logout-url-tab">
         <div class="card appheader">
-            <div class="card-header">
-                <h4>Logout URL</h4>
+          <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center">
+              <h4>Logout URL</h4>
+              <a class="btn btn-primary" href="<?php echo htmlspecialchars($logoutUrl); ?>">LOGOUT</a>
             </div>
-            <div class="card-body">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th style="width: 20%">Key</th>
-                            <th style="width: 80%">Value</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>uri</td>
-                            <td><?php echo htmlspecialchars($config['oidc_discovery']['end_session_endpoint']); ?></td>
-                        </tr>
-                        <tr>
-                            <td>id_token_hint</td>
-                            <td style="word-break: break-all;"><?php echo htmlspecialchars($idToken); ?></td>
-                        </tr>
-                        <tr>
-                            <td class="red-background">post_logout_redirect_uri</td>
-                            <td class="red-background"><?php echo htmlspecialchars($postLogoutRedirectUri); ?></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+          </div>
+          <div class="card-body">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th style="width: 20%">Key</th>
+                  <th style="width: 80%">Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>uri</td>
+                  <td><?php echo htmlspecialchars($config['oidc_discovery']['end_session_endpoint']); ?></td>
+                </tr>
+                <tr>
+                  <td>id_token_hint</td>
+                  <td style="word-break: break-all;"><?php echo htmlspecialchars($idToken); ?></td>
+                </tr>
+                <tr>
+                  <td class="red-background">post_logout_redirect_uri</td>
+                  <td class="red-background"><?php echo htmlspecialchars($postLogoutRedirectUri); ?></td>
+                </tr>
+              </tbody>
+            </table>
 
-        <div class="card appheader">
-            <div class="card-header">
-                <h4>ID Token</h4>
-            </div>
-            <div class="card-body">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th style="width: 20%">Key</th>
-                            <th style="width: 80%">Value</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($idTokenData as $key => $value): ?>
-                            <tr class="align-middle">
-                                <td><?php echo $key ?></td>
-                                <td><?php echo htmlspecialchars(convertToString($value)) ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+            <p class="red-background p-1">*** Optional ***</p>
 
-        <div class="card appheader">
-            <div class="card-header">
-                <h4>Access Token</h4>
-            </div>
-            <div class="card-body">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th style="width: 20%">Key</th>
-                            <th style="width: 80%">Value</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($accessTokenData as $key => $value): ?>
-                            <tr class="align-middle">
-                                <td><?php echo $key ?></td>
-                                <td><?php echo htmlspecialchars(convertToString($value)) ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
+          </div>
         </div>
+      </div>
 
+      <div class="tab-pane fade show" id="nav-idtoken" role="tabpanel" aria-labelledby="nav-idtoken-tab">
         <div class="card appheader">
-            <div class="card-header">
-                <h4>Refresh Token</h4>
-            </div>
-            <div class="card-body">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th style="width: 20%">Key</th>
-                            <th style="width: 80%">Value</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($refreshTokenData as $key => $value): ?>
-                            <tr class="align-middle">
-                                <td><?php echo $key ?></td>
-                                <td><?php echo htmlspecialchars(convertToString($value)) ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
+          <div class="card-header">
+            <h4>ID Token</h4>
+          </div>
+          <div class="card-body">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th style="width: 10%">Key</th>
+                  <th style="width: 40%">Value</th>
+                  <th style="width: 50%">Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php foreach ($idTokenData as $key => $value): ?>
+                  <tr class="align-middle">
+                    <td><?php echo $key ?></td>
+                    <td><?php echo htmlspecialchars(convertToString($value)) ?></td>
+                    <td><?php echo $tokenDescriptions[$key] ?></td>
+                  </tr>
+                <?php endforeach; ?>
+              </tbody>
+            </table>
+          </div>
         </div>
+      </div>
+
+      <div class="tab-pane fade show" id="nav-accesstoken" role="tabpanel" aria-labelledby="nav-accesstoken-tab">
+        <div class="card appheader">
+          <div class="card-header">
+            <h4>Access Token</h4>
+          </div>
+          <div class="card-body">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th style="width: 10%">Key</th>
+                  <th style="width: 40%">Value</th>
+                  <th style="width: 50%">Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php foreach ($accessTokenData as $key => $value): ?>
+                  <tr class="align-middle">
+                    <td><?php echo $key ?></td>
+                    <td><?php echo htmlspecialchars(convertToString($value)) ?></td>
+                    <td><?php echo $tokenDescriptions[$key] ?></td>
+                  </tr>
+                <?php endforeach; ?>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane fade show" id="nav-refreshtoken" role="tabpanel" aria-labelledby="nav-refreshtoken-tab">
+        <div class="card appheader">
+          <div class="card-header">
+            <h4>Refresh Token</h4>
+          </div>
+          <div class="card-body">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th style="width: 10%">Key</th>
+                  <th style="width: 40%">Value</th>
+                  <th style="width: 50%">Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php foreach ($refreshTokenData as $key => $value): ?>
+                  <tr class="align-middle">
+                    <td><?php echo $key ?></td>
+                    <td><?php echo htmlspecialchars(convertToString($value)) ?></td>
+                    <td><?php echo $tokenDescriptions[$key] ?></td>
+                  </tr>
+                <?php endforeach; ?>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
