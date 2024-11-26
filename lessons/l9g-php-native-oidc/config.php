@@ -92,7 +92,7 @@ $redis->connect($config['redis']['host'], $config['redis']['port']);
 
 // check if issuer is already stored in Redis
 if ($redis->get('issuer')) {
-  error_log("Reading OIDC discovery endpoints from Redis");
+  error_log("Reading OIDC discovery endpoints from Redis issuer=" . $redis->get('issuer'));
   $config['oidc_discovery'] = [
     'issuer' => $redis->get('issuer'),
     'authorization_endpoint' => $redis->get('authorization_endpoint'),
@@ -102,6 +102,7 @@ if ($redis->get('issuer')) {
   ];
 } else {
   // Fetch OIDC discovery endpoints
+  error_log("Fetching OIDC discovery endpoints from IDP");
   $response = file_get_contents($config['oidc_discovery_url']);
   $oidcDiscovery = json_decode($response, true);
 

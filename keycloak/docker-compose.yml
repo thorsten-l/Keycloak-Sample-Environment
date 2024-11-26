@@ -39,29 +39,45 @@ services:
         target: /var/lib/postgresql/data/pg_stat_tmp
         tmpfs:
           size: 268435456
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U keycloak"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   keycloak:
-    image: quay.io/keycloak/keycloak:25.0
+    image: quay.io/keycloak/keycloak:26.0
     restart: always
     container_name: keycloak
-    command: "start --debug --log-level=INFO,org.apache.http:DEBUG,org.keycloak.services.managers:DEBUG,l9g:TRACE,org.hibernate:INFO,org.keycloak.transaction:INFO,org.keycloak.saml:TRACE,org.keycloak.protocol.oidc:TRACE --proxy edge --hostname-strict=false --db=postgres"
+    command: "start --debug --log-level=INFO,org.apache.http:DEBUG,org.keycloak.services.managers:DEBUG,l9g:TRACE,org.hibernate:INFO,org.keycloak.transaction:INFO,org.keycloak.saml:TRACE,org.keycloak.protocol.oidc:TRACE"
     environment:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin123
-      - KC_PROXY=edge
       - KC_DB=postgres
       - KC_DB_PASSWORD=keycloak
       - KC_DB_USERNAME=keycloak
       - KC_DB_URL_HOST=kcdb
       - KC_DB_URL_PORT=5432
       - KC_DB_URL_DATABASE=keycloak
+      - KC_HTTP_ENABLED=true
       - KC_HOSTNAME_STRICT=false
+      - KC_PROXY_HEADERS=xforwarded
+      - KC_HEALTH_ENABLED=true
+      - JAVA_OPTS_APPEND=-Xmx4g -Xms1g
     volumes:
       - ./keycloak/themes:/opt/keycloak/themes:ro
       - ./keycloak/providers:/opt/keycloak/providers:ro
+      - ./HealthCheck.java:/HealthCheck.java:ro
     depends_on:
-      - kcdb
-      - kcldap
+      kcdb:
+        condition: service_healthy
+      kcldap:
+        condition: service_healthy
+    healthcheck:
+      test: ['CMD-SHELL', 'java /HealthCheck.java http://localhost:9000/health/live']
+      interval: 10s
+      timeout: 10s
+      retries: 3
     extra_hosts:
       - "portal.dev.sonia.de:192.168.4.204"
 
@@ -79,10 +95,14 @@ services:
       - ./kcfront/log:/var/log/nginx
     environment:
       - TZ=Europe/Berlin
+    healthcheck:
+      test: curl -k --fail --head https://localhost/ || exit 1
+      interval: 10s
+      timeout: 30s
+      retries: 3
     depends_on:
-      - kcdb
-      - kcldap
-      - keycloak
+      keycloak:
+        condition: service_healthy
 
   kcmailhog:
     build: build/mailhog

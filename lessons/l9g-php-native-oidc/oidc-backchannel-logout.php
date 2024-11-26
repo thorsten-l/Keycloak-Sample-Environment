@@ -32,6 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	if (!empty($logoutToken)) {
 		$logoutTokenData = $oidc->decodeJwt($logoutToken);
 		$sid = $logoutTokenData['sid'];
+		error_log("handleBackchannelLogout logoutTokenData=" . json_encode($logoutTokenData));
 		error_log("handleBackchannelLogout logoutTokenData sid=" . $sid);
 
 		$redis = new Redis();
