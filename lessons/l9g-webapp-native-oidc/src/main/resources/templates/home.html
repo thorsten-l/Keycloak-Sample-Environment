@@ -8,48 +8,186 @@
     <link th:rel="stylesheet" th:href="@{/css/main.css}" ></link>
   </head>
   <body>
-    <div class="container mt-2"> 
-      <h1>Home</h1>
-      <a class="btn btn-primary" th:href="@{{uri}(uri=${oauth2AuthorizationEndpoint},client_id=${oauth2ClientId},response_type=${oauth2ResponseType},redirect_uri=${oauth2RedirectUri},scope=${oauth2ClientScope},state=${oauth2State},code_challenge=${oauth2CodeChallenge},code_challenge_method=${oauth2CodeChallengeMethod})}">LOGIN</a>
-      <p style="word-break: break-all;" class="m-4" th:text="@{{uri}(uri=${oauth2AuthorizationEndpoint},client_id=${oauth2ClientId},response_type=${oauth2ResponseType},redirect_uri=${oauth2RedirectUri},scope=${oauth2ClientScope},state=${oauth2State},code_challenge=${oauth2CodeChallenge},code_challenge_method=${oauth2CodeChallengeMethod})}"></p>
-    
-      <p class="red-background p-1">*** Optional: PKCE code challenge ***<p>
-    
-      <h2 class="appheader">Login URL</h2>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th style="width: 20%">Key</th>
-            <th style="width: 80%">Value</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>uri</td><td th:text="${oauth2AuthorizationEndpoint}"></td></tr>
-          <tr><td>client_id</td><td th:text="${oauth2ClientId}"></td></tr>
-          <tr><td>response_type</td><td th:text="${oauth2ResponseType}"></td></tr>
-          <tr><td>redirect_uri</td><td th:text="${oauth2RedirectUri}"></td></tr>
-          <tr><td>scope</td><td th:text="${oauth2ClientScope}"></td></tr>
-          <tr><td>state</td><td th:text="${oauth2State}"></td></tr>
-          <tr><td class="red-background">code_challenge</td><td class="red-background" th:text="${oauth2CodeChallenge}"></td></tr>
-          <tr><td class="red-background">code_challenge_method</td><td class="red-background" th:text="${oauth2CodeChallengeMethod}"></td></tr>
-        </tbody>
-      </table>    
-    
-      <h2 class="appheader">Session Attributes</h2>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th style="width: 20%">Key</th>
-            <th style="width: 80%">Value</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>session id</td><td th:text="${sessionId}"></td></tr>
-          <tr><td>oauth2State</td><td th:text="${oauth2State}"></td></tr>
-          <tr><td class="red-background">oauth2CodeVerifier</td><td class="red-background" th:text="${oauth2CodeVerifier}"></td></tr>
-        </tbody>
-      </table>
 
+    <div class="container mt-4">
+      <h1>Home</h1>
+
+      <nav class="appheader">
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+          <a class="nav-link active" id="nav-login-url-tab" data-bs-toggle="tab" href="#nav-login-url" role="tab" aria-controls="nav-login-url" aria-selected="true">Login-URL</a>
+          <a class="nav-link" id="nav-session-tab" data-bs-toggle="tab" href="#nav-session" role="tab" aria-controls="nav-session" aria-selected="false">Session Attributes</a>
+          <a class="nav-link" id="nav-discovery-tab" data-bs-toggle="tab" href="#nav-discovery" role="tab" aria-controls="nav-discovery" aria-selected="false">OIDC Discovery</a>
+        </div>
+      </nav>
+
+      <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-login-url" role="tabpanel" aria-labelledby="nav-login-url-tab">
+          <div class="appheader card">
+            <div class="card-header">
+              <div class="d-flex justify-content-between align-items-center">
+                <h4>Login URL</h4>
+                <a class="btn btn-primary" th:href="@{{uri}(uri=${oauth2AuthorizationEndpoint},client_id=${oauth2ClientId},response_type=${oauth2ResponseType},redirect_uri=${oauth2RedirectUri},scope=${oauth2ClientScope},state=${oauth2State},code_challenge=${oauth2CodeChallenge},code_challenge_method=${oauth2CodeChallengeMethod})}">LOGIN</a>
+              </div>
+            </div>
+            <div class="card-body">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th style="width: 10%">Key</th>
+                    <th style="width: 40%">Value</th>
+                    <th style="width: 50%">Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="discovery-background">uri</td>
+                    <td class="discovery-background" th:text="${oauth2AuthorizationEndpoint}"></td>
+                    <td class="discovery-background" th:text="#{authorization_endpoint}"></td>
+                  </tr>
+                  <tr>
+                    <td class="config-background">client_id</td>
+                    <td class="config-background" th:text="${oauth2ClientId}"></td>
+                    <td class="config-background" th:text="#{client_id}"></td>
+                  </tr>
+                  <tr>
+                    <td class="config-background">response_type</td>
+                    <td class="config-background" th:text="${oauth2ResponseType}"></td>
+                    <td class="config-background" th:text="#{response_type}"></td>
+                  </tr>
+                  <tr>
+                    <td class="config-background">redirect_uri</td>
+                    <td class="config-background" th:text="${oauth2RedirectUri}"></td>
+                    <td class="config-background" th:text="#{redirect_uri}"></td>
+                  </tr>
+                  <tr>
+                    <td class="config-background">scope</td>
+                    <td class="config-background" th:text="${oauth2ClientScope}"></td>
+                    <td class="config-background" th:text="#{scope}"></td>
+                  </tr>
+                  <tr>
+                    <td class="random-background">state</td>
+                    <td class="random-background" th:text="${oauth2State}"></td>
+                    <td class="random-background" th:text="#{state}"></td>
+                  </tr>
+                  <tr>
+                    <td class="optional-background">code_challenge</td>
+                    <td class="random-background" th:text="${oauth2CodeChallenge}"></td>
+                    <td class="random-background" th:text="#{code_challenge}"></td>
+                  </tr>
+                  <tr>
+                    <td class="optional-background">code_challenge_method</td>
+                    <td class="config-background" th:text="${oauth2CodeChallengeMethod}"></td>
+                    <td class="config-background" th:text="#{code_challenge_method}"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+        <div class="tab-pane fade show" id="nav-session" role="tabpanel" aria-labelledby="nav-session-tab">
+          <div class="appheader card">
+            <div class="card-header">
+              <h4>Session Attributes</h4>
+            </div>
+            <div class="card-body">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th style="width: 10%">Key</th>
+                    <th style="width: 40%">Value</th>
+                    <th style="width: 50%">Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="random-background">session id</td>
+                    <td class="random-background" th:text="${sessionId}"></td>
+                    <td class="random-background" th:text="#{session_id}"></td>
+                  </tr>
+                  <tr>
+                    <td class="random-background">oauth2_state</td>
+                    <td class="random-background" th:text="${oauth2State}"></td>
+                    <td class="random-background" th:text="#{state}"></td>
+                  </tr>
+                  <tr>
+                    <td class="random-background">code_verifier</td>
+                    <td class="random-background" th:text="${oauth2CodeVerifier}"></td>
+                    <td class="random-background" th:text="#{code_verifier}"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-pane fade show" id="nav-discovery" role="tabpanel" aria-labelledby="nav-discovery-tab">
+          <div class="appheader card">
+            <div class="card-header">
+              <h4>OIDC Discovery</h4>
+            </div>
+            <div class="card-body">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th style="width: 10%">Key</th>
+                    <th style="width: 40%">Value</th>
+                    <th style="width: 50%">Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="config-background">oidc_discovery_url</td>
+                    <td class="config-background" th:text="${oidcDiscoveryUri}"></td>
+                    <td class="config-background" th:text="#{oidc_discovery_url}"></td>
+                  </tr>
+                  <tr>
+                    <td class="discovery-background">issuer</td>
+                    <td class="discovery-background" th:text="${oidcDiscovery.issuer}"></td>
+                    <td class="discovery-background" th:text="#{issuer}"></td>
+                  </tr>
+                  <tr>
+                    <td class="discovery-background">authorization_endpoint</td>
+                    <td class="discovery-background" th:text="${oidcDiscovery.authorizationEndpoint}"></td>
+                    <td class="discovery-background" th:text="#{authorization_endpoint}"></td>
+                  </tr>
+                  <tr>
+                    <td class="discovery-background">token_endpoint</td>
+                    <td class="discovery-background" th:text="${oidcDiscovery.tokenEndpoint}"></td>
+                    <td class="discovery-background" th:text="#{token_endpoint}"></td>
+                  </tr>
+                  <tr>
+                    <td class="discovery-background">end_session_endpoint</td>
+                    <td class="discovery-background" th:text="${oidcDiscovery.endSessionEndpoint}"></td>
+                    <td class="discovery-background" th:text="#{end_session_endpoint}"></td>
+                  </tr>
+                  <tr>
+                    <td class="discovery-background">userinfo_endpoint</td>
+                    <td class="discovery-background" th:text="${oidcDiscovery.userinfoEndpoint}"></td>
+                    <td class="discovery-background" th:text="#{userinfo_endpoint}"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-4">
+        <div class="col text-center">
+          <p class="config-background p-1">Config</p>
+        </div>
+        <div class="col text-center">
+          <p class="discovery-background p-1">Discovery</p>
+        </div>
+        <div class="col text-center">
+          <p class="random-background p-1">Random</p>
+        </div>
+        <div class="col text-center">
+          <p class="optional-background p-1">Optional</p>
+        </div>
+      </div>
     </div>
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
   </body>
 </html>

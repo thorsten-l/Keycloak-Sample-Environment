@@ -5,6 +5,9 @@ spring:
     active: default
   config:
     import: optional:file:config.yaml
+  messages:
+    basename: messages
+    encoding: UTF-8
 
 logging:
   pattern:

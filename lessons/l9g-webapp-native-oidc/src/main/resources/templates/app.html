@@ -1,80 +1,216 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
   <head>
     <title>App</title>
     <meta charset="UTF-8"></meta>
-    <meta name="viewport" content="width=device-width, initial-scale=1" ></meta>
-    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" ></link>
-    <link th:rel="stylesheet" th:href="@{/css/main.css}" ></link>
+    <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"></link>
+    <link th:rel="stylesheet" th:href="@{/css/main.css}"></link>
   </head>
+
   <body>
-    <div class="container"> 
-      <h1 class="appheader">App</h1>
-      <a class="btn btn-primary" th:href="@{{uri}(uri=${oauth2EndSessionEndpoint},id_token_hint=${oauth2IdToken},post_logout_redirect_uri=${oauth2PostLogoutRedirectUri})}">LOGOUT</a>  
-      <p style="word-break: break-all;" class="m-4" th:text="@{{uri}(uri=${oauth2EndSessionEndpoint},id_token_hint=${oauth2IdToken},post_logout_redirect_uri=${oauth2PostLogoutRedirectUri})}"></p>
-        
-      <h2 class="appheader">Logout URL</h2>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th style="width: 20%">Key</th>
-            <th style="width: 80%">Value</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>uri</td><td th:text="${oauth2EndSessionEndpoint}"></td></tr>
-          <tr><td>id_token_hint</td><td style="word-break: break-all;" th:text="${oauth2IdToken}"></td></tr>
-          <tr><td class="red-background">post_logout_redirect_uri</td><td class="red-background" th:text="${oauth2PostLogoutRedirectUri}"></td></tr>
-        </tbody>
-      </table>    
-  
-      <h2 class="appheader">ID Token</h2>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th style="width: 20%">Key</th>
-            <th style="width: 80%">Value</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="align-middle" th:each="entry : ${idTokenMap}">
-            <td th:text="${entry.key}"></td>
-            <td th:text="${entry.value}"></td>                     
-          </tr>
-        </tbody>
-      </table>
+    <div class="container mt-4">
+      <h1>App</h1>
+      <nav class="appheader">
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+          <a class="nav-link active" id="nav-logout-url-tab" data-bs-toggle="tab" href="#nav-logout-url" role="tab"
+             aria-controls="nav-logout-url" aria-selected="true">Logout-URL</a>
+          <a class="nav-link" id="nav-userinfo-tab" data-bs-toggle="tab" href="#nav-userinfo" role="tab"
+             aria-controls="nav-userinfo" aria-selected="false">Userinfo</a>
+          <a class="nav-link" id="nav-idtoken-tab" data-bs-toggle="tab" href="#nav-idtoken" role="tab"
+             aria-controls="nav-idtoken" aria-selected="false">ID Token</a>
+          <a class="nav-link" id="nav-accesstoken-tab" data-bs-toggle="tab" href="#nav-accesstoken" role="tab"
+             aria-controls="nav-accesstoken" aria-selected="false">Access Token</a>
+          <a class="nav-link" id="nav-refreshtoken-tab" data-bs-toggle="tab" href="#nav-refreshtoken" role="tab"
+             aria-controls="nav-refreshtoken" aria-selected="false">Refresh Token</a>
+        </div>
+      </nav>
 
-      <h2 class="appheader">Access Token</h2>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th style="width: 20%">Key</th>
-            <th style="width: 80%">Value</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="align-middle" th:each="entry : ${accessTokenMap}">
-            <td th:text="${entry.key}"></td>
-            <td th:text="${entry.value}"></td>                     
-          </tr>
-        </tbody>
-      </table>
+      <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-logout-url" role="tabpanel" aria-labelledby="nav-logout-url-tab">
+          <div class="card appheader">
+            <div class="card-header">
+              <div class="d-flex justify-content-between align-items-center">
+                <h4>Logout URL</h4>
+                <a class="btn btn-primary" th:href="@{{uri}(uri=${oauth2EndSessionEndpoint},id_token_hint=${oauth2IdToken},post_logout_redirect_uri=${oauth2PostLogoutRedirectUri})}">LOGOUT</a>
+              </div>
+            </div>
+            <div class="card-body">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th style="width: 20%">Key</th>
+                    <th style="width: 80%">Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="discovery-background">uri</td>
+                    <td class="discovery-background" th:text="${oauth2EndSessionEndpoint}"></td>
+                  </tr>
+                  <tr>
+                    <td>id_token_hint</td>
+                    <td style="word-break: break-all;" th:text="${oauth2IdToken}"></td>
+                  </tr>
+                  <tr>
+                    <td class="optional-background">post_logout_redirect_uri</td>
+                    <td class="config-background" th:text="${oauth2PostLogoutRedirectUri}"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
 
-      <h2 class="appheader">Refresh Token</h2>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th style="width: 20%">Key</th>
-            <th style="width: 80%">Value</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="align-middle" th:each="entry : ${refreshTokenMap}">
-            <td th:text="${entry.key}"></td>
-            <td th:text="${entry.value}"></td>                     
-          </tr>
-        </tbody>
-      </table>
+        <div class="tab-pane fade show" id="nav-userinfo" role="tabpanel" aria-labelledby="nav-userinfo-tab">
+          <div class="card appheader">
+            <div class="card-header">
+              <div class="d-flex justify-content-between align-items-center">
+                <h4>Userinfo</h4>
+              </div>
+            </div>
+            <div class="card-body">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th style="width: 20%">Key</th>
+                    <th style="width: 80%">Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>username</td>
+                    <td th:text="${idTokenMap.preferred_username}"></td>
+                  </tr>
+                  <tr>
+                    <td>email</td>
+                    <td th:text="${idTokenMap.email}"></td>
+                  </tr>
+                  <tr>
+                    <td>family_name</td>
+                    <td th:text="${idTokenMap.family_name}"></td>
+                  </tr>
+                  <tr>
+                    <td>given_name</td>
+                    <td th:text="${idTokenMap.given_name}"></td>
+                  </tr>
+                  <tr>
+                    <td>gender</td>
+                    <td th:text="${idTokenMap.gender}"></td>
+                  </tr>
+                  <tr>
+                    <td>realm roles</td>
+                    <td th:text="${accessTokenMap.realm_access.roles}"></td>
+                  </tr>
+                  <tr>
+                    <td>resource roles</td>
+                    <td th:text="${accessTokenMap.resource_access.app1.roles}"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-pane fade show" id="nav-idtoken" role="tabpanel" aria-labelledby="nav-idtoken-tab">
+          <div class="card appheader">
+            <div class="card-header">
+              <h4>ID Token</h4>
+            </div>
+            <div class="card-body">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th style="width: 10%">Key</th>
+                    <th style="width: 40%">Value</th>
+                    <th style="width: 50%">Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="align-middle" th:each="entry : ${idTokenMap}">
+                    <td th:text="${entry.key}"></td>
+                    <td th:text="${entry.value}"></td>
+                    <td th:text="#{${entry.key}}"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-pane fade show" id="nav-accesstoken" role="tabpanel" aria-labelledby="nav-accesstoken-tab">
+          <div class="card appheader">
+            <div class="card-header">
+              <h4>Access Token</h4>
+            </div>
+            <div class="card-body">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th style="width: 10%">Key</th>
+                    <th style="width: 40%">Value</th>
+                    <th style="width: 50%">Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="align-middle" th:each="entry : ${accessTokenMap}">
+                    <td th:text="${entry.key}"></td>
+                    <td th:text="${entry.value}"></td>
+                    <td th:text="#{${entry.key}}"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-pane fade show" id="nav-refreshtoken" role="tabpanel" aria-labelledby="nav-refreshtoken-tab">
+          <div class="card appheader">
+            <div class="card-header">
+              <h4>Refresh Token</h4>
+            </div>
+            <div class="card-body">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th style="width: 10%">Key</th>
+                    <th style="width: 40%">Value</th>
+                    <th style="width: 50%">Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="align-middle" th:each="entry : ${refreshTokenMap}">
+                    <td th:text="${entry.key}"></td>
+                    <td th:text="${entry.value}"></td>
+                    <td th:text="#{${entry.key}}"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-4">
+        <div class="col text-center">
+          <p class="config-background p-1">Config</p>
+        </div>
+        <div class="col text-center">
+          <p class="discovery-background p-1">Discovery</p>
+        </div>
+        <div class="col text-center">
+          <p class="random-background p-1">Random</p>
+        </div>
+        <div class="col text-center">
+          <p class="optional-background p-1">Optional</p>
+        </div>
+      </div>
+
     </div>
+
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+
   </body>
+
 </html>
