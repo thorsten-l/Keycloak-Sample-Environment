@@ -66,7 +66,7 @@ $authUrl = $oidc->buildAuthorizationUrl($state, $code_challenge);
         <div class="appheader card">
           <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
-              <h4>Login URL</h4>
+              <div class="appcard-title">Login URL</div>
               <a class="btn btn-primary" href="<?php echo $authUrl; ?>">LOGIN</a>
             </div>
           </div>
@@ -129,7 +129,7 @@ $authUrl = $oidc->buildAuthorizationUrl($state, $code_challenge);
       <div class="tab-pane fade show" id="nav-session" role="tabpanel" aria-labelledby="nav-session-tab">
         <div class="appheader card">
           <div class="card-header">
-            <h4>Session Attributes</h4>
+            <div class="appcard-title">Session Attributes</div>
           </div>
           <div class="card-body">
             <table class="table table-striped">
@@ -164,7 +164,7 @@ $authUrl = $oidc->buildAuthorizationUrl($state, $code_challenge);
       <div class="tab-pane fade show" id="nav-discovery" role="tabpanel" aria-labelledby="nav-discovery-tab">
         <div class="appheader card">
           <div class="card-header">
-            <h4>OIDC Discovery</h4>
+            <div class="appcard-title">OIDC Discovery</div>
           </div>
           <div class="card-body">
             <table class="table table-striped">

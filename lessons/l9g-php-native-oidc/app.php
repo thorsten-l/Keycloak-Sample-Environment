@@ -83,7 +83,7 @@ function convertToString($value)
         <div class="card appheader">
           <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
-              <h4>Logout URL</h4>
+              <div class="appcard-title">Logout URL</div>
               <a class="btn btn-primary" href="<?php echo htmlspecialchars($logoutUrl); ?>">LOGOUT</a>
             </div>
           </div>
@@ -119,7 +119,7 @@ function convertToString($value)
         <div class="card appheader">
           <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
-              <h4>Userinfo</h4>
+              <div class="appcard-title">Userinfo</div>
             </div>
           </div>
           <div class="card-body">
@@ -168,7 +168,7 @@ function convertToString($value)
       <div class="tab-pane fade show" id="nav-idtoken" role="tabpanel" aria-labelledby="nav-idtoken-tab">
         <div class="card appheader">
           <div class="card-header">
-            <h4>ID Token</h4>
+            <div class="appcard-title">ID Token</div>
           </div>
           <div class="card-body">
             <table class="table table-striped">
@@ -196,7 +196,7 @@ function convertToString($value)
       <div class="tab-pane fade show" id="nav-accesstoken" role="tabpanel" aria-labelledby="nav-accesstoken-tab">
         <div class="card appheader">
           <div class="card-header">
-            <h4>Access Token</h4>
+            <div class="appcard-title">Access Token</div>
           </div>
           <div class="card-body">
             <table class="table table-striped">
@@ -224,7 +224,7 @@ function convertToString($value)
       <div class="tab-pane fade show" id="nav-refreshtoken" role="tabpanel" aria-labelledby="nav-refreshtoken-tab">
         <div class="card appheader">
           <div class="card-header">
-            <h4>Refresh Token</h4>
+            <div class="appcard-title">Refresh Token</div>
           </div>
           <div class="card-body">
             <table class="table table-striped">
