@@ -19,6 +19,7 @@ import l9g.webapp.nativeoidc.dto.JwksCerts;
 import l9g.webapp.nativeoidc.dto.OAuth2Tokens;
 import l9g.webapp.nativeoidc.dto.OidcDiscovery;
 import jakarta.annotation.PostConstruct;
+import java.util.function.Supplier;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -107,56 +108,36 @@ public class OidcService
     log.debug("initialize oidcDiscoveryUri={}", oidcDiscoveryUri);
     restClient = builder.baseUrl(oidcDiscoveryUri).build();
 
-    ResponseEntity<OidcDiscovery> responseEntity = restClient
-      .get()
-      .uri(oidcDiscoveryUri)
-      .retrieve()
-      .toEntity(new ParameterizedTypeReference<OidcDiscovery>()
-      {
-      });
+    oidcDiscovery = fetchData(oidcDiscoveryUri, OidcDiscovery.class);
 
-    if(responseEntity.getStatusCode().is2xxSuccessful())
+    if(oidcDiscovery != null)
     {
-      log.debug("*** is2xxSuccessful {}", responseEntity.getBody());
-      oidcDiscovery = responseEntity.getBody();
+      oauth2AuthorizationEndpoint = defaultIfNullOrBlank(
+        oauth2AuthorizationEndpoint, oidcDiscovery :: authorizationEndpoint);
+      oauth2tokenEndpoint = defaultIfNullOrBlank(
+        oauth2tokenEndpoint, oidcDiscovery :: tokenEndpoint);
+      oauth2EndSessionEndpoint = defaultIfNullOrBlank(
+        oauth2EndSessionEndpoint, oidcDiscovery :: endSessionEndpoint);
+      oauth2JwksUri = defaultIfNullOrBlank(
+        oauth2JwksUri, oidcDiscovery :: jwksUri);
 
-      if(oauth2AuthorizationEndpoint == null || oauth2AuthorizationEndpoint.isBlank())
-      {
-        oauth2AuthorizationEndpoint = oidcDiscovery.authorizationEndpoint();
-      }
       log.debug("oauth2AuthorizationEndpoint={}", oauth2AuthorizationEndpoint);
-
-      if(oauth2tokenEndpoint == null || oauth2tokenEndpoint.isBlank())
-      {
-        oauth2tokenEndpoint = oidcDiscovery.tokenEndpoint();
-      }
       log.debug("oauth2AuthorizationEndpoint={}", oauth2tokenEndpoint);
-
-      if(oauth2EndSessionEndpoint == null || oauth2EndSessionEndpoint.isBlank())
-      {
-        oauth2EndSessionEndpoint = oidcDiscovery.endSessionEndpoint();
-      }
       log.debug("oauth2EndSessionEndpoint={}", oauth2EndSessionEndpoint);
-
-      if(oauth2JwksUri == null || oauth2JwksUri.isBlank())
-      {
-        oauth2JwksUri = oidcDiscovery.jwksUri();
-      }
       log.debug("oauth2JwksUri={}", oauth2JwksUri);
 
-      ResponseEntity<JwksCerts> certEntity = restClient
-        .get()
-        .uri(oauth2JwksUri)
-        .retrieve()
-        .toEntity(new ParameterizedTypeReference<JwksCerts>()
-        {
-        });
+      JwksCerts jwksCerts = fetchData(oauth2JwksUri, JwksCerts.class);
 
-      if(certEntity.getStatusCode().is2xxSuccessful())
+      if(jwksCerts != null)
       {
-        log.debug("*** certEntity is2xxSuccessful {}", certEntity.getBody());
-        jwtService.setOauth2JwksCert(certEntity.getBody());
+        log.debug("{}",jwksCerts);
+        jwtService.setOauth2JwksCerts(jwksCerts);
       }
+    }
+    else
+    {
+      log.error("Coult not fetch discovery endpoints.");
+      System.exit(-1);
     }
   }
 
@@ -191,17 +172,63 @@ public class OidcService
     {
       tokens = responseEntity.getBody();
 
-      log.trace("client secret='{}'", oauth2ClientSecret);    
+      log.trace("client secret='{}'", oauth2ClientSecret);
       log.debug("accessToken={}", tokens.accessToken());
-      log.debug("valid access token = {}", jwtService.validateJwtSignature(tokens.accessToken()));
+      log.debug("valid access token = {}",
+        jwtService.validateJwtSignature(tokens.accessToken()));
       log.debug("idToken={}", tokens.idToken());
-      log.debug("valid id token = {}", jwtService.validateJwtSignature(tokens.idToken()));
+      log.debug("valid id token = {}",
+        jwtService.validateJwtSignature(tokens.idToken()));
       log.debug("refreshToken={}", tokens.refreshToken());
-      log.debug("valid refresh token = {}", jwtService.validateJwtSignature(tokens.refreshToken()));
+      log.debug("valid refresh token = {}",
+        jwtService.validateJwtSignature(tokens.refreshToken()));
       log.debug("expiresIn={}", tokens.expiresIn());
     }
 
     return tokens;
+  }
+
+  private <T> T fetchData(String uri, Class clazz)
+  {
+    try
+    {
+      ResponseEntity<T> responseEntity = restClient
+        .get()
+        .uri(uri)
+        .retrieve()
+        .toEntity(parameterizedTypeReferenceFromClass(clazz));
+
+      if(responseEntity.getStatusCode().is2xxSuccessful())
+      {
+        return responseEntity.getBody();
+      }
+    }
+    catch(Exception e)
+    {
+      log.error("Error fetching data from {}", uri, e);
+    }
+    return null;
+  }
+
+  private String defaultIfNullOrBlank(
+    String value, Supplier<String> defaultValueSupplier)
+  {
+    return (value == null
+      || value.isBlank()) ? defaultValueSupplier.get() : value;
+  }
+
+  private <T> ParameterizedTypeReference<T>
+    parameterizedTypeReferenceFromClass(Class<T> clazz)
+  {
+    return new ParameterizedTypeReference<>()
+    {
+      @Override
+      public java.lang.reflect.Type getType()
+      {
+        return clazz;
+      }
+
+    };
   }
 
 }

@@ -61,7 +61,7 @@ import org.springframework.stereotype.Service;
 public class JwtService
 {
   @Setter
-  private JwksCerts oauth2JwksCert;
+  private JwksCerts oauth2JwksCerts;
 
   public String[] splitJwt(String jwt)
   {
@@ -165,7 +165,7 @@ public class JwtService
       byte[] signatureBytes = Base64.getUrlDecoder().decode(parts[2]);
 
       // Öffentlichen Schlüssel abrufen
-      RSAPublicKey publicKey = getPublicKeyFromJwks(oauth2JwksCert, keyId);
+      RSAPublicKey publicKey = getPublicKeyFromJwks(oauth2JwksCerts, keyId);
       if(publicKey == null)
       {
         log.error("Public key with kid={} not found", keyId);

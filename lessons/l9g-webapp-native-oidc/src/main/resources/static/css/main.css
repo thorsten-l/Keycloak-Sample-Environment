@@ -21,7 +21,12 @@ limitations under the License.
 .appheader{
   margin-top: 1em;
 }
-      
+
+.appcard-title {
+  font-size: 18pt;
+  font-weight: 400;
+}
+
 .red-background {
   background-color: rgba(255, 99, 71, 0.2) !important;
 }

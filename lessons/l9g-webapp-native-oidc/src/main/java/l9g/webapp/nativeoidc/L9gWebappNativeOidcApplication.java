@@ -53,7 +53,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class L9gWebappNativeOidcApplication
 {
-
   public static void main(String[] args)
   {
     SpringApplication.run(L9gWebappNativeOidcApplication.class, args);

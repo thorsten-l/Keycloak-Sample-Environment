@@ -99,6 +99,32 @@
             </exclude>
           </excludes>
         </configuration>
+        <executions>
+          <execution>
+            <id>build-info</id>
+            <goals>
+              <goal>build-info</goal>
+            </goals>
+            <configuration>
+              <additionalProperties>
+                <java.version>${java.version}</java.version>
+                <java.version.date>${java.version.date}</java.version.date>
+                <java.vendor>${java.vendor}</java.vendor>
+                <java.vendor.url>${java.vendor.url}</java.vendor.url>
+                <java.vm.name>${java.vm.name}</java.vm.name>
+                <java.vm.vendor>${java.vm.vendor}</java.vm.vendor>
+                <java.vm.version>${java.vm.version}</java.vm.version>
+                <java.runtime.name>${java.runtime.name}</java.runtime.name>
+                <java.runtime.version>${java.runtime.version}</java.runtime.version>
+                <description>${project.description}</description>
+                <profile>${build.profile}</profile>
+                <os.arch>${os.arch}</os.arch>
+                <os.name>${os.name}</os.name>
+                <os.version>${os.version}</os.version>
+              </additionalProperties>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

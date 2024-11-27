@@ -32,11 +32,11 @@
           <div class="card appheader">
             <div class="card-header">
               <div class="d-flex justify-content-between align-items-center">
-                <h4>Logout URL</h4>
-                <a class="btn btn-primary" th:href="@{{uri}(uri=${oauth2EndSessionEndpoint},id_token_hint=${oauth2IdToken},post_logout_redirect_uri=${oauth2PostLogoutRedirectUri})}">LOGOUT</a>
+                <div class="appcard-title">Logout URL</div>
+                <a class="btn btn-primary" th:href="${oauth2LogoutUri}">LOGOUT</a>
               </div>
             </div>
-            <div class="card-body">
+            <div class="card-body">              
               <table class="table table-striped">
                 <thead>
                   <tr>
@@ -67,7 +67,7 @@
           <div class="card appheader">
             <div class="card-header">
               <div class="d-flex justify-content-between align-items-center">
-                <h4>Userinfo</h4>
+                <div class="appcard-title">Userinfo</div>
               </div>
             </div>
             <div class="card-body">
@@ -116,7 +116,7 @@
         <div class="tab-pane fade show" id="nav-idtoken" role="tabpanel" aria-labelledby="nav-idtoken-tab">
           <div class="card appheader">
             <div class="card-header">
-              <h4>ID Token</h4>
+              <div class="appcard-title">ID Token</div>
             </div>
             <div class="card-body">
               <table class="table table-striped">
@@ -142,7 +142,7 @@
         <div class="tab-pane fade show" id="nav-accesstoken" role="tabpanel" aria-labelledby="nav-accesstoken-tab">
           <div class="card appheader">
             <div class="card-header">
-              <h4>Access Token</h4>
+              <div class="appcard-title">Access Token</div>
             </div>
             <div class="card-body">
               <table class="table table-striped">
@@ -168,7 +168,7 @@
         <div class="tab-pane fade show" id="nav-refreshtoken" role="tabpanel" aria-labelledby="nav-refreshtoken-tab">
           <div class="card appheader">
             <div class="card-header">
-              <h4>Refresh Token</h4>
+              <div class="appcard-title">Refresh Token</div>
             </div>
             <div class="card-body">
               <table class="table table-striped">

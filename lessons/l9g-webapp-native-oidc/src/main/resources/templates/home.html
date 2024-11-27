@@ -17,6 +17,7 @@
           <a class="nav-link active" id="nav-login-url-tab" data-bs-toggle="tab" href="#nav-login-url" role="tab" aria-controls="nav-login-url" aria-selected="true">Login-URL</a>
           <a class="nav-link" id="nav-session-tab" data-bs-toggle="tab" href="#nav-session" role="tab" aria-controls="nav-session" aria-selected="false">Session Attributes</a>
           <a class="nav-link" id="nav-discovery-tab" data-bs-toggle="tab" href="#nav-discovery" role="tab" aria-controls="nav-discovery" aria-selected="false">OIDC Discovery</a>
+          <a class="nav-link" id="nav-properties-tab" data-bs-toggle="tab" href="#nav-properties" role="tab" aria-controls="nav-properties" aria-selected="false">Build Properties</a>
         </div>
       </nav>
 
@@ -25,8 +26,8 @@
           <div class="appheader card">
             <div class="card-header">
               <div class="d-flex justify-content-between align-items-center">
-                <h4>Login URL</h4>
-                <a class="btn btn-primary" th:href="@{{uri}(uri=${oauth2AuthorizationEndpoint},client_id=${oauth2ClientId},response_type=${oauth2ResponseType},redirect_uri=${oauth2RedirectUri},scope=${oauth2ClientScope},state=${oauth2State},code_challenge=${oauth2CodeChallenge},code_challenge_method=${oauth2CodeChallengeMethod})}">LOGIN</a>
+                <div class="appcard-title">Login URL</div>
+                <a class="btn btn-primary" th:href="${oauth2LoginUri}">LOGIN</a>
               </div>
             </div>
             <div class="card-body">
@@ -88,7 +89,7 @@
         <div class="tab-pane fade show" id="nav-session" role="tabpanel" aria-labelledby="nav-session-tab">
           <div class="appheader card">
             <div class="card-header">
-              <h4>Session Attributes</h4>
+              <div class="appcard-title">Session Attributes</div>
             </div>
             <div class="card-body">
               <table class="table table-striped">
@@ -124,7 +125,7 @@
         <div class="tab-pane fade show" id="nav-discovery" role="tabpanel" aria-labelledby="nav-discovery-tab">
           <div class="appheader card">
             <div class="card-header">
-              <h4>OIDC Discovery</h4>
+              <div class="appcard-title">OIDC Discovery</div>
             </div>
             <div class="card-body">
               <table class="table table-striped">
@@ -168,6 +169,31 @@
                   </tr>
                 </tbody>
               </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-pane fade show" id="nav-properties" role="tabpanel" aria-labelledby="nav-properties-tab">
+          <div class="card appheader">
+            <div class="card-header">
+              <div class="appcard-title">Build Properties</div>
+            </div>
+            <div class="card-body">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th style="width: 10%">Key</th>
+                    <th style="width: 40%">Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="align-middle" th:each="entry : ${buildProperties}">
+                    <td th:text="${entry.key}"></td>
+                    <td th:text="${entry.value}"></td>
+                  </tr>
+                </tbody>
+              </table>
+              <p class="mt-4">spring boot version: <span th:text="${springBootVersion}"></span></p>
             </div>
           </div>
         </div>

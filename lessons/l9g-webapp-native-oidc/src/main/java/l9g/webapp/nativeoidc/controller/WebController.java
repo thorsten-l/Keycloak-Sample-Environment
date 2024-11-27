@@ -20,12 +20,17 @@ import l9g.webapp.nativeoidc.service.OidcService;
 import l9g.webapp.nativeoidc.service.JwtService;
 import l9g.webapp.nativeoidc.dto.OAuth2Tokens;
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.UUID;
 import l9g.webapp.nativeoidc.service.PKCE;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.SpringBootVersion;
+import org.springframework.boot.info.BuildProperties;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,6 +38,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  * WebController is a Spring MVC controller that handles OAuth2/OIDC login and logout flows.
@@ -79,31 +85,33 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Slf4j
 @RequiredArgsConstructor
 public class WebController
-{  
+{
   private static final String SESSION_OAUTH2_STATE = "oauth2State";
-  
+
   private static final String SESSION_OAUTH2_TOKENS = "oauth2Tokens";
-  
+
   private static final String SESSION_OAUTH2_CODE_VERIFIER = "oauth2CodeVerifier";
-  
+
   private final OidcService oidcService;
-  
+
   private final JwtService jwtService;
-  
+
+  private final BuildProperties buildProperties;
+
   @Value("${oauth2.redirect-uri}")
   private String oauth2RedirectUri;
-  
+
   @Value("${oauth2.client.id}")
   private String oauth2ClientId;
-  
+
   @Value("${oauth2.client.scope}")
   private String oauth2ClientScope;
-  
+
   @Value("${oauth2.post-logout-redirect-uri}")
   private String oauth2PostLogoutRedirectUri;
-  
+
   private final HashMap<String, HttpSession> sessionStore = new HashMap<>();
-  
+
   @PostConstruct
   private void initialize()
   {
@@ -111,7 +119,7 @@ public class WebController
     log.debug("oauth2ClientId={}", oauth2ClientId);
     log.debug("oauth2ClientScope={}", oauth2ClientScope);
   }
-  
+
   @GetMapping("/")
   public String home(HttpSession session, Model model)
     throws Exception
@@ -122,20 +130,20 @@ public class WebController
       log.debug("Session already authenticated");
       return "redirect:/app";
     }
- 
+
     String oauth2State = UUID.randomUUID().toString();
     String oauth2CodeVerifier = PKCE.generateCodeVerifier();
     String oauth2CodeChallenge = PKCE.generateCodeChallenge(oauth2CodeVerifier);
-    
+
     log.debug("home={}", session.getId());
-    
+
     log.debug("oauth2State={}", oauth2State);
     log.debug("oauth2CodeVerifier={}", oauth2CodeVerifier);
     log.debug("oauth2CodeChallenge={}", oauth2CodeChallenge);
-    
+
     session.setAttribute(SESSION_OAUTH2_STATE, oauth2State);
     session.setAttribute(SESSION_OAUTH2_CODE_VERIFIER, oauth2CodeVerifier);
-    
+
     model.addAttribute(SESSION_OAUTH2_STATE, oauth2State);
     model.addAttribute("oauth2ClientScope", oauth2ClientScope);
     model.addAttribute("oauth2ClientId", oauth2ClientId);
@@ -148,10 +156,32 @@ public class WebController
     model.addAttribute("sessionId", session.getId());
     model.addAttribute("oidcDiscoveryUri", oidcService.getOidcDiscoveryUri());
     model.addAttribute("oidcDiscovery", oidcService.getOidcDiscovery());
-    
+
+    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
+      oidcService.getOauth2AuthorizationEndpoint());
+    builder.queryParam("client_id", oauth2ClientId);
+    builder.queryParam("response_type", "code");
+    builder.queryParam("redirect_uri", oauth2RedirectUri);
+    builder.queryParam("scope", oauth2ClientScope);
+    builder.queryParam("state", oauth2State);
+    builder.queryParam("code_challenge", oauth2CodeChallenge);
+    builder.queryParam("code_challenge_method", "S256");
+    model.addAttribute("oauth2LoginUri", builder.build().toUriString());
+
+    ArrayList<String> keys = new ArrayList<>();
+    buildProperties.forEach(p -> keys.add(p.getKey()));
+    Collections.sort(keys);
+    LinkedHashMap<String, String> properties = new LinkedHashMap<>();
+    for(String key : keys)
+    {
+      properties.put(key, buildProperties.get(key));
+    }
+    model.addAttribute("buildProperties", properties);
+    model.addAttribute("springBootVersion", SpringBootVersion.getVersion());
+
     return "home";
   }
-  
+
   @GetMapping("/oidc-login")
   public String oidcLogin(
     @RequestParam(name = "code", required = false) String code,
@@ -165,31 +195,31 @@ public class WebController
     log.debug("oidcLogin: state={}", state);
     log.debug("oidcLogin: error={}", error);
     log.debug("oidcLogin: error_description={}", errorDescription);
-    
+
     if(error != null &&  ! error.isBlank())
     {
       log.error("Error: {} / {}", error, errorDescription);
       return "redirect:/";
     }
-    
+
     String oauth2State = (String)session.getAttribute(SESSION_OAUTH2_STATE);
-    
+
     if(oauth2State == null ||  ! oauth2State.equals(state))
     {
       log.error("Illegal 'state'");
       return "redirect:/";
     }
-    
+
     OAuth2Tokens tokens = oidcService.fetchOAuth2Tokens(
       code, (String)session.getAttribute(SESSION_OAUTH2_CODE_VERIFIER));
     session.setAttribute(SESSION_OAUTH2_TOKENS, tokens);
-    
+
     sessionStore.put(
       jwtService.decodeJwtPayload(tokens.idToken()).get("sid"), session);
-        
+
     return "redirect:/app";
   }
-  
+
   @GetMapping("/oidc-logout")
   public String oidcLogout(HttpSession session)
   {
@@ -197,15 +227,15 @@ public class WebController
     session.invalidate();
     return "redirect:/";
   }
-  
+
   @PostMapping("/oidc-backchannel-logout")
   public ResponseEntity<Void> handleBackchannelLogout(@RequestBody String logoutToken)
   {
     log.debug("handleBackchannelLogout logoutToken={}", logoutToken);
     log.debug("decoded logoutToken={}", jwtService.decodeJwtPayload(logoutToken));
-    
+
     String sid = jwtService.decodeJwtPayload(logoutToken).get("sid");
-    
+
     if(sid != null)
     {
       HttpSession session = sessionStore.get(sid);
@@ -216,32 +246,38 @@ public class WebController
         sessionStore.remove(sid);
       }
     }
-    
+
     return ResponseEntity.ok().build();
   }
-  
+
   @GetMapping("/app")
   public String app(HttpSession session, Model model)
   {
     log.debug("app: session id = {}", session.getId());
-    
+
     OAuth2Tokens oauth2Tokens = (OAuth2Tokens)session.getAttribute(SESSION_OAUTH2_TOKENS);
-    
+
     if(oauth2Tokens == null || oauth2Tokens.idToken() == null)
     {
       return "redirect:/";
     }
-    
+
     model.addAttribute("oauth2ClientId", oauth2ClientId);
     model.addAttribute("oauth2EndSessionEndpoint", oidcService.getOauth2EndSessionEndpoint());
     model.addAttribute("oauth2IdToken", oauth2Tokens.idToken());
     model.addAttribute("oauth2PostLogoutRedirectUri", oauth2PostLogoutRedirectUri);
-    
+
+    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
+      oidcService.getOauth2EndSessionEndpoint());
+    builder.queryParam("id_token_hint", oauth2Tokens.idToken());
+    builder.queryParam("post_logout_redirect_uri", oauth2PostLogoutRedirectUri);
+    model.addAttribute("oauth2LogoutUri", builder.build().toUriString());
+
     model.addAttribute("accessTokenMap", jwtService.decodeJwtPayload(oauth2Tokens.accessToken()));
     model.addAttribute("idTokenMap", jwtService.decodeJwtPayload(oauth2Tokens.idToken()));
     model.addAttribute("refreshTokenMap", jwtService.decodeJwtPayload(oauth2Tokens.refreshToken()));
-    
+
     return "app";
   }
-  
+
 }
