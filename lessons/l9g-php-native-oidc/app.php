@@ -61,7 +61,8 @@ function convertToString($value)
 <head>
   <title>App</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="main.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" rel="stylesheet" />
+  <link href="/css/main.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -101,15 +102,34 @@ function convertToString($value)
                   <td class="discovery-background"><?php echo htmlspecialchars($config['oidc_discovery']['end_session_endpoint']); ?></td>
                 </tr>
                 <tr>
-                  <td>id_token_hint</td>
-                  <td style="word-break: break-all;"><?php echo htmlspecialchars($idToken); ?></td>
+                  <td>id_token_hint
+                    <div class="mt-2">                    
+                      <button class="btn btn-secondary" onclick="copyToClipboard('<?php echo htmlspecialchars($idToken); ?>')"><i class="fa-regular fa-copy"></i></button>
+                    </div>
+                  </td>
+                  <td style="word-break: break-all;">
+                    <?php echo htmlspecialchars($idToken); ?>
+                  </td>
                 </tr>
                 <tr>
                   <td class="optional-background">post_logout_redirect_uri</td>
                   <td class="config-background"><?php echo htmlspecialchars($postLogoutRedirectUri); ?></td>
                 </tr>
+                <tr>
+                  <td>Copy ID Token</td>
+                  <td><a target="_blank" title="View on JWT.io" href="https://jwt.io"><img height="48" src="images/jwt.io-badge.svg"></a></td>
+                </tr>
+                <tr>
+                  <td>PHP-Libraries</td>
+                  <td>            
+                    <a class="ms-2" target="_blank" title="JWT PHP Libraries" href="https://jwt.io/libraries?language=PHP"><img height="48" src="images/jwt.io-logo-asset.svg"></a>
+                    <span class="ms-2">composer require web-token/jwt-framework</span>
+                  </td>
+                </tr>
               </tbody>
             </table>
+
+            
 
           </div>
         </div>
@@ -267,6 +287,17 @@ function convertToString($value)
 
   </div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    function copyToClipboard(text) {
+      const tempInput = document.createElement("textarea");
+      tempInput.value = text;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand("copy");
+      document.body.removeChild(tempInput);
+    }
+  </script>
 </body>
 
 </html>
