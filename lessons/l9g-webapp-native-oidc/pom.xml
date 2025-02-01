@@ -63,6 +63,11 @@
       <artifactId>bootstrap</artifactId>
       <version>5.3.3</version>
     </dependency>
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>font-awesome</artifactId>
+      <version>6.6.0</version>
+    </dependency>
     
     <dependency>
       <groupId>org.projectlombok</groupId>

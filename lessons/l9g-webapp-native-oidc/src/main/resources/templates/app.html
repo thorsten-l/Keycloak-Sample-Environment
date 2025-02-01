@@ -6,6 +6,7 @@
     <meta charset="UTF-8"></meta>
     <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
     <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"></link>
+    <link th:rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.min.css}" ></link>
     <link th:rel="stylesheet" th:href="@{/css/main.css}"></link>
   </head>
 
@@ -50,13 +51,33 @@
                     <td class="discovery-background" th:text="${oauth2EndSessionEndpoint}"></td>
                   </tr>
                   <tr>
-                    <td>id_token_hint</td>
+                    <td>id_token_hint
+                      <div class="mt-2">                    
+                        <button class="btn btn-secondary" th:data-token="${oauth2IdToken}" th:onclick="copyTokenFromData(this)"><i class="fa-regular fa-copy"></i></button>
+                      </div>
+                    </td>
                     <td style="word-break: break-all;" th:text="${oauth2IdToken}"></td>
                   </tr>
                   <tr>
                     <td class="optional-background">post_logout_redirect_uri</td>
                     <td class="config-background" th:text="${oauth2PostLogoutRedirectUri}"></td>
                   </tr>
+
+                  <tr>
+                    <td>Copy ID Token</td>
+                    <td><a target="_blank" title="View on JWT.io" href="https://jwt.io"><img height="48" th:src="@{images/jwt.io-badge.svg}"></a></td>
+                  </tr>
+                  <tr>
+                    <td>Java-Libraries</td>
+                    <td>            
+                      <a class="ms-2" target="_blank" title="JWT Java Libraries" href="https://jwt.io/libraries?language=Java"><img height="48" th:src="@{images/jwt.io-logo-asset.svg}"></a>
+                      <span class="ms-2">
+                        <a target="_blank" href="https://mvnrepository.com/artifact/org.bitbucket.b_c/jose4j">maven: org.bitbucket.b_c / jose4j</a> /
+                        <a target="_blank" href="https://bitbucket.org/b_c/jose4j/wiki/Home">HOME</a>
+                      </span>
+                    </td>
+                  </tr>
+
                 </tbody>
               </table>
             </div>
@@ -210,7 +231,18 @@
     </div>
 
     <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-
+    <script>
+      function copyTokenFromData(button) {
+        const token = button.getAttribute('data-token');
+        const tempInput = document.createElement("textarea");
+        tempInput.value = token;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand("copy");
+        document.body.removeChild(tempInput);
+        console.log(token);
+      }
+    </script>
   </body>
 
 </html>

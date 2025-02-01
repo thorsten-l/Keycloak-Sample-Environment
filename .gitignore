@@ -1,6 +1,8 @@
 keycloak/kcdb
 keycloak/kcfront
 keycloak/kcldap
+keycloak/kcmailpit
+keycloak/keycloak/themes
 
 appliances/portainer/portainer_data
 appliances/typo3-11lts-composer/mysql

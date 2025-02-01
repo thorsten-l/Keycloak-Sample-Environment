@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>{{ messages['app_title'] if messages.get('app_title') else 'App' }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Einbindung der statischen CSS-Dateien -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/main.css">
+  </head>
+  <body>
+    <div class="container mt-4">
+      <h1>{{ messages['app_heading'] if messages.get('app_heading') else 'App' }}</h1>
+      <nav class="appheader">
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+          <a class="nav-link active" id="nav-logout-url-tab" data-bs-toggle="tab" href="#nav-logout-url" role="tab" aria-controls="nav-logout-url" aria-selected="true">
+            {{ messages['logout_url_tab'] if messages.get('logout_url_tab') else 'Logout-URL' }}
+          </a>
+          <a class="nav-link" id="nav-userinfo-tab" data-bs-toggle="tab" href="#nav-userinfo" role="tab" aria-controls="nav-userinfo" aria-selected="false">
+            {{ messages['userinfo_tab'] if messages.get('userinfo_tab') else 'Userinfo' }}
+          </a>
+          <a class="nav-link" id="nav-idtoken-tab" data-bs-toggle="tab" href="#nav-idtoken" role="tab" aria-controls="nav-idtoken" aria-selected="false">
+            {{ messages['idtoken_tab'] if messages.get('idtoken_tab') else 'ID Token' }}
+          </a>
+          <a class="nav-link" id="nav-accesstoken-tab" data-bs-toggle="tab" href="#nav-accesstoken" role="tab" aria-controls="nav-accesstoken" aria-selected="false">
+            {{ messages['accesstoken_tab'] if messages.get('accesstoken_tab') else 'Access Token' }}
+          </a>
+          <a class="nav-link" id="nav-refreshtoken-tab" data-bs-toggle="tab" href="#nav-refreshtoken" role="tab" aria-controls="nav-refreshtoken" aria-selected="false">
+            {{ messages['refreshtoken_tab'] if messages.get('refreshtoken_tab') else 'Refresh Token' }}
+          </a>
+        </div>
+      </nav>
+      
+      <div class="tab-content" id="nav-tabContent">
+        <!-- Logout URL Tab -->
+        <div class="tab-pane fade show active" id="nav-logout-url" role="tabpanel" aria-labelledby="nav-logout-url-tab">
+          <div class="card appheader">
+            <div class="card-header">
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="appcard-title">
+                  {{ messages['logout_url_title'] if messages.get('logout_url_title') else 'Logout URL' }}
+                </div>
+                <a class="btn btn-primary" href="{{ oauth2LogoutUri }}">
+                  {{ messages['logout_button'] if messages.get('logout_button') else 'LOGOUT' }}
+                </a>
+              </div>
+            </div>
+            <div class="card-body">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th style="width: 20%">{{ messages['key'] if messages.get('key') else 'Key' }}</th>
+                    <th style="width: 80%">{{ messages['value'] if messages.get('value') else 'Value' }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="discovery-background">uri</td>
+                    <td class="discovery-background">{{ oauth2EndSessionEndpoint }}</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      id_token_hint
+                      <div class="mt-2">
+                        <button class="btn btn-secondary" data-token="{{ oauth2IdToken }}" onclick="copyToken(this)">
+                          <i class="fa-regular fa-copy"></i>
+                        </button>
+                      </div>
+                    </td>
+                    <td style="word-break: break-all;">{{ oauth2IdToken }}</td>
+                  </tr>
+                  <tr>
+                    <td class="optional-background">post_logout_redirect_uri</td>
+                    <td class="config-background">{{ oauth2PostLogoutRedirectUri }}</td>
+                  </tr>
+                  <tr>
+                    <td>{{ messages['copy_id_token'] if messages.get('copy_id_token') else 'Copy ID Token' }}</td>
+                    <td>
+                      <a target="_blank" title="{{ messages['jwt_io_title'] if messages.get('jwt_io_title') else 'View on JWT.io' }}" href="https://jwt.io">
+                        <img height="48" src="/static/jwt.io-badge.svg">
+                      </a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Python-Libraries</td>
+                    <td>
+                      <a target="_blank" href="https://jwt.io/libraries?language=Python"><img height="48" src="/static/jwt.io-logo-asset.svg"></a>
+                      <span class="ms-2">
+                        <a target="_blank" href="https://github.com/latchset/jwcrypto/"><tt>pip install jwcrypto</tt></a>
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <!-- Userinfo Tab -->
+        <div class="tab-pane fade" id="nav-userinfo" role="tabpanel" aria-labelledby="nav-userinfo-tab">
+          <div class="card appheader">
+            <div class="card-header">
+              <div class="appcard-title">
+                {{ messages['userinfo_title'] if messages.get('userinfo_title') else 'Userinfo' }}
+              </div>
+            </div>
+            <div class="card-body">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th style="width: 20%">{{ messages['key'] if messages.get('key') else 'Key' }}</th>
+                    <th style="width: 80%">{{ messages['value'] if messages.get('value') else 'Value' }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>username</td>
+                    <td>{{ idTokenMap.preferred_username }}</td>
+                  </tr>
+                  <tr>
+                    <td>email</td>
+                    <td>{{ idTokenMap.email }}</td>
+                  </tr>
+                  <tr>
+                    <td>family_name</td>
+                    <td>{{ idTokenMap.family_name }}</td>
+                  </tr>
+                  <tr>
+                    <td>given_name</td>
+                    <td>{{ idTokenMap.given_name }}</td>
+                  </tr>
+                  <tr>
+                    <td>gender</td>
+                    <td>{{ idTokenMap.gender }}</td>
+                  </tr>
+                  <tr>
+                    <td>realm roles</td>
+                    <td>{{ accessTokenMap.realm_access.roles }}</td>
+                  </tr>
+                  <tr>
+                    <td>resource roles</td>
+                    <td>{{ accessTokenMap.resource_access.app1.roles }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <!-- ID Token Tab -->
+        <div class="tab-pane fade" id="nav-idtoken" role="tabpanel" aria-labelledby="nav-idtoken-tab">
+          <div class="card appheader">
+            <div class="card-header">
+              <div class="appcard-title">
+                {{ messages['idtoken_title'] if messages.get('idtoken_title') else 'ID Token' }}
+              </div>
+            </div>
+            <div class="card-body">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th style="width: 10%">{{ messages['key'] if messages.get('key') else 'Key' }}</th>
+                    <th style="width: 40%">{{ messages['value'] if messages.get('value') else 'Value' }}</th>
+                    <th style="width: 50%">{{ messages['description'] if messages.get('description') else 'Description' }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for key, value in idTokenMap.items() %}
+                  <tr class="align-middle">
+                    <td>{{ key }}</td>
+                    <td>{{ value }}</td>
+                    <td>{{ messages[key] if messages.get(key) else key }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <!-- Access Token Tab -->
+        <div class="tab-pane fade" id="nav-accesstoken" role="tabpanel" aria-labelledby="nav-accesstoken-tab">
+          <div class="card appheader">
+            <div class="card-header">
+              <div class="appcard-title">
+                {{ messages['accesstoken_title'] if messages.get('accesstoken_title') else 'Access Token' }}
+              </div>
+            </div>
+            <div class="card-body">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th style="width: 10%">{{ messages['key'] if messages.get('key') else 'Key' }}</th>
+                    <th style="width: 40%">{{ messages['value'] if messages.get('value') else 'Value' }}</th>
+                    <th style="width: 50%">{{ messages['description'] if messages.get('description') else 'Description' }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for key, value in accessTokenMap.items() %}
+                  <tr class="align-middle">
+                    <td>{{ key }}</td>
+                    <td>{{ value }}</td>
+                    <td>{{ messages[key] if messages.get(key) else key }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <!-- Refresh Token Tab -->
+        <div class="tab-pane fade" id="nav-refreshtoken" role="tabpanel" aria-labelledby="nav-refreshtoken-tab">
+          <div class="card appheader">
+            <div class="card-header">
+              <div class="appcard-title">
+                {{ messages['refreshtoken_title'] if messages.get('refreshtoken_title') else 'Refresh Token' }}
+              </div>
+            </div>
+            <div class="card-body">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th style="width: 10%">{{ messages['key'] if messages.get('key') else 'Key' }}</th>
+                    <th style="width: 40%">{{ messages['value'] if messages.get('value') else 'Value' }}</th>
+                    <th style="width: 50%">{{ messages['description'] if messages.get('description') else 'Description' }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for key, value in refreshTokenMap.items() %}
+                  <tr class="align-middle">
+                    <td>{{ key }}</td>
+                    <td>{{ value }}</td>
+                    <td>{{ messages[key] if messages.get(key) else key }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row mt-4">
+        <div class="col text-center">
+          <p class="config-background p-1">{{ messages['config_label'] if messages.get('config_label') else 'Config' }}</p>
+        </div>
+        <div class="col text-center">
+          <p class="discovery-background p-1">{{ messages['discovery_label'] if messages.get('discovery_label') else 'Discovery' }}</p>
+        </div>
+        <div class="col text-center">
+          <p class="random-background p-1">{{ messages['random_label'] if messages.get('random_label') else 'Random' }}</p>
+        </div>
+        <div class="col text-center">
+          <p class="optional-background p-1">{{ messages['optional_label'] if messages.get('optional_label') else 'Optional' }}</p>
+        </div>
+      </div>
+    </div>
+    
+    <script>
+      function copyToken(button) {
+        const token = button.getAttribute('data-token');
+        const tempInput = document.createElement("textarea");
+        tempInput.value = token;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand("copy");
+        document.body.removeChild(tempInput);
+        console.log("Token kopiert:", token);
+      }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  </body>
+</html>

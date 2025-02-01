@@ -1,0 +1,9 @@
+services:
+
+  kcdb:
+    image: postgres:16
+    container_name: kcdb
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./kcdb:/var/lib/postgresql/data

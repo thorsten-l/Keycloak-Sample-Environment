@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>{{ messages['home_title'] if messages.get('home_title') else 'Home' }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Verweisen Sie auf Ihre statischen CSS-Dateien oder verwenden Sie CDN-Links -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/main.css">
+  </head>
+  <body>
+    <div class="container mt-4">
+      <h1>{{ messages['home_heading'] if messages.get('home_heading') else 'Home' }}</h1>
+      
+      <!-- Navigation Tabs -->
+      <nav class="appheader">
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+          <a class="nav-link active" id="nav-login-url-tab" data-bs-toggle="tab" href="#nav-login-url" role="tab" aria-controls="nav-login-url" aria-selected="true">
+            {{ messages['login_url_tab'] if messages.get('login_url_tab') else 'Login-URL' }}
+          </a>
+          <a class="nav-link" id="nav-session-tab" data-bs-toggle="tab" href="#nav-session" role="tab" aria-controls="nav-session" aria-selected="false">
+            {{ messages['session_attributes_tab'] if messages.get('session_attributes_tab') else 'Session Attributes' }}
+          </a>
+          <a class="nav-link" id="nav-discovery-tab" data-bs-toggle="tab" href="#nav-discovery" role="tab" aria-controls="nav-discovery" aria-selected="false">
+            {{ messages['oidc_discovery_tab'] if messages.get('oidc_discovery_tab') else 'OIDC Discovery' }}
+          </a>
+          <a class="nav-link" id="nav-properties-tab" data-bs-toggle="tab" href="#nav-properties" role="tab" aria-controls="nav-properties" aria-selected="false">
+            {{ messages['build_properties_tab'] if messages.get('build_properties_tab') else 'Build Properties' }}
+          </a>
+        </div>
+      </nav>
+      
+      <div class="tab-content" id="nav-tabContent">
+        <!-- Login URL Tab -->
+        <div class="tab-pane fade show active" id="nav-login-url" role="tabpanel" aria-labelledby="nav-login-url-tab">
+          <div class="appheader card">
+            <div class="card-header">
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="appcard-title">
+                  {{ messages['login_url_title'] if messages.get('login_url_title') else 'Login URL' }}
+                </div>
+                <a class="btn btn-primary" href="{{ oauth2LoginUri }}">
+                  {{ messages['login_button'] if messages.get('login_button') else 'LOGIN' }}
+                </a>
+              </div>
+            </div>
+            <div class="card-body">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th style="width: 10%">{{ messages['key'] if messages.get('key') else 'Key' }}</th>
+                    <th style="width: 40%">{{ messages['value'] if messages.get('value') else 'Value' }}</th>
+                    <th style="width: 50%">{{ messages['description'] if messages.get('description') else 'Description' }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="discovery-background">uri</td>
+                    <td class="discovery-background">{{ oauth2AuthorizationEndpoint }}</td>
+                    <td class="discovery-background">{{ messages['authorization_endpoint'] }}</td>
+                  </tr>
+                  <tr>
+                    <td class="config-background">client_id</td>
+                    <td class="config-background">{{ oauth2ClientId }}</td>
+                    <td class="config-background">{{ messages['client_id'] }}</td>
+                  </tr>
+                  <tr>
+                    <td class="config-background">response_type</td>
+                    <td class="config-background">code</td>
+                    <td class="config-background">{{ messages['response_type'] }}</td>
+                  </tr>
+                  <tr>
+                    <td class="config-background">redirect_uri</td>
+                    <td class="config-background">{{ oauth2RedirectUri }}</td>
+                    <td class="config-background">{{ messages['redirect_uri'] }}</td>
+                  </tr>
+                  <tr>
+                    <td class="config-background">scope</td>
+                    <td class="config-background">{{ oauth2ClientScope }}</td>
+                    <td class="config-background">{{ messages['scope'] }}</td>
+                  </tr>
+                  <tr>
+                    <td class="random-background">state</td>
+                    <td class="random-background">{{ oauth2State }}</td>
+                    <td class="random-background">{{ messages['state'] }}</td>
+                  </tr>
+                  <tr>
+                    <td class="optional-background">code_challenge</td>
+                    <td class="random-background">{{ oauth2CodeChallenge }}</td>
+                    <td class="random-background">{{ messages['code_challenge'] }}</td>
+                  </tr>
+                  <tr>
+                    <td class="optional-background">code_challenge_method</td>
+                    <td class="config-background">S256</td>
+                    <td class="config-background">{{ messages['code_challenge_method'] }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <!-- Session Attributes Tab -->
+        <div class="tab-pane fade" id="nav-session" role="tabpanel" aria-labelledby="nav-session-tab">
+          <div class="appheader card">
+            <div class="card-header">
+              <div class="appcard-title">
+                {{ messages['session_attributes_title'] if messages.get('session_attributes_title') else 'Session Attributes' }}
+              </div>
+            </div>
+            <div class="card-body">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th style="width: 10%">{{ messages['key'] if messages.get('key') else 'Key' }}</th>
+                    <th style="width: 40%">{{ messages['value'] if messages.get('value') else 'Value' }}</th>
+                    <th style="width: 50%">{{ messages['description'] if messages.get('description') else 'Description' }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="random-background">session id</td>
+                    <td class="random-background">{{ sessionId }}</td>
+                    <td class="random-background">{{ messages['session_id'] }}</td>
+                  </tr>
+                  <tr>
+                    <td class="random-background">oauth2_state</td>
+                    <td class="random-background">{{ oauth2State }}</td>
+                    <td class="random-background">{{ messages['state'] }}</td>
+                  </tr>
+                  <tr>
+                    <td class="random-background">code_verifier</td>
+                    <td class="random-background">{{ oauth2CodeVerifier }}</td>
+                    <td class="random-background">{{ messages['code_verifier'] }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <!-- OIDC Discovery Tab -->
+        <div class="tab-pane fade" id="nav-discovery" role="tabpanel" aria-labelledby="nav-discovery-tab">
+          <div class="appheader card">
+            <div class="card-header">
+              <div class="appcard-title">
+                {{ messages['oidc_discovery_title'] if messages.get('oidc_discovery_title') else 'OIDC Discovery' }}
+              </div>
+            </div>
+            <div class="card-body">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th style="width: 10%">{{ messages['key'] if messages.get('key') else 'Key' }}</th>
+                    <th style="width: 40%">{{ messages['value'] if messages.get('value') else 'Value' }}</th>
+                    <th style="width: 50%">{{ messages['description'] if messages.get('description') else 'Description' }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="config-background">oidc_discovery_url</td>
+                    <td class="config-background">{{ oidcDiscoveryUri }}</td>
+                    <td class="config-background">{{ messages['oidc_discovery_url'] }}</td>
+                  </tr>
+                  <tr>
+                    <td class="discovery-background">issuer</td>
+                    <td class="discovery-background">{{ oidcDiscovery.issuer }}</td>
+                    <td class="discovery-background">{{ messages['issuer'] }}</td>
+                  </tr>
+                  <tr>
+                    <td class="discovery-background">authorization_endpoint</td>
+                    <td class="discovery-background">{{ oidcDiscovery.authorization_endpoint }}</td>
+                    <td class="discovery-background">{{ messages['authorization_endpoint'] }}</td>
+                  </tr>
+                  <tr>
+                    <td class="discovery-background">token_endpoint</td>
+                    <td class="discovery-background">{{ oidcDiscovery.token_endpoint }}</td>
+                    <td class="discovery-background">{{ messages['token_endpoint'] }}</td>
+                  </tr>
+                  <tr>
+                    <td class="discovery-background">end_session_endpoint</td>
+                    <td class="discovery-background">{{ oidcDiscovery.end_session_endpoint }}</td>
+                    <td class="discovery-background">{{ messages['end_session_endpoint'] }}</td>
+                  </tr>
+                  <tr>
+                    <td class="discovery-background">userinfo_endpoint</td>
+                    <td class="discovery-background">{{ oidcDiscovery.userinfo_endpoint }}</td>
+                    <td class="discovery-background">{{ messages['userinfo_endpoint'] }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <!-- Build Properties Tab -->
+        <div class="tab-pane fade" id="nav-properties" role="tabpanel" aria-labelledby="nav-properties-tab">
+          <div class="card appheader">
+            <div class="card-header">
+              <div class="appcard-title">
+                {{ messages['build_properties_title'] if messages.get('build_properties_title') else 'Build Properties' }}
+              </div>
+            </div>
+            <div class="card-body">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th style="width: 10%">{{ messages['key'] if messages.get('key') else 'Key' }}</th>
+                    <th style="width: 40%">{{ messages['value'] if messages.get('value') else 'Value' }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for key, value in buildProperties.items() %}
+                  <tr class="align-middle">
+                    <td>{{ key }}</td>
+                    <td>{{ value }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              <p class="mt-4">spring boot version: {{ springBootVersion }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row mt-4">
+        <div class="col text-center">
+          <p class="config-background p-1">{{ messages['config_label'] if messages.get('config_label') else 'Config' }}</p>
+        </div>
+        <div class="col text-center">
+          <p class="discovery-background p-1">{{ messages['discovery_label'] if messages.get('discovery_label') else 'Discovery' }}</p>
+        </div>
+        <div class="col text-center">
+          <p class="random-background p-1">{{ messages['random_label'] if messages.get('random_label') else 'Random' }}</p>
+        </div>
+        <div class="col text-center">
+          <p class="optional-background p-1">{{ messages['optional_label'] if messages.get('optional_label') else 'Optional' }}</p>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  </body>
+</html>
