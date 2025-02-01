@@ -26,3 +26,9 @@ target
 .DS_Store
 .cache*
 .cache_ggshield
+
+nbactions.xml
+nb-configuration.xml
+rebel.xml
+.rebel.xml*
+.vscode
