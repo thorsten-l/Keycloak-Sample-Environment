@@ -8,7 +8,7 @@ SESSION_PERMANENT = False
 SESSION_USE_SIGNER = True
 
 # Redis-Konfiguration
-SESSION_REDIS = {
+REDIS_CONFIG = {
     "host": "app1-redis",
     "port": 6379,
     "charset": "utf-8",

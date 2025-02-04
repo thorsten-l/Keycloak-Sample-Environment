@@ -27,7 +27,7 @@ app = Flask(__name__, static_folder='/work/static', static_url_path='/static')
 app.config.from_object('config')
 
 # Redis-Konfiguration extrahieren und an redis.StrictRedis übergeben
-redis_conf = app.config['SESSION_REDIS']
+redis_conf = app.config['REDIS_CONFIG']
 redisDb = app.config['SESSION_REDIS'] = redis.StrictRedis(
     host=redis_conf["host"],
     port=redis_conf["port"],
