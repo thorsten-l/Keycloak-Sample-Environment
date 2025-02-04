@@ -9,11 +9,9 @@ import uuid
 from urllib.parse import urlencode
 
 import redis
-
-from flask import Flask, session
-
 import requests
 import javaproperties
+
 from flask import (Flask, Response, redirect, render_template, request,
                    session, url_for)
 
