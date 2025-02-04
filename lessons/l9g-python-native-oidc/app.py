@@ -23,23 +23,21 @@ from cryptography.hazmat.backends import default_backend
 
 app = Flask(__name__, static_folder='/work/static', static_url_path='/static')
 
-# Konfiguration der Session
-app.config['SECRET_KEY'] = 'dein_super_geheimer_schluessel'  # für die Signierung der Sessions
-app.config['SESSION_TYPE'] = 'redis'
-app.config['SESSION_KEY_PREFIX'] = 'app1-session:'  # Hier wird der Präfix definiert
-app.config['SESSION_PERMANENT'] = False
-app.config['SESSION_USE_SIGNER'] = True  # optional: signierte Sessions
-# Konfiguration der Redis-Instanz. Passe host, port und ggf. password an.
+# Konfiguration aus der separaten Datei laden
+app.config.from_object('config')
 
+# Redis-Konfiguration extrahieren und an redis.StrictRedis übergeben
+redis_conf = app.config['SESSION_REDIS']
 redisDb = app.config['SESSION_REDIS'] = redis.StrictRedis(
-    host='app1-redis', 
-    port=6379,
-    charset='utf-8',
-    decode_responses=False
+    host=redis_conf["host"],
+    port=redis_conf["port"],
+    charset=redis_conf["charset"],
+    decode_responses=redis_conf["decode_responses"]
 )
 
-# Initialisierung der Session
+# Session initialisieren
 Session(app)
+
 
 # --- Nachrichten (messages.properties) laden ---
 def load_messages_properties(filename="messages.properties"):
