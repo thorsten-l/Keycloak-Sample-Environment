@@ -24,9 +24,6 @@
           <a class="nav-link" id="nav-discovery-tab" data-bs-toggle="tab" href="#nav-discovery" role="tab" aria-controls="nav-discovery" aria-selected="false">
             {{ messages['oidc_discovery_tab'] if messages.get('oidc_discovery_tab') else 'OIDC Discovery' }}
           </a>
-          <a class="nav-link" id="nav-properties-tab" data-bs-toggle="tab" href="#nav-properties" role="tab" aria-controls="nav-properties" aria-selected="false">
-            {{ messages['build_properties_tab'] if messages.get('build_properties_tab') else 'Build Properties' }}
-          </a>
         </div>
       </nav>
       
@@ -187,35 +184,6 @@
                   </tr>
                 </tbody>
               </table>
-            </div>
-          </div>
-        </div>
-        <!-- Build Properties Tab -->
-        <div class="tab-pane fade" id="nav-properties" role="tabpanel" aria-labelledby="nav-properties-tab">
-          <div class="card appheader">
-            <div class="card-header">
-              <div class="appcard-title">
-                {{ messages['build_properties_title'] if messages.get('build_properties_title') else 'Build Properties' }}
-              </div>
-            </div>
-            <div class="card-body">
-              <table class="table table-striped">
-                <thead>
-                  <tr>
-                    <th style="width: 10%">{{ messages['key'] if messages.get('key') else 'Key' }}</th>
-                    <th style="width: 40%">{{ messages['value'] if messages.get('value') else 'Value' }}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for key, value in buildProperties.items() %}
-                  <tr class="align-middle">
-                    <td>{{ key }}</td>
-                    <td>{{ value }}</td>
-                  </tr>
-                  {% endfor %}
-                </tbody>
-              </table>
-              <p class="mt-4">spring boot version: {{ springBootVersion }}</p>
             </div>
           </div>
         </div>

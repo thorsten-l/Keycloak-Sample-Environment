@@ -13,6 +13,14 @@ services:
     networks:
       - iddev
 
+  app1-redis:
+    image: redis:alpine
+    hostname: app1-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - iddev
+
 networks:
   iddev:
     external: true

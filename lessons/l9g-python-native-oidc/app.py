@@ -8,16 +8,40 @@ import secrets
 import uuid
 from urllib.parse import urlencode
 
+import redis
+
+from flask import Flask, session
+
 import requests
 import javaproperties
 from flask import (Flask, Response, redirect, render_template, request,
                    session, url_for)
+
+from flask_session import Session
+
 from cryptography.hazmat.primitives.asymmetric import rsa, padding
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.backends import default_backend
 
 app = Flask(__name__, static_folder='/work/static', static_url_path='/static')
-app.secret_key = os.environ.get("FLASK_SECRET_KEY", "changeme")  # Für produktiven Einsatz ändern
+
+# Konfiguration der Session
+app.config['SECRET_KEY'] = 'dein_super_geheimer_schluessel'  # für die Signierung der Sessions
+app.config['SESSION_TYPE'] = 'redis'
+app.config['SESSION_KEY_PREFIX'] = 'app1-session:'  # Hier wird der Präfix definiert
+app.config['SESSION_PERMANENT'] = False
+app.config['SESSION_USE_SIGNER'] = True  # optional: signierte Sessions
+# Konfiguration der Redis-Instanz. Passe host, port und ggf. password an.
+
+redisDb = app.config['SESSION_REDIS'] = redis.StrictRedis(
+    host='app1-redis', 
+    port=6379,
+    charset='utf-8',
+    decode_responses=False
+)
+
+# Initialisierung der Session
+Session(app)
 
 # --- Nachrichten (messages.properties) laden ---
 def load_messages_properties(filename="messages.properties"):
@@ -51,14 +75,6 @@ oauth2_end_session_endpoint = None
 oauth2_jwks_uri = None
 oidc_discovery = {}
 jwks = {}
-
-# Dummy build-properties (analog zu BuildProperties in Java)
-build_properties = {
-    "build.time": "2025-02-01T00:00:00Z",
-    "version": "0.0.1-SNAPSHOT"
-}
-spring_boot_version = "Python (Flask)"
-
 
 # --- Initialisierung: OIDC-Discovery und JWKS laden ---
 def initialize_oidc():
@@ -95,6 +111,15 @@ def initialize_oidc():
     # Speichern Sie die Discovery-Daten global
     app.config["OIDC_DISCOVERY"] = oidc_discovery
     print("OIDC Discovery erfolgreich geladen.")
+
+
+def get_session_id() -> str:
+    cookie_name = request.cookies.get(app.config['SESSION_COOKIE_NAME'])
+    if not cookie_name:
+        return ""
+    session_id = cookie_name.split(".")[0]
+    print("session_id =", session_id, flush=True)
+    return session_id
 
 
 # --- PKCE Funktionen ---
@@ -210,12 +235,10 @@ def fetch_oauth2_tokens(code: str, code_verifier: str) -> dict:
         return {}
 
 
-# --- Globaler Session-Store zur Backchannel-Abmeldung ---
-session_store = {}
-
 # --- Endpunkte (analog zum Java WebController) ---
 @app.route("/")
 def home():
+    print("* /", flush=True)
     tokens = session.get("oauth2_tokens")
     if tokens and tokens.get("id_token"):
         return redirect(url_for("app_page"))
@@ -230,6 +253,7 @@ def home():
     session["oauth2_state"] = oauth2_state
     session["oauth2_code_verifier"] = oauth2_code_verifier
 
+    session_id = get_session_id()
     params = {
         "client_id": OAUTH2_CLIENT_ID,
         "response_type": "code",
@@ -245,7 +269,7 @@ def home():
         "oauth2State": oauth2_state,
         "oauth2CodeVerifier": oauth2_code_verifier,
         "oauth2CodeChallenge": oauth2_code_challenge,
-        "sessionId": session.sid if hasattr(session, "sid") else request.cookies.get(app.session_cookie_name),
+        "sessionId": session_id,
         "oauth2ClientId": OAUTH2_CLIENT_ID,
         "oauth2ClientScope": OAUTH2_CLIENT_SCOPE,
         "oauth2RedirectUri": OAUTH2_REDIRECT_URI,
@@ -253,14 +277,14 @@ def home():
         "oidcDiscoveryUri": OIDC_DISCOVERY_URI,
         "oidcDiscovery": oidc_discovery,
         "oauth2LoginUri": oauth2_login_uri,
-        "buildProperties": build_properties,
-        "springBootVersion": spring_boot_version,
     }
     return render_template("home.html", **model)
 
 
 @app.route("/oidc-login")
 def oidc_login():
+    print("* /oidc-login", flush=True)
+
     error = request.args.get("error")
     if error:
         print("Fehler bei der Anmeldung:", request.args.get("error_description"))
@@ -278,33 +302,49 @@ def oidc_login():
     code_verifier = session.get("oauth2_code_verifier")
     tokens = fetch_oauth2_tokens(code, code_verifier)
     session["oauth2_tokens"] = tokens
+    session_id = get_session_id()
 
     try:
         payload = decode_jwt_payload(tokens.get("id_token", ""))
         sid = payload.get("sid")
+        print("sid =", sid, flush=True)
         if sid:
-            session_store[sid] = session.get("oauth2_tokens")
+          redisDb.set(sid, session_id.encode('utf-8'))
     except Exception as e:
         print("Fehler beim Dekodieren des id_token:", e)
 
     return redirect(url_for("app_page"))
 
+def delete_session_from_redis( session_id: str):
+    if session_id:
+        session_key_prefix = app.config.get('SESSION_KEY_PREFIX', '')
+        full_session_key = f"{session_key_prefix}{session_id}"
+        redisDb.delete(full_session_key)
+        print(f"Session {full_session_key} wurde aus redis gelöscht.", flush=True)
+
 
 @app.route("/oidc-logout")
 def oidc_logout():
+    print("* /oidc-logout", flush=True)
+    session_id = get_session_id()
+    delete_session_from_redis(session_id)
     session.clear()
     return redirect(url_for("home"))
 
 
 @app.route("/oidc-backchannel-logout", methods=["POST"])
 def oidc_backchannel_logout():
+    print("* /oidc-backchannel-logout", flush=True)
     logout_token = request.get_data(as_text=True)
     try:
         payload = decode_jwt_payload(logout_token)
         sid = payload.get("sid")
-        if sid and sid in session_store:
-            del session_store[sid]
-            print("Session mit sid", sid, "wurde invalidiert.")
+        if sid:
+            r_session_id = redisDb.get(sid)
+            redisDb.delete(sid)
+            if r_session_id:
+                session_id = r_session_id.decode('utf-8')
+                delete_session_from_redis(session_id)
     except Exception as e:
         print("Fehler beim Verarbeiten des logout-Tokens:", e)
     return Response(status=200)
@@ -312,6 +352,7 @@ def oidc_backchannel_logout():
 
 @app.route("/app")
 def app_page():
+    print("* /app", flush=True)
     tokens = session.get("oauth2_tokens")
     if not tokens or not tokens.get("id_token"):
         return redirect(url_for("home"))
