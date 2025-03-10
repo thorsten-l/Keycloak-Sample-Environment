@@ -1,4 +1,5 @@
 keycloak/kcdb
+keycloak/kccerts
 keycloak/kcfront
 keycloak/kcldap
 keycloak/kcmailpit

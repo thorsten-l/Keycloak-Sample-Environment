@@ -90,7 +90,6 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./kccerts:/etc/kccerts:ro
       - ./kcfront/etc:/etc/nginx
       - ./kcfront/cache:/share/container/nginx/cache
       - ./kcfront/log:/var/log/nginx
@@ -104,25 +103,6 @@ services:
     depends_on:
       kse-keycloak:
         condition: service_healthy
-
-#  kse-kcproxy:
-#    image: haproxy:latest
-#    container_name: kse-kcproxy
-#    hostname: id.dev.sonia.de
-#    restart: unless-stopped
-#    ports:
-#      - "80:80"
-#      - "443:443"
-#    environment:
-#      - TZ=Europe/Berlin
-#    volumes:
-#      - ./kccerts:/etc/kccerts:ro
-#      - ./kcproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
-#    depends_on:
-#      kse-keycloak:
-#        condition: service_healthy
-#    cap_add:
-#      - NET_ADMIN
 
   kse-kcmailpit:
     image: axllent/mailpit
