@@ -1,7 +1,6 @@
 package l9g.webapp.sb3oauth2client;
 
 import java.security.Security;
-import l9g.util.BuildProperties;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +40,6 @@ public class Sb3Oauth2ClientApplication
   public static void main(String[] args)
   {
     LOGGER.info("START");
-    LOGGER.info("{}", BuildProperties.toFormattedString());
 
     Security.addProvider(new BouncyCastleProvider());
 

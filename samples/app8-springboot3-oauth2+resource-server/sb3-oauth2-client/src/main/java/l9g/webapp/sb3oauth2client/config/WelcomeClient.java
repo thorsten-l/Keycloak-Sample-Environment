@@ -1,7 +1,6 @@
 package l9g.webapp.sb3oauth2client.config;
 
-import l9g.util.BuildProperties;
-import org.springframework.security.oauth2.jwt.Jwt;
+import java.util.Map;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.service.annotation.GetExchange;
@@ -24,7 +23,7 @@ public interface WelcomeClient
   String getParamName(@RequestParam("name") String name);
 
   @GetExchange("/buildinfo")
-  public BuildProperties getBuildinfo();
+  public Map<String, String> getBuildinfo();
 
   @GetExchange("/rscs-principal")
   public String getPrincipal();

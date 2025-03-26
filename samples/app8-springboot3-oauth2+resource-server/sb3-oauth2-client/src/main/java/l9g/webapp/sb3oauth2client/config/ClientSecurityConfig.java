@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import static org.springframework.security.config.Customizer.withDefaults;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.oauth2.client.oidc.web.logout.OidcClientInitiatedLogoutSuccessHandler;
@@ -29,12 +30,10 @@ public class ClientSecurityConfig
     LOGGER.debug("filterChain");
     http.authorizeHttpRequests(
       authorize -> authorize
-        .requestMatchers("/").permitAll()
-        .requestMatchers( new AntPathRequestMatcher("/actuator/**")).permitAll()
-        .requestMatchers( new AntPathRequestMatcher("/webjars/**")).permitAll()
+        .requestMatchers("/", "/actuator/**", "/webjars/**" ).permitAll()
         .anyRequest().authenticated())
-      .oauth2Login()
-      .and()
+      .oauth2Login(withDefaults())
+      .oauth2Client(withDefaults())
       .logout((logout) ->
       {
         logout.logoutSuccessHandler(oidcLogoutSuccessHandler());

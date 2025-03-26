@@ -1,10 +1,14 @@
 package l9g.webapp.sb3oauth2client.controller;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import l9g.util.BuildProperties;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.info.BuildProperties;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.oidc.StandardClaimNames;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -16,10 +20,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 public class AppController
 {
   private final static Logger LOGGER = LoggerFactory.getLogger(
     AppController.class.getName());
+
+  private final BuildProperties buildProperties;
 
   @GetMapping("/")
   public String homeGET(JwtAuthenticationToken jwtAuthenticationToken)
@@ -35,10 +42,10 @@ public class AppController
     LOGGER.debug("authentication.credentials.class={}", jwtAuthenticationToken.
       getCredentials().getClass().getCanonicalName());
 
-    Jwt jwt = (Jwt) jwtAuthenticationToken.getPrincipal();
+    Jwt jwt = (Jwt)jwtAuthenticationToken.getPrincipal();
 
-    String preferredUsername
-      = jwt.getClaimAsString(StandardClaimNames.PREFERRED_USERNAME);
+    String preferredUsername =
+      jwt.getClaimAsString(StandardClaimNames.PREFERRED_USERNAME);
 
     StringBuilder message = new StringBuilder("Welcome from resource server!\n");
     LocalDateTime time = LocalDateTime.now();
@@ -47,7 +54,7 @@ public class AppController
     message = message.append("\njwt=").append(jwt.getClass().getCanonicalName());
     message = message.append("\npreferred_username=").append(preferredUsername);
 
-    WebAuthenticationDetails wad = (WebAuthenticationDetails) jwtAuthenticationToken.
+    WebAuthenticationDetails wad = (WebAuthenticationDetails)jwtAuthenticationToken.
       getDetails();
 
     message = message.append("\nremote ip addr=").append(wad.getRemoteAddress());
@@ -63,7 +70,7 @@ public class AppController
 
     message = message.append("\n-----------");
 
-    for (String key : claims.keySet())
+    for(String key : claims.keySet())
     {
       message = message.append("\njwt claim '").append(key);
       message = message.append("' = ").append(claims.get(key).toString());
@@ -83,7 +90,7 @@ public class AppController
 
     message = message.append("\nname=").append(name);
 
-    Jwt jwt = (Jwt) authentication.getPrincipal();
+    Jwt jwt = (Jwt)authentication.getPrincipal();
     message = message.append("\n\nlocal time=").append(time);
     message = message.append("\njwt id=").append(jwt.getId());
     message = message.append("\njwt issuer=").append(jwt.getIssuer().
@@ -91,7 +98,7 @@ public class AppController
 
     Map<String, Object> claims = jwt.getClaims();
 
-    for (String key : claims.keySet())
+    for(String key : claims.keySet())
     {
       message = message.append("\njwt claim '").append(key);
       message = message.append("' = ").append(claims.get(key).toString());
@@ -111,7 +118,7 @@ public class AppController
 
     message = message.append("\nparameter name=").append(name);
 
-    Jwt jwt = (Jwt) authentication.getPrincipal();
+    Jwt jwt = (Jwt)authentication.getPrincipal();
     message = message.append("\n\nlocal time=").append(time);
     message = message.append("\njwt id=").append(jwt.getId());
     message = message.append("\njwt issuer=").append(jwt.getIssuer().
@@ -119,7 +126,7 @@ public class AppController
 
     Map<String, Object> claims = jwt.getClaims();
 
-    for (String key : claims.keySet())
+    for(String key : claims.keySet())
     {
       message = message.append("\njwt claim '").append(key);
       message = message.append("' = ").append(claims.get(key).toString());
@@ -129,19 +136,29 @@ public class AppController
   }
 
   @GetMapping(path = "/buildinfo")
-  public BuildProperties getBuildinfo()
+  public Map<String, String> apiBuildinfo()
   {
-    LOGGER.debug("getBuildinfo");
-    return BuildProperties.getInstance();
+    LOGGER.debug("api buildinfo");
+
+    ArrayList<String> keys = new ArrayList<>();
+    buildProperties.forEach(p -> keys.add(p.getKey()));
+    Collections.sort(keys);
+    LinkedHashMap<String, String> properties = new LinkedHashMap<>();
+    for(String key : keys)
+    {
+      properties.put(key, buildProperties.get(key));
+    }
+
+    return properties;
   }
 
   @GetMapping(path = "/rscs-principal")
   public Jwt getPrincipal(JwtAuthenticationToken jwtAuthenticationToken)
   {
     LOGGER.debug("getPrincipal");
-    return (Jwt) jwtAuthenticationToken.getPrincipal();
+    return (Jwt)jwtAuthenticationToken.getPrincipal();
   }
-  
+
   @GetMapping(path = "/rscs-authtoken")
   public JwtAuthenticationToken getAuthToken(JwtAuthenticationToken jwtAuthenticationToken)
   {

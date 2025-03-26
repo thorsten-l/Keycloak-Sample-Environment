@@ -53,8 +53,9 @@ public class WebClientConfig
       .baseUrl(webClientBaseUrl)
       .build();
     
-    WebClientAdapter client = WebClientAdapter.forClient(webClient);
-    return HttpServiceProxyFactory.builder(client).build();
+    WebClientAdapter adapter =  WebClientAdapter.create(webClient);
+    HttpServiceProxyFactory.builderFor(adapter).build();
+    return HttpServiceProxyFactory.builderFor(adapter).build();
   }
 
   @Bean

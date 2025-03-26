@@ -1,11 +1,14 @@
 package l9g.webapp.sb3oauth2client.controller;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import l9g.util.BuildProperties;
 import l9g.webapp.sb3oauth2client.config.WelcomeClient;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.info.BuildProperties;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -14,10 +17,8 @@ import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.service.annotation.GetExchange;
 
 /**
  *
@@ -32,25 +33,28 @@ public class UserController
 
   private final WelcomeClient welcomeClient;
 
+  private final BuildProperties buildProperties;
+
   @GetMapping("/token")
   public OAuth2AuthenticationToken authenticationGET()
   {
-    OAuth2AuthenticationToken token = 
+    OAuth2AuthenticationToken token =
       (OAuth2AuthenticationToken)SecurityContextHolder.getContext().
-      getAuthentication();
-        
-    token.getAuthorities().forEach( ga -> { 
-      
-      if ( ga instanceof OidcUserAuthority )
+        getAuthentication();
+
+    token.getAuthorities().forEach(ga ->
+    {
+
+      if(ga instanceof OidcUserAuthority)
       {
         OidcUserAuthority userAuth = (OidcUserAuthority)ga;
-        LOGGER.debug( ">>> '{}'", userAuth.getIdToken().getTokenValue());
+        LOGGER.debug(">>> '{}'", userAuth.getIdToken().getTokenValue());
       }
     });
-    
+
     return token;
   }
-  
+
   @GetMapping("/principal")
   public OAuth2User principalGET(
     @AuthenticationPrincipal OAuth2User principal)
@@ -71,20 +75,14 @@ public class UserController
   public OidcUserInfo principalUserinfoGET(
     @AuthenticationPrincipal OAuth2User principal)
   {
-    return ((DefaultOidcUser) principal).getUserInfo();
+    return ((DefaultOidcUser)principal).getUserInfo();
   }
 
   @GetMapping("/principal-idtoken")
   public OidcIdToken principalIdTokenGET(
     @AuthenticationPrincipal OAuth2User principal)
   {
-    return ((DefaultOidcUser) principal).getIdToken();
-  }
-
-  @GetMapping("/build-properties")
-  public BuildProperties buildPropertiesGET()
-  {
-    return BuildProperties.getInstance();
+    return ((DefaultOidcUser)principal).getIdToken();
   }
 
   @GetMapping("/rscs1/welcome")
@@ -111,22 +109,33 @@ public class UserController
   }
 
   @GetMapping("/rscs1/buildinfo")
-  public BuildProperties rscs1Buildinfo()
+  public Map<String, String> rscs1Buildinfo()
   {
     LOGGER.debug("rscs1Buildinfo");
     return welcomeClient.getBuildinfo();
   }
 
-  @GetMapping( path="/rscs1/principal", produces = "application/json")
+  @GetMapping(path = "/rscs1/principal", produces = "application/json")
   public String getPrincipal()
   {
     return welcomeClient.getPrincipal();
   }
-  
+
   @GetMapping("/api/buildinfo")
-  public BuildProperties apiBuildinfo()
+  public Map<String, String> apiBuildinfo()
   {
-    LOGGER.debug("rscs1Buildinfo");
-    return BuildProperties.getInstance();
+    LOGGER.debug("api buildinfo");
+
+    ArrayList<String> keys = new ArrayList<>();
+    buildProperties.forEach(p -> keys.add(p.getKey()));
+    Collections.sort(keys);
+    LinkedHashMap<String, String> properties = new LinkedHashMap<>();
+    for(String key : keys)
+    {
+      properties.put(key, buildProperties.get(key));
+    }
+
+    return properties;
   }
+
 }

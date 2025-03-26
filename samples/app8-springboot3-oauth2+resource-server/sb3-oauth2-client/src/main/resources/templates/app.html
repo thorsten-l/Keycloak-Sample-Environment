@@ -29,22 +29,28 @@
         plain password = '<span th:text="${PLAIN_PASSWORD}"></span>'
       </p>
       
+      <h4>principal</h4>
       <ul>
         <li><a target="_blank" th:href="@{/principal}">principal</a></li>
         <li><a target="_blank" th:href="@{/principal-attributes}">principal attributes</a></li>
         <li><a target="_blank" th:href="@{/principal-userinfo}">principal userinfo</a></li>
         <li><a target="_blank" th:href="@{/principal-idtoken}">principal idToken</a></li>
+      </ul>
+      
+      <h4>client api</h4>
+      <ul>
+        <li><a target="_blank" th:href="@{/api/buildinfo}">buildinfo</a></li>
+      </ul>
+      
+      <h4>resource server</h4>
+      <ul>
         <li><a target="_blank" th:href="@{/rscs1/welcome}">resource server - welcome</a></li>
         <li><a target="_blank" th:href="@{/rscs1/name}">resource server - path name</a></li>
         <li><a target="_blank" th:href="@{/rscs1/parameter}">resource server - parameter</a></li>
         <li><a target="_blank" th:href="@{/rscs1/buildinfo}">resource server - buildinfo</a></li>
         <li><a target="_blank" th:href="@{/rscs1/principal}">resource server - principal</a></li>
-        <li><a target="_blank" th:href="@{/api/buildinfo}">buildinfo</a></li>
       </ul>
       
-      <p>
-        <a target="_blank" th:href="@{/build-properties}">build properties</a>
-      </p>
     </div>
 
     <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
